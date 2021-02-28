@@ -23,6 +23,11 @@ public class TipoCliente extends EntidadeDominio {
 		super();
 	}
 
+	public TipoCliente(String nome, String descricao) {
+		this.nome = nome;
+		this.descricao = descricao;
+	}
+
 	public TipoCliente(LocalDate timeStamp, boolean isAtivo, int id, String nome, String descricao) {
 		super(timeStamp, isAtivo);
 		this.id = id;

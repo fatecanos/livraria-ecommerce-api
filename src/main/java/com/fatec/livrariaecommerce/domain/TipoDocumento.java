@@ -1,14 +1,56 @@
 package com.fatec.livrariaecommerce.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
-@Data @AllArgsConstructor
+import javax.persistence.*;
+
+@Entity
 public class TipoDocumento extends EntidadeDominio {
+
+	@Id
+	@SequenceGenerator(
+			name="tipo_doc_sequence",
+			sequenceName="tipo_doc_sequence",
+			allocationSize=1
+	)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE,
+			generator = "tipo_doc_sequence"
+	)
+	private int id;
 	private String descricao;
 	private String nome;
 
+	public TipoDocumento() {
+		this.setAtivo(true);
+	}
 
+	public TipoDocumento(String descricao, String nome) {
+		this.descricao = descricao;
+		this.nome = nome;
+		this.setAtivo(true);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 }

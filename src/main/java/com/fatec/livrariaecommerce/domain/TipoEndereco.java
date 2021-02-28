@@ -17,5 +17,4 @@ public class TipoEndereco extends EntidadeDominio {
 	)
 	private int id;
 	private String descricao;
-
 }

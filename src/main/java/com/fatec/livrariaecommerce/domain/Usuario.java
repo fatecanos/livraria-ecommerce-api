@@ -21,6 +21,7 @@ public class Usuario {
     private PerfilUsuario perfilUsuario;
 
     public Usuario() {
+
     }
 
     public Usuario(String email, String senha, PerfilUsuario perfilUsuario) {

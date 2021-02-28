@@ -1,7 +1,5 @@
 package com.fatec.livrariaecommerce.domain;
 
-import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,16 +21,20 @@ public class Cliente extends Pessoa {
 	private String nome;
 	private String sobrenome;
 	private LocalDate dataNascimento;
+	private LocalDate timeStamp;
+	private boolean isAtivo;
 
-	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_TIPO_CLIENTE"))
-	@Transient
+	@OneToOne(cascade = CascadeType.ALL)
 	private TipoCliente tipoCliente;
 
-	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_USUARIO"))
-	@Transient
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Documento> documentos;
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Endereco> enderecos;
 
 	public Cliente() {
 
@@ -76,12 +78,42 @@ public class Cliente extends Pessoa {
 		this.dataNascimento = dataNascimento;
 	}
 
+	@Override
+	public LocalDate getTimeStamp() {
+		return timeStamp;
+	}
+
+	@Override
+	public void setTimeStamp(LocalDate timeStamp) {
+		this.timeStamp = timeStamp;
+	}
+
+	@Override
+	public boolean isAtivo() {
+		return isAtivo;
+	}
+
+	@Override
+	public void setAtivo(boolean ativo) {
+		isAtivo = ativo;
+	}
+
 	public TipoCliente getTipoCliente() {
 		return tipoCliente;
 	}
 
 	public void setTipoCliente(TipoCliente tipoCliente) {
 		this.tipoCliente = tipoCliente;
+	}
+
+	@Override
+	public List<Documento> getDocumentos() {
+		return documentos;
+	}
+
+	@Override
+	public void setDocumentos(List<Documento> documentos) {
+		this.documentos = documentos;
 	}
 
 	public Usuario getUsuario() {
@@ -92,12 +124,11 @@ public class Cliente extends Pessoa {
 		this.usuario = usuario;
 	}
 
-	/*
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
 
-	@OneToMany
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ENDERECO"))
-	private List<Endereco> enderecos;
-	*/
-
-
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
 }
