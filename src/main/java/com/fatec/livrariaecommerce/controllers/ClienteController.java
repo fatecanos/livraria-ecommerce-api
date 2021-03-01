@@ -29,28 +29,28 @@ public class ClienteController {
     @PostMapping(produces = "application/json")
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto) {
-
         Message message = new Message();
         ArrayList documentos = new ArrayList<Documento>();
 
         Cliente cliente = new Cliente(
-                    clienteDto.getNome(),
-                    clienteDto.getSobrenome(),
-                    clienteDto.getDataNascimento()
+            clienteDto.getNome(),
+            clienteDto.getSobrenome(),
+            clienteDto.getDataNascimento()
         );
+
         Documento documento = new Documento(
-                clienteDto.getCpf(),
-                new TipoDocumento(
-                        "cadastro de pessoa física",
-                        "CPF")
+            clienteDto.getCpf(),
+            new TipoDocumento(
+                    "cadastro de pessoa física",
+                    "CPF")
         );
 
         documentos.add(documento);
 
         Usuario usuario = new Usuario(
-                clienteDto.getEmail(),
-                clienteDto.getSenha(),
-                PerfilUsuario.CLIENTE
+            clienteDto.getEmail(),
+            clienteDto.getSenha(),
+            PerfilUsuario.CLIENTE
         );
 
         cliente.setDocumentos(documentos);
@@ -63,7 +63,7 @@ public class ClienteController {
             return new ResponseEntity<Message>(message, HttpStatus.CREATED);
         } catch (IllegalStateException ex) {
             message.setTitle("Erro");
-            message.setDescription("E-mail já existe!");
+            message.setDescription(ex.getMessage());
             return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
         }
     }
@@ -79,7 +79,8 @@ public class ClienteController {
                     .id(cliente.getId())
                     .nome(cliente.getNome())
                     .sobrenome(cliente.getSobrenome())
-                    .cpf(cliente.getDocumentos().stream().findFirst().get().getCodigo())
+                    .cpf(cliente.getDocumentos().stream()
+                            .findFirst().get().getCodigo())
                     .email(cliente.getUsuario().getEmail())
                     .dataNascimento(cliente.getDataNascimento())
                     .enderecos(cliente.getEnderecos().stream().map(endereco ->
@@ -113,14 +114,14 @@ public class ClienteController {
             return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             message.setTitle("Erro");
-            message.setDescription("Falha ao inativar!");
+            message.setDescription(ex.getMessage());
             return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
         }
     }
 
     @CrossOrigin
     @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<Message> atualziarClientePeloId(
+    public ResponseEntity<Message> atualizarClientePeloId(
             @PathVariable int id, @RequestBody ClienteDTO clienteDto
     ) {
         Message message = new Message();
@@ -156,7 +157,7 @@ public class ClienteController {
             return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             message.setTitle("Erro");
-            message.setDescription("Falha ao atualizar!");
+            message.setDescription(ex.getMessage());
             return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
         }
     }

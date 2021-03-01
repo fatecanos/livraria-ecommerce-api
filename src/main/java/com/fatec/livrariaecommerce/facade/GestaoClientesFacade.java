@@ -1,14 +1,18 @@
 package com.fatec.livrariaecommerce.facade;
 
 import com.fatec.livrariaecommerce.dao.ClienteDao;
+import com.fatec.livrariaecommerce.dao.DocumentoDao;
 import com.fatec.livrariaecommerce.dao.TipoClienteDao;
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
 import com.fatec.livrariaecommerce.domain.Cliente;
+import com.fatec.livrariaecommerce.domain.Documento;
 import com.fatec.livrariaecommerce.domain.TipoCliente;
 import com.fatec.livrariaecommerce.domain.Usuario;
+import com.fatec.livrariaecommerce.models.CpfValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -16,27 +20,38 @@ import java.util.stream.Collectors;
 
 @Service
 public class GestaoClientesFacade {
-    private final ClienteDao clienteDao;
-    private final TipoClienteDao tipoClienteDao;
-    private final UsuarioDao usuarioDao;
+    final ClienteDao clienteDao;
+    final TipoClienteDao tipoClienteDao;
+    final UsuarioDao usuarioDao;
+    final DocumentoDao documentoDao;
 
     @Autowired
     public GestaoClientesFacade(
+            DocumentoDao documentoDao,
             ClienteDao clienteDao,
             TipoClienteDao tipoClienteDao,
             UsuarioDao usuarioDao) {
         this.clienteDao = clienteDao;
         this.tipoClienteDao = tipoClienteDao;
         this.usuarioDao = usuarioDao;
+        this.documentoDao = documentoDao;
     }
 
     public Cliente save(Cliente cliente) {
         Optional<TipoCliente> tipoClienteOptional =
                 tipoClienteDao.findTipoClienteByName("NOVO");
 
-        Optional<Usuario> isEmailPresent =
-                usuarioDao.isEmailAlreadyPresent(
-                        cliente.getUsuario().getEmail());
+        Optional<Documento> isDocumentAlreadyPresent =
+                this.documentoDao.isCpfAlreadyExists(
+                        cliente.getDocumentos().stream()
+                            .findFirst()
+                            .get()
+                            .getCodigo()
+                );
+
+        Optional<Usuario> isEmailAlreadyExist =
+                this.usuarioDao.isEmailAlreadyPresent(cliente
+                        .getUsuario().getEmail());
 
         if(tipoClienteOptional.isEmpty()) {
             TipoCliente novoTipoCliente = new TipoCliente(
@@ -46,13 +61,29 @@ public class GestaoClientesFacade {
             tipoClienteDao.save(novoTipoCliente);
         }
 
-        if(isEmailPresent.isPresent()) {
-            throw new IllegalStateException();
+        if(isDocumentAlreadyPresent.isPresent()) {
+            throw new IllegalStateException("CPF já esta sendo " +
+                    "usado por outro usuário");
+        }
+
+        if(isEmailAlreadyExist.isPresent()) {
+            throw new IllegalStateException("E-mail já está sendo " +
+                    "usado por um usuário no sistema");
+        }
+
+        String cpfTemp = cliente.getDocumentos()
+                .stream().findFirst().get().getCodigo();
+
+        if(!CpfValidator.isCPF(cpfTemp)) {
+           throw new IllegalStateException("CPF inválido");
         }
 
         cliente.setTimeStamp(LocalDate.now());
         cliente.setAtivo(true);
+
+        //TODO: rever esta regra de contro de tipo cliente
         cliente.setTipoCliente(this.tipoClienteDao.getOne(1));
+        //TODO: implementar regra de obtenção de tipo documento
 
         return this.clienteDao.save(cliente);
     }
@@ -71,13 +102,28 @@ public class GestaoClientesFacade {
                         "identificador inválido: "+ id));
 
         if(!clienteTemp.isAtivo()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Usuário não está ativo");
         }
 
-        cliente.setId(id);
-        cliente.setAtivo(true);
-        cliente.setTimeStamp(LocalDate.now());
-        return this.clienteDao.save(cliente);
+        String cpfTemp = cliente.getDocumentos()
+                .stream().findFirst().get().getCodigo();
+
+        if(!CpfValidator.isCPF(cpfTemp)) {
+            throw new IllegalStateException("CPF inválido");
+        }
+
+        clienteTemp.setId(id);
+        clienteTemp.setAtivo(true);
+        clienteTemp.setTimeStamp(LocalDate.now());
+        clienteTemp.setTipoCliente(cliente.getTipoCliente());
+        clienteTemp.setEnderecos(cliente.getEnderecos());
+        clienteTemp.setDocumentos(cliente.getDocumentos());
+        clienteTemp.setDataNascimento(cliente.getDataNascimento());
+        clienteTemp.setNome(cliente.getNome());
+        clienteTemp.setSobrenome(cliente.getSobrenome());
+        clienteTemp.setUsuario(cliente.getUsuario());
+
+        return this.clienteDao.save(clienteTemp);
     }
 
     public Cliente disableById(int id) {
