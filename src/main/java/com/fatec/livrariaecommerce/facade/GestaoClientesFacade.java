@@ -12,7 +12,6 @@ import com.fatec.livrariaecommerce.models.CpfValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -100,6 +99,19 @@ public class GestaoClientesFacade {
         Cliente clienteTemp = this.clienteDao.findById(id)
                 .orElseThrow(() -> new IllegalStateException(
                         "identificador inválido: "+ id));
+
+
+        /*
+        if(!clienteTemp.equals(cliente)) {
+            Optional<Usuario> isEmailAlreadyExist =
+                    this.usuarioDao.isEmailAlreadyPresent(cliente
+                            .getUsuario().getEmail());
+            if (isEmailAlreadyExist.isPresent()) {
+                throw new IllegalStateException("E-mail já está sendo " +
+                        "usado por um usuário no sistema");
+            }
+        }
+        */
 
         if(!clienteTemp.isAtivo()) {
             throw new IllegalStateException("Usuário não está ativo");
