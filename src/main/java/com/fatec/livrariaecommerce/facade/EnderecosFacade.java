@@ -6,6 +6,7 @@ import com.fatec.livrariaecommerce.dao.TipoEnderecoDao;
 import com.fatec.livrariaecommerce.domain.Endereco;
 import com.fatec.livrariaecommerce.domain.Estado;
 import com.fatec.livrariaecommerce.domain.TipoEndereco;
+import com.fatec.livrariaecommerce.dto.EnderecoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class EnderecosFacade {
         return null;
     }
 
-    public void saveEndereco() {
+    public void saveEndereco(int idCliente, EnderecoDTO endereco) {
 
     }
 

@@ -13,27 +13,21 @@ import java.util.List;
 @RequestMapping("/endereco")
 public class EnderecoController {
 
-    public EnderecoController() {
-
-    }
-
     @CrossOrigin
     @PostMapping
     public ResponseEntity<Message> save(
             @RequestBody EnderecoDTO enderecoDto) {
         Message message = new Message();
 
-        System.out.println(enderecoDto);
-
         message.setTitle("Sucesso");
         message.setDescription("Endereco cadastrado com sucesso!");
 
-        return new ResponseEntity<>(message, HttpStatus.ACCEPTED);
+        return new ResponseEntity(message, HttpStatus.ACCEPTED);
     }
 
-    @CrossOrigin
+    /*@CrossOrigin
     @GetMapping(value="/tipoEnderecos")
     public List<TipoEndereco> obterTipoEnderecos() {
-        return this.obterTipoEnderecos();
-    }
+        return;
+    }*/
 }
