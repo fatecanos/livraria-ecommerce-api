@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.models;
+package com.fatec.livrariaecommerce.models.utils;
 
 import lombok.Data;
 import org.springframework.stereotype.Service;

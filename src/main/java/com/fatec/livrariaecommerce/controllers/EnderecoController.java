@@ -1,13 +1,10 @@
 package com.fatec.livrariaecommerce.controllers;
 
-import com.fatec.livrariaecommerce.domain.TipoEndereco;
-import com.fatec.livrariaecommerce.dto.EnderecoDTO;
-import com.fatec.livrariaecommerce.models.Message;
+import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
+import com.fatec.livrariaecommerce.models.utils.Message;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/endereco")

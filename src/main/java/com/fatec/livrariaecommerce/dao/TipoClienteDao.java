@@ -1,6 +1,6 @@
 package com.fatec.livrariaecommerce.dao;
 
-import com.fatec.livrariaecommerce.domain.TipoCliente;
+import com.fatec.livrariaecommerce.models.domain.TipoCliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

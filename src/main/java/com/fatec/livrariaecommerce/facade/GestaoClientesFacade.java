@@ -4,11 +4,11 @@ import com.fatec.livrariaecommerce.dao.ClienteDao;
 import com.fatec.livrariaecommerce.dao.DocumentoDao;
 import com.fatec.livrariaecommerce.dao.TipoClienteDao;
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
-import com.fatec.livrariaecommerce.domain.Cliente;
-import com.fatec.livrariaecommerce.domain.Documento;
-import com.fatec.livrariaecommerce.domain.TipoCliente;
-import com.fatec.livrariaecommerce.domain.Usuario;
-import com.fatec.livrariaecommerce.models.CpfValidator;
+import com.fatec.livrariaecommerce.models.domain.Cliente;
+import com.fatec.livrariaecommerce.models.domain.Documento;
+import com.fatec.livrariaecommerce.models.domain.TipoCliente;
+import com.fatec.livrariaecommerce.models.domain.Usuario;
+import com.fatec.livrariaecommerce.models.utils.CpfValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

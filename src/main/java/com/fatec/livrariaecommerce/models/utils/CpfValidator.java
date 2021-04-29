@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.models;
+package com.fatec.livrariaecommerce.models.utils;
 
 import java.util.InputMismatchException;
 

@@ -3,10 +3,10 @@ package com.fatec.livrariaecommerce.facade;
 import com.fatec.livrariaecommerce.dao.EnderecoDao;
 import com.fatec.livrariaecommerce.dao.EstadoDao;
 import com.fatec.livrariaecommerce.dao.TipoEnderecoDao;
-import com.fatec.livrariaecommerce.domain.Endereco;
-import com.fatec.livrariaecommerce.domain.Estado;
-import com.fatec.livrariaecommerce.domain.TipoEndereco;
-import com.fatec.livrariaecommerce.dto.EnderecoDTO;
+import com.fatec.livrariaecommerce.models.domain.Endereco;
+import com.fatec.livrariaecommerce.models.domain.Estado;
+import com.fatec.livrariaecommerce.models.domain.TipoEndereco;
+import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

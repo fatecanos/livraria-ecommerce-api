@@ -1,7 +1,7 @@
 package com.fatec.livrariaecommerce.dao;
 
-import com.fatec.livrariaecommerce.domain.Cliente;
-import com.fatec.livrariaecommerce.domain.Documento;
+import com.fatec.livrariaecommerce.models.domain.Cliente;
+import com.fatec.livrariaecommerce.models.domain.Documento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

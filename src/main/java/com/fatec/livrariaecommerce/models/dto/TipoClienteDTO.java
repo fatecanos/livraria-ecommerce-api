@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.dto;
+package com.fatec.livrariaecommerce.models.dto;
 
 import lombok.Data;
 

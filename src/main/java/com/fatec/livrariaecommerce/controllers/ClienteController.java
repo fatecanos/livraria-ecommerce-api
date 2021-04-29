@@ -1,10 +1,10 @@
 package com.fatec.livrariaecommerce.controllers;
 
-import com.fatec.livrariaecommerce.domain.*;
-import com.fatec.livrariaecommerce.dto.ClienteDTO;
-import com.fatec.livrariaecommerce.dto.EnderecoDTO;
+import com.fatec.livrariaecommerce.models.domain.*;
+import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
+import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.facade.GestaoClientesFacade;
-import com.fatec.livrariaecommerce.models.Message;
+import com.fatec.livrariaecommerce.models.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class ClienteController {
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto) {
         Message message = new Message();
-        ArrayList documentos = new ArrayList<Documento>();
+        List documentos = new ArrayList<Documento>();
 
         Cliente cliente = new Cliente(
             clienteDto.getNome(),

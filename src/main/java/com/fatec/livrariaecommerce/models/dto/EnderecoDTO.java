@@ -1,7 +1,7 @@
-package com.fatec.livrariaecommerce.dto;
+package com.fatec.livrariaecommerce.models.dto;
 
-import com.fatec.livrariaecommerce.domain.Cidade;
-import com.fatec.livrariaecommerce.domain.TipoEndereco;
+import com.fatec.livrariaecommerce.models.domain.Cidade;
+import com.fatec.livrariaecommerce.models.domain.TipoEndereco;
 import lombok.Builder;
 import lombok.Data;
 

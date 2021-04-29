@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.domain;
+package com.fatec.livrariaecommerce.models.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

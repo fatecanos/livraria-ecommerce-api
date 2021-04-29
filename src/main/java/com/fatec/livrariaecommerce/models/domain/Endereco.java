@@ -1,7 +1,6 @@
-package com.fatec.livrariaecommerce.domain;
+package com.fatec.livrariaecommerce.models.domain;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class Endereco extends EntidadeDominio {
