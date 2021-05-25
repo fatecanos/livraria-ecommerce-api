@@ -88,7 +88,8 @@ public class LivrosController {
     @CrossOrigin
     @PutMapping
     public ResponseEntity<Message>
-        atualizar(@RequestBody LivroDTO livroDto) throws Exception{
+        atualizar(@RequestBody LivroDTO livroDto) throws Exception {
+        System.out.println("Chegou o DTO"+ livroDto.toString());
         this.livrosFacade.atualizar(livroDto);
         return ResponseEntity.ok().build();
     }

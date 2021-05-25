@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class DimensaoDTO {
     private int id;
-    private String altura;
-    private String largura;
-    private String peso;
-    private String profundidade;
+    private double altura;
+    private double largura;
+    private double peso;
+    private double profundidade;
 }

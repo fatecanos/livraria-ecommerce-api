@@ -55,6 +55,7 @@ public class LivrosFacade {
         originalLivro.setNumeroPaginas(livroDto.getQuantidadePaginas());
         originalLivro.setIsbn(livroDto.getIsbn());
         originalLivro.setTitulo(livroDto.getTitulo());
+        originalLivro.setSinopse(livroDto.getSinopse());
 
         //dimensoes
         Dimensoes dimensoes = new Dimensoes();
@@ -90,7 +91,7 @@ public class LivrosFacade {
     public void atualizar(LivroDTO livroDto) throws Exception {
         Livro livro = this.livroDao.getOne(livroDto.getId());
 
-        if(livro.equals(null)) {
+        if(!livro.isAtivo()) {
             throw new Exception("Erro: livro não encontrado");
         }
 
