@@ -91,7 +91,7 @@ public class GestaoClientesFacade {
         List<Cliente> clientes = this.clienteDao.findAll();
 
         return clientes.stream()
-                .filter(cliente -> cliente.isAtivo())
+                .filter(Cliente::isAtivo)
                 .collect(Collectors.toList());
     }
 

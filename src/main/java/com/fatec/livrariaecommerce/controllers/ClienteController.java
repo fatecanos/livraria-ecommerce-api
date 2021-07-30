@@ -33,24 +33,24 @@ public class ClienteController {
         List documentos = new ArrayList<Documento>();
 
         Cliente cliente = new Cliente(
-            clienteDto.getNome(),
-            clienteDto.getSobrenome(),
-            clienteDto.getDataNascimento()
+                clienteDto.getNome(),
+                clienteDto.getSobrenome(),
+                clienteDto.getDataNascimento()
         );
 
         Documento documento = new Documento(
-            clienteDto.getCpf(),
-            new TipoDocumento(
-                    "cadastro de pessoa física",
-                    "CPF")
+                clienteDto.getCpf(),
+                new TipoDocumento(
+                        "cadastro de pessoa física",
+                        "CPF")
         );
 
         documentos.add(documento);
 
         Usuario usuario = new Usuario(
-            clienteDto.getEmail(),
-            clienteDto.getSenha(),
-            PerfilUsuario.CLIENTE
+                clienteDto.getEmail(),
+                clienteDto.getSenha(),
+                PerfilUsuario.CLIENTE
         );
 
         cliente.setDocumentos(documentos);
@@ -72,31 +72,33 @@ public class ClienteController {
     @GetMapping(produces = "application/json")
     public List<ClienteDTO> obterTodosClientes() {
         List<Cliente> clientes = this.facade.viewAll();
+
+
         List<ClienteDTO> clientesDto;
 
         clientesDto = clientes.stream().map(cliente ->
-            ClienteDTO.montar()
-                    .id(cliente.getId())
-                    .nome(cliente.getNome())
-                    .sobrenome(cliente.getSobrenome())
-                    .cpf(cliente.getDocumentos().stream()
-                            .findFirst().get().getCodigo())
-                    .email(cliente.getUsuario().getEmail())
-                    .dataNascimento(cliente.getDataNascimento())
-                    .enderecos(cliente.getEnderecos().stream().map(endereco ->
-                            EnderecoDTO.montar()
-                                    .id(endereco.getId())
-                                    .logradouro(endereco.getLogradouro())
-                                    .bairro(endereco.getBairro())
-                                    .cidade(endereco.getCidade())
-                                    .tipoEndereco(endereco.getTipoEndereco())
-                                    .complemento(endereco.getComplemento())
-                                    .numero(endereco.getNumero())
-                                    .cep(endereco.getCep())
-                                .build()
-                        ).collect(Collectors.toList())
-                    )
-                    .build()
+                ClienteDTO.montar()
+                        .id(cliente.getId())
+                        .nome(cliente.getNome())
+                        .sobrenome(cliente.getSobrenome())
+                        .cpf(cliente.getDocumentos().stream()
+                                .findFirst().get().getCodigo())
+                        .email(cliente.getUsuario().getEmail())
+                        .dataNascimento(cliente.getDataNascimento())
+                        .enderecos(cliente.getEnderecos().stream().map(endereco ->
+                                        EnderecoDTO.montar()
+                                                .id(endereco.getId())
+                                                .logradouro(endereco.getLogradouro())
+                                                .bairro(endereco.getBairro())
+                                                .cidade(endereco.getCidade())
+                                                .tipoEndereco(endereco.getTipoEndereco())
+                                                .complemento(endereco.getComplemento())
+                                                .numero(endereco.getNumero())
+                                                .cep(endereco.getCep())
+                                                .build()
+                                ).collect(Collectors.toList())
+                        )
+                        .build()
         ).collect(Collectors.toList());
 
         return clientesDto;
@@ -163,29 +165,28 @@ public class ClienteController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/{id}",produces = "application/json")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ClienteDTO getClienteById(@PathVariable int id) {
         Cliente cliente = this.facade.findClienteById(id);
-
         return ClienteDTO.montar()
-            .id(cliente.getId())
-            .nome(cliente.getNome())
-            .sobrenome(cliente.getSobrenome())
-            .cpf(cliente.getDocumentos().stream().findFirst().get().getCodigo())
-            .email(cliente.getUsuario().getEmail())
-            .dataNascimento(cliente.getDataNascimento())
-            .enderecos(cliente.getEnderecos().stream().map(endereco ->
-                EnderecoDTO.montar()
-                    .id(endereco.getId())
-                    .logradouro(endereco.getLogradouro())
-                    .bairro(endereco.getBairro())
-                    .cidade(endereco.getCidade())
-                    .tipoEndereco(endereco.getTipoEndereco())
-                    .complemento(endereco.getComplemento())
-                    .numero(endereco.getNumero())
-                    .cep(endereco.getCep())
-                .build()
-            ).collect(Collectors.toList())
-        ).build();
+                .id(cliente.getId())
+                .nome(cliente.getNome())
+                .sobrenome(cliente.getSobrenome())
+                .cpf(cliente.getDocumentos().stream().findFirst().get().getCodigo())
+                .email(cliente.getUsuario().getEmail())
+                .dataNascimento(cliente.getDataNascimento())
+                .enderecos(cliente.getEnderecos().stream().map(endereco ->
+                                EnderecoDTO.montar()
+                                        .id(endereco.getId())
+                                        .logradouro(endereco.getLogradouro())
+                                        .bairro(endereco.getBairro())
+                                        .cidade(endereco.getCidade())
+                                        .tipoEndereco(endereco.getTipoEndereco())
+                                        .complemento(endereco.getComplemento())
+                                        .numero(endereco.getNumero())
+                                        .cep(endereco.getCep())
+                                        .build()
+                        ).collect(Collectors.toList())
+                ).build();
     }
 }
