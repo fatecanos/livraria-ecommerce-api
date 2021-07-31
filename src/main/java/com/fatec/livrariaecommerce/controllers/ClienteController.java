@@ -5,30 +5,33 @@ import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
 import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.facade.GestaoClientesFacade;
 import com.fatec.livrariaecommerce.models.utils.Message;
+import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
 
     private final GestaoClientesFacade facade;
 
-    @Autowired
-    public ClienteController(GestaoClientesFacade facade) {
-        this.facade = facade;
-    }
-
-    @CrossOrigin
-    @PostMapping(produces = "application/json")
+    @PostMapping
     public ResponseEntity<Message> salvarCliente(
-            @RequestBody ClienteDTO clienteDto) {
+            @RequestBody ClienteDTO clienteDto, HttpSession session) {
+        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
+//        if(session.getAttribute("loggedUserId") == null){
+//            return ResponseEntity.badRequest().build();
+//        }
+
         Message message = new Message();
         List documentos = new ArrayList<Documento>();
 
@@ -68,44 +71,22 @@ public class ClienteController {
         }
     }
 
-    @CrossOrigin
-    @GetMapping(produces = "application/json")
-    public List<ClienteDTO> obterTodosClientes() {
-        List<Cliente> clientes = this.facade.viewAll();
-
-
-        List<ClienteDTO> clientesDto;
-
-        clientesDto = clientes.stream().map(cliente ->
-                ClienteDTO.montar()
-                        .id(cliente.getId())
-                        .nome(cliente.getNome())
-                        .sobrenome(cliente.getSobrenome())
-                        .cpf(cliente.getDocumentos().stream()
-                                .findFirst().get().getCodigo())
-                        .email(cliente.getUsuario().getEmail())
-                        .dataNascimento(cliente.getDataNascimento())
-                        .enderecos(cliente.getEnderecos().stream().map(endereco ->
-                                        EnderecoDTO.montar()
-                                                .id(endereco.getId())
-                                                .logradouro(endereco.getLogradouro())
-                                                .bairro(endereco.getBairro())
-                                                .cidade(endereco.getCidade())
-                                                .tipoEndereco(endereco.getTipoEndereco())
-                                                .complemento(endereco.getComplemento())
-                                                .numero(endereco.getNumero())
-                                                .cep(endereco.getCep())
-                                                .build()
-                                ).collect(Collectors.toList())
-                        )
-                        .build()
-        ).collect(Collectors.toList());
-
-        return clientesDto;
+    @GetMapping
+    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
+        try {
+            List<Cliente> clientes = this.facade.viewAll();
+            List<ClienteDTO> clienteDTOList = new ArrayList<>();
+            for (Cliente cliente : clientes) {
+                clienteDTOList.add(new ClienteDTO(cliente));
+            }
+            return ResponseEntity.ok(clienteDTOList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @CrossOrigin
-    @DeleteMapping(produces = "application/json")
+    @DeleteMapping
     public ResponseEntity<Message> inativarClientePeloId(
             @RequestParam int id) {
         Message message = new Message();
@@ -121,8 +102,7 @@ public class ClienteController {
         }
     }
 
-    @CrossOrigin
-    @PutMapping(value = "/{id}", produces = "application/json")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Message> atualizarClientePeloId(
             @PathVariable int id, @RequestBody ClienteDTO clienteDto
     ) {
@@ -164,29 +144,13 @@ public class ClienteController {
         }
     }
 
-    @CrossOrigin
-    @GetMapping(value = "/{id}", produces = "application/json")
-    public ClienteDTO getClienteById(@PathVariable int id) {
-        Cliente cliente = this.facade.findClienteById(id);
-        return ClienteDTO.montar()
-                .id(cliente.getId())
-                .nome(cliente.getNome())
-                .sobrenome(cliente.getSobrenome())
-                .cpf(cliente.getDocumentos().stream().findFirst().get().getCodigo())
-                .email(cliente.getUsuario().getEmail())
-                .dataNascimento(cliente.getDataNascimento())
-                .enderecos(cliente.getEnderecos().stream().map(endereco ->
-                                EnderecoDTO.montar()
-                                        .id(endereco.getId())
-                                        .logradouro(endereco.getLogradouro())
-                                        .bairro(endereco.getBairro())
-                                        .cidade(endereco.getCidade())
-                                        .tipoEndereco(endereco.getTipoEndereco())
-                                        .complemento(endereco.getComplemento())
-                                        .numero(endereco.getNumero())
-                                        .cep(endereco.getCep())
-                                        .build()
-                        ).collect(Collectors.toList())
-                ).build();
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(new ClienteDTO(this.facade.findClienteById(id)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

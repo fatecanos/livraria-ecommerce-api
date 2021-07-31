@@ -1,6 +1,7 @@
 package com.fatec.livrariaecommerce.models.dto;
 
 import com.fatec.livrariaecommerce.models.domain.Cidade;
+import com.fatec.livrariaecommerce.models.domain.Endereco;
 import com.fatec.livrariaecommerce.models.domain.TipoEndereco;
 import lombok.Builder;
 import lombok.Data;
@@ -16,17 +17,14 @@ public class EnderecoDTO {
     private TipoEndereco tipoEndereco;
     private Cidade cidade;
 
-    @Builder(builderMethodName = "montar")
-    public EnderecoDTO(int id, String logradouro, String numero,
-                       String bairro, String complemento,
-                       TipoEndereco tipoEndereco, Cidade cidade, String cep) {
-        this.id = id;
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.bairro = bairro;
-        this.complemento = complemento;
-        this.tipoEndereco = tipoEndereco;
-        this.cidade = cidade;
-        this.cep = cep;
+    public EnderecoDTO(Endereco endereco) {
+        this.id = endereco.getId();
+        this.logradouro = endereco.getLogradouro();
+        this.numero = endereco.getNumero();
+        this.bairro = endereco.getBairro();
+        this.complemento = endereco.getComplemento();
+        this.tipoEndereco = endereco.getTipoEndereco();
+        this.cidade = endereco.getCidade();
+        this.cep = endereco.getCep();
     }
 }

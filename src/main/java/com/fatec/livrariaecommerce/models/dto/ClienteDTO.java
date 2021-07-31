@@ -1,13 +1,16 @@
 package com.fatec.livrariaecommerce.models.dto;
 
+import com.fatec.livrariaecommerce.models.domain.Cliente;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Data @NoArgsConstructor
+@Data
+@NoArgsConstructor
 public class ClienteDTO {
     private int id;
     private String nome;
@@ -19,19 +22,13 @@ public class ClienteDTO {
     private String confirmacaoSenha;
     private List<EnderecoDTO> enderecos;
 
-    @Builder(builderMethodName = "montar")
-    public ClienteDTO(int id, String nome, String sobrenome,
-                      LocalDate dataNascimento, String cpf,
-                      String email, String senha, String confirmacaoSenha,
-                      List<EnderecoDTO> enderecos) {
-        this.id = id;
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.dataNascimento = dataNascimento;
-        this.cpf = cpf;
-        this.email = email;
-        this.senha = senha;
-        this.confirmacaoSenha = confirmacaoSenha;
-        this.enderecos = enderecos;
+    public ClienteDTO(Cliente cliente) {
+        this.id = cliente.getId();
+        this.nome = cliente.getNome();
+        this.sobrenome = cliente.getSobrenome();
+        this.dataNascimento = cliente.getDataNascimento();
+        this.cpf = cliente.getDocumentos().stream().findFirst().get().getCodigo();
+        this.email = cliente.getUsuario().getEmail();
+        this.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::new).collect(Collectors.toList());
     }
 }
