@@ -30,6 +30,8 @@ public class LoginController {
 
             session.setAttribute("loggedUserId", usuario.getId());
 
+            System.out.println("Olha quem logou: " + session.getAttribute("loggedUserId"));
+
             return ResponseEntity.ok(new UsuarioDTO(usuario));
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,7 +40,7 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity logout(HttpSession session){
+    public ResponseEntity logout(HttpSession session) {
         session.setAttribute("loggedUserId", null);
         return ResponseEntity.ok().build();
     }

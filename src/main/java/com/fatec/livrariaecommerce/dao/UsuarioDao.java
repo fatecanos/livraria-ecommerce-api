@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface UsuarioDao
         extends JpaRepository<Cliente, Integer> {
-//    @Query("SELECT s FROM Usuario s WHERE s.email = ?1")
-//    Optional<Usuario> isEmailAlreadyPresent(String email);
+    @Query("SELECT s FROM Usuario s WHERE s.email = ?1")
+    Optional<Usuario> isEmailAlreadyPresent(String email);
 
 
     @Query("SELECT s FROM Usuario s WHERE s.email = :email AND s.senha = :senha")

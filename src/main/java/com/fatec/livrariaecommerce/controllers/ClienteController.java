@@ -24,11 +24,14 @@ public class ClienteController {
 
     private final GestaoClientesFacade facade;
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto, HttpSession session) {
-        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
-//        if(session.getAttribute("loggedUserId") == null){
+
+//        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
+//
+//        if (session.getAttribute("loggedUserId") == null) {
 //            return ResponseEntity.badRequest().build();
 //        }
 
@@ -71,6 +74,7 @@ public class ClienteController {
         }
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
@@ -86,6 +90,8 @@ public class ClienteController {
         }
     }
 
+    //TODO: RETURN CROSS ORIGIN TO RESOLVE FRONT PROBLEM
+    @CrossOrigin
     @DeleteMapping
     public ResponseEntity<Message> inativarClientePeloId(
             @RequestParam int id) {
@@ -102,6 +108,7 @@ public class ClienteController {
         }
     }
 
+    @CrossOrigin
     @PutMapping(value = "/{id}")
     public ResponseEntity<Message> atualizarClientePeloId(
             @PathVariable int id, @RequestBody ClienteDTO clienteDto
@@ -144,8 +151,18 @@ public class ClienteController {
         }
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int id) {
+    @CrossOrigin
+    @GetMapping(path = "/meus_dados")
+    public ResponseEntity<ClienteDTO> getClienteById(HttpSession session) {
+        int id;
+        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
+        if (session.getAttribute("loggedUserId") == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        id = Integer.parseInt(session.getAttribute("loggedUserId").toString());
+
+
         try {
             return ResponseEntity.ok(new ClienteDTO(this.facade.findClienteById(id)));
         } catch (Exception e) {

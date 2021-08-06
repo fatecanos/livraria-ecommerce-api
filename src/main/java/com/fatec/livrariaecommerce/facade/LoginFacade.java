@@ -13,11 +13,6 @@ public class LoginFacade {
     @Autowired
     private UsuarioDao usuarioDao;
 
-
-    public void save() {
-
-    }
-
     public Optional<Usuario> findByEmailAndSenha(String email, String senha) {
         return this.usuarioDao.findByEmailAndSenha(email, senha);
     }
