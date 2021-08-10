@@ -80,15 +80,23 @@ public class LivrosController {
     }
 
     @CrossOrigin
+    @GetMapping("/{id}")
+    public ResponseEntity<LivroDTO> obterLivroPorId(@PathVariable int id) throws Exception {
+        LivroDTO livro = this.livrosFacade.obterLivroPorId(id);
+        return ResponseEntity.ok(livro);
+    }
+
+
+    // TODO: anexar motivo inativação
+    @CrossOrigin
     @DeleteMapping
-    public void inativar(@RequestParam int id) throws Exception{
+    public void inativar(@RequestParam int id) throws Exception {
         this.livrosFacade.inativarLivro(id);
     }
 
     @CrossOrigin
     @PutMapping
-    public ResponseEntity<Message>
-        atualizar(@RequestBody LivroDTO livroDto) throws Exception {
+    public ResponseEntity<Message> atualizar(@RequestBody LivroDTO livroDto) throws Exception {
         System.out.println("Chegou o DTO"+ livroDto.toString());
         this.livrosFacade.atualizar(livroDto);
         return ResponseEntity.ok().build();

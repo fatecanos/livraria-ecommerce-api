@@ -18,13 +18,9 @@ public class GrupoPrecificacao {
     )
     private int id;
     private String descricao;
+    private double percentualLucro;
 
     public GrupoPrecificacao() {
-    }
-
-    public GrupoPrecificacao(int id, String descricao) {
-        this.id = id;
-        this.descricao = descricao;
     }
 
     public int getId() {
@@ -41,5 +37,13 @@ public class GrupoPrecificacao {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public double getPercentualLucro() {
+        return percentualLucro;
+    }
+
+    public void setPercentualLucro(double percentualLucro) {
+        this.percentualLucro = percentualLucro;
     }
 }

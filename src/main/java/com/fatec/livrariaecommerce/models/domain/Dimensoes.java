@@ -1,12 +1,14 @@
 package com.fatec.livrariaecommerce.models.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table
-@Data
+@Data @Getter @Setter
 public class Dimensoes {
     @Id
     @SequenceGenerator(

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,6 +57,7 @@ public class LivrosFacade {
         originalLivro.setIsbn(livroDto.getIsbn());
         originalLivro.setTitulo(livroDto.getTitulo());
         originalLivro.setSinopse(livroDto.getSinopse());
+        originalLivro.setCodigoBarras(livroDto.getCodigoBarras());
 
         //dimensoes
         Dimensoes dimensoes = new Dimensoes();
@@ -77,6 +79,12 @@ public class LivrosFacade {
 
     public List<Livro> obterLivros() {
         return this.livroDao.findAll();
+    }
+
+    public LivroDTO obterLivroPorId(Integer id) throws Exception {
+        Optional<Livro> livro = this.livroDao.findById(id);
+        if(livro.isEmpty()) throw new Exception("erro ao obter livro");
+        return new LivroDTO(livro.get());
     }
 
     public void inativarLivro(int livroId) throws Exception {

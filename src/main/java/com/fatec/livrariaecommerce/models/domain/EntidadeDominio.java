@@ -3,6 +3,7 @@ package com.fatec.livrariaecommerce.models.domain;
 import java.time.LocalDate;
 
 public abstract class EntidadeDominio {
+	private int id;
 	private LocalDate timeStamp;
 	private boolean isAtivo;
 
