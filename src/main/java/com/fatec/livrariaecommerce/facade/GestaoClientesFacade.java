@@ -146,4 +146,8 @@ public class GestaoClientesFacade {
     public Cliente findClienteById(int id) {
         return this.clienteDao.getOne(id);
     }
+
+    public Optional<Cliente> findClienteByUsuarioId(int usuarioId) {
+        return this.clienteDao.findClienteByUsuarioID(usuarioId);
+    }
 }

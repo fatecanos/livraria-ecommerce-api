@@ -29,11 +29,11 @@ public class ClienteController {
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto, HttpSession session) {
 
-//        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
-//
-//        if (session.getAttribute("loggedUserId") == null) {
-//            return ResponseEntity.badRequest().build();
-//        }
+        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
+
+        if (session.getAttribute("loggedUserId") == null) {
+            return ResponseEntity.badRequest().build();
+        }
 
         Message message = new Message();
         List documentos = new ArrayList<Documento>();
@@ -152,22 +152,26 @@ public class ClienteController {
     }
 
     @CrossOrigin
-    @GetMapping(path = "/meus_dados")
+    @GetMapping(value = "/meus_dados")
     public ResponseEntity<ClienteDTO> getClienteById(HttpSession session) {
+
         int id;
         System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
         if (session.getAttribute("loggedUserId") == null) {
             return ResponseEntity.badRequest().build();
         }
-
         id = Integer.parseInt(session.getAttribute("loggedUserId").toString());
 
-
         try {
-            return ResponseEntity.ok(new ClienteDTO(this.facade.findClienteById(id)));
+            Cliente cliente = this.facade.
+                    findClienteByUsuarioId(id)
+                    .orElseThrow(Exception::new);
+            return ResponseEntity.ok(new ClienteDTO(cliente));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
+
+
     }
 }
