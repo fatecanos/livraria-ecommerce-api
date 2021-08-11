@@ -13,25 +13,21 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-@CrossOrigin
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin
 @RequestMapping("/login")
 public class LoginController {
 
     private final LoginFacade loginFacade;
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO, HttpSession session) {
+    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
 
         try {
             Usuario usuario = this.loginFacade
                     .findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha())
                     .orElseThrow(Exception::new);
-
-            session.setAttribute("loggedUserId", usuario.getId());
-
-            System.out.println("Olha quem logou: " + session.getAttribute("loggedUserId"));
 
             return ResponseEntity.ok(new UsuarioDTO(usuario));
         } catch (Exception e) {

@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin
 @RequestMapping("/clientes")
 public class ClienteController {
 
     private final GestaoClientesFacade facade;
 
-    @CrossOrigin
     @PostMapping
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto, HttpSession session) {
@@ -74,7 +74,6 @@ public class ClienteController {
         }
     }
 
-    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
@@ -90,8 +89,6 @@ public class ClienteController {
         }
     }
 
-    //TODO: RETURN CROSS ORIGIN TO RESOLVE FRONT PROBLEM
-    @CrossOrigin
     @DeleteMapping
     public ResponseEntity<Message> inativarClientePeloId(
             @RequestParam int id) {
@@ -108,7 +105,6 @@ public class ClienteController {
         }
     }
 
-    @CrossOrigin
     @PutMapping(value = "/{id}")
     public ResponseEntity<Message> atualizarClientePeloId(
             @PathVariable int id, @RequestBody ClienteDTO clienteDto
@@ -151,17 +147,8 @@ public class ClienteController {
         }
     }
 
-    @CrossOrigin
-    @GetMapping(value = "/meus_dados")
-    public ResponseEntity<ClienteDTO> getClienteById(HttpSession session) {
-
-        int id;
-        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
-        if (session.getAttribute("loggedUserId") == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        id = Integer.parseInt(session.getAttribute("loggedUserId").toString());
-
+    @GetMapping(value = "/meus_dados/{id}")
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int id) {
         try {
             Cliente cliente = this.facade.
                     findClienteByUsuarioId(id)
