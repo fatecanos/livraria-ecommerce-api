@@ -1,22 +1,19 @@
 package com.fatec.livrariaecommerce.models.domain;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+
+@NoArgsConstructor
 
 @Entity
 @Table
 public class Cliente extends Pessoa {
 	@Id
-	@SequenceGenerator(
-			name="clientes_sequence",
-			sequenceName="clientes_sequence",
-			allocationSize=1
-	)
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator = "clientes_sequence"
-	)
+	@SequenceGenerator(name="clientes_sequence", sequenceName="clientes_sequence", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_sequence")
 	private int id;
 	private String nome;
 	private String sobrenome;
@@ -33,12 +30,8 @@ public class Cliente extends Pessoa {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
 	private List<Endereco> enderecos;
-
-	public Cliente() {
-
-	}
 
 	public Cliente(String nome, String sobrenome, LocalDate dataNascimento) {
 		this.nome = nome;

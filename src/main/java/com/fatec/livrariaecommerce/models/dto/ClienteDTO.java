@@ -29,6 +29,6 @@ public class ClienteDTO {
         this.dataNascimento = cliente.getDataNascimento();
         this.cpf = cliente.getDocumentos().stream().findFirst().get().getCodigo();
         this.email = cliente.getUsuario().getEmail();
-        this.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::new).collect(Collectors.toList());
+        this.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::from).collect(Collectors.toList());
     }
 }

@@ -7,6 +7,5 @@ import org.springframework.stereotype.Service;
 
 @Repository
 @Service
-public interface EnderecoDao
-        extends JpaRepository<Endereco, Integer> {
+public interface EnderecoDao extends JpaRepository<Endereco, Integer> {
 }

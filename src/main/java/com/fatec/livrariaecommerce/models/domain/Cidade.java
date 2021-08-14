@@ -1,8 +1,14 @@
 package com.fatec.livrariaecommerce.models.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
+@Table(name = "cidade")
 public class Cidade extends EntidadeDominio {
 	@Id
 	@SequenceGenerator(
@@ -15,35 +21,12 @@ public class Cidade extends EntidadeDominio {
 			generator = "cidades_sequences"
 	)
 	private int id;
-	private String descricao;
+	private String nome;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "estado")
 	private Estado estado;
 
 	public Cidade() {
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Estado getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Estado estado) {
-		this.estado = estado;
 	}
 }
