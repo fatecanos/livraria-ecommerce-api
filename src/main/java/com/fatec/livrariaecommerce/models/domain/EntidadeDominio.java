@@ -1,34 +1,33 @@
 package com.fatec.livrariaecommerce.models.domain;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@Setter
+@Getter
 
+@MappedSuperclass
 public abstract class EntidadeDominio {
 
-	private LocalDate timeStamp;
-	private boolean isAtivo;
+    @CreatedDate
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private LocalDateTime dataCriacao;
 
-	public EntidadeDominio(LocalDate timeStamp, boolean isAtivo) {
-		this.timeStamp = timeStamp;
-		this.isAtivo = isAtivo;
-	}
+    @Basic
+    @Column(name = "ativo", nullable = false)
+    private boolean ativo;
 
-	public LocalDate getTimeStamp() {
-		return timeStamp;
-	}
 
-	public void setTimeStamp(LocalDate timeStamp) {
-		this.timeStamp = timeStamp;
-	}
-
-	public boolean isAtivo() {
-		return isAtivo;
-	}
-
-	public void setAtivo(boolean ativo) {
-		isAtivo = ativo;
-	}
+    public EntidadeDominio() {
+        this.dataCriacao = LocalDateTime.now();
+        this.ativo = true;
+    }
 }

@@ -1,14 +1,19 @@
 package com.fatec.livrariaecommerce.models.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Setter
+@Getter
 @Entity
-public class Usuario {
+public class Usuario extends EntidadeDominio {
     @Id
     @SequenceGenerator(
-            name="usuario_sequences",
-            sequenceName="usuario_sequences",
-            allocationSize=1
+            name = "usuario_sequences",
+            sequenceName = "usuario_sequences",
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -30,35 +35,4 @@ public class Usuario {
         this.perfilUsuario = perfilUsuario;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public PerfilUsuario getPerfilUsuario() {
-        return perfilUsuario;
-    }
-
-    public void setPerfilUsuario(PerfilUsuario perfilUsuario) {
-        this.perfilUsuario = perfilUsuario;
-    }
 }

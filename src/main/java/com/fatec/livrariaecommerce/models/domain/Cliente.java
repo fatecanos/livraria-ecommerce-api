@@ -1,6 +1,8 @@
 package com.fatec.livrariaecommerce.models.domain;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -8,120 +10,46 @@ import java.util.List;
 
 @NoArgsConstructor
 
+@Setter
+@Getter
 @Entity
-@Table
-public class Cliente extends Pessoa {
-	@Id
-	@SequenceGenerator(name="clientes_sequence", sequenceName="clientes_sequence", allocationSize=1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_sequence")
-	private int id;
-	private String nome;
-	private String sobrenome;
-	private LocalDate dataNascimento;
-	private LocalDate timeStamp;
-	private boolean isAtivo;
+@Table(name = "cliente")
+public class Cliente extends EntidadeDominio {
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private TipoCliente tipoCliente;
+    // ***********************************************************************
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Documento> documentos;
+    @Id
+    @SequenceGenerator(name = "clientes_sequence", sequenceName = "clientes_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_sequence")
+    private int id;
+    private String nome;
+    private String sobrenome;
+    private LocalDate dataNascimento;
+    private String cpf;
+    private String genero;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Usuario usuario;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Usuario usuario;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-	private List<Endereco> enderecos;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    private List<Endereco> enderecos;
 
-	public Cliente(String nome, String sobrenome, LocalDate dataNascimento) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.dataNascimento = dataNascimento;
-	}
 
-	public int getId() {
-		return id;
-	}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    private List<Telefone> telefones;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    // ***********************************************************************
 
-	public String getNome() {
-		return nome;
-	}
+    public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,
+                               String genero, Usuario usuario) {
+        this.id = id;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.dataNascimento = dataNascimento;
+        this.cpf = cpf;
+        this.genero = genero;
+        this.usuario = usuario;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 
-	public String getSobrenome() {
-		return sobrenome;
-	}
-
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
-	}
-
-	public LocalDate getDataNascimento() {
-		return dataNascimento;
-	}
-
-	public void setDataNascimento(LocalDate dataNascimento) {
-		this.dataNascimento = dataNascimento;
-	}
-
-	@Override
-	public LocalDate getTimeStamp() {
-		return timeStamp;
-	}
-
-	@Override
-	public void setTimeStamp(LocalDate timeStamp) {
-		this.timeStamp = timeStamp;
-	}
-
-	@Override
-	public boolean isAtivo() {
-		return isAtivo;
-	}
-
-	@Override
-	public void setAtivo(boolean ativo) {
-		isAtivo = ativo;
-	}
-
-	public TipoCliente getTipoCliente() {
-		return tipoCliente;
-	}
-
-	public void setTipoCliente(TipoCliente tipoCliente) {
-		this.tipoCliente = tipoCliente;
-	}
-
-	@Override
-	public List<Documento> getDocumentos() {
-		return documentos;
-	}
-
-	@Override
-	public void setDocumentos(List<Documento> documentos) {
-		this.documentos = documentos;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public List<Endereco> getEnderecos() {
-		return enderecos;
-	}
-
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
-	}
 }

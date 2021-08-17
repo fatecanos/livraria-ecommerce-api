@@ -29,7 +29,7 @@ public class TipoCliente extends EntidadeDominio {
 	}
 
 	public TipoCliente(LocalDate timeStamp, boolean isAtivo, int id, String nome, String descricao) {
-		super(timeStamp, isAtivo);
+		super();
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;

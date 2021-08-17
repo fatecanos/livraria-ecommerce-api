@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.negocio.endereco;
+package com.fatec.livrariaecommerce.negocio.cliente.endereco;
 
 import com.fatec.livrariaecommerce.models.domain.Endereco;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;

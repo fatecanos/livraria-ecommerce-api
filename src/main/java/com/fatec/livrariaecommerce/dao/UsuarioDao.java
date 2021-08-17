@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UsuarioDao
-        extends JpaRepository<Cliente, Integer> {
+        extends JpaRepository<Usuario, Integer> {
     @Query("SELECT s FROM Usuario s WHERE s.email = ?1")
     Optional<Usuario> isEmailAlreadyPresent(String email);
 

@@ -2,8 +2,8 @@ package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.dao.CidadeDao;
 import com.fatec.livrariaecommerce.dao.TipoEnderecoDao;
+import com.fatec.livrariaecommerce.facade.ClientesFacade;
 import com.fatec.livrariaecommerce.facade.EnderecoFacade;
-import com.fatec.livrariaecommerce.facade.GestaoClientesFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.domain.Endereco;
 import com.fatec.livrariaecommerce.models.dto.CidadeDTO;
@@ -31,14 +31,14 @@ public class EnderecoController {
     private final EnderecoFacade enderecoFacade;
     private final CidadeDao cidadeDao;
     private final TipoEnderecoDao tipoEnderecoDao;
-    private final GestaoClientesFacade gestaoClientesFacade;
+    private final ClientesFacade clientesFacade;
 
     // ***********************************************************************
 
     @PostMapping(path = "{userId}")
     public ResponseEntity<Message> save(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
         try {
-            Cliente cliente = this.gestaoClientesFacade.findClienteByUsuarioId(userId).orElseThrow(Exception::new);
+            Cliente cliente = this.clientesFacade.findClienteByUsuarioId(userId).orElseThrow(Exception::new);
             Cidade cidade = this.cidadeDao.getOne(enderecoDto.getCidade().getId());
             TipoEndereco tipoEndereco = this.tipoEnderecoDao.getOne(enderecoDto.getTipoEndereco().getId());
             Endereco endereco = new Endereco(cliente);

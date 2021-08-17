@@ -1,7 +1,7 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
-import com.fatec.livrariaecommerce.facade.LoginFacade;
+import com.fatec.livrariaecommerce.facade.UsuarioFacade;
 import com.fatec.livrariaecommerce.models.domain.Usuario;
 import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
 import com.fatec.livrariaecommerce.models.dto.LoginDTO;
@@ -19,13 +19,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/login")
 public class LoginController {
 
-    private final LoginFacade loginFacade;
+    private final UsuarioFacade usuarioFacade;
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
 
         try {
-            Usuario usuario = this.loginFacade
+            Usuario usuario = this.usuarioFacade
                     .findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha())
                     .orElseThrow(Exception::new);
 
