@@ -4,37 +4,55 @@ import com.fatec.livrariaecommerce.dao.ClienteDao;
 import com.fatec.livrariaecommerce.dao.DocumentoDao;
 import com.fatec.livrariaecommerce.dao.TipoClienteDao;
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
-import com.fatec.livrariaecommerce.models.domain.Cliente;
-import com.fatec.livrariaecommerce.models.domain.Documento;
-import com.fatec.livrariaecommerce.models.domain.TipoCliente;
-import com.fatec.livrariaecommerce.models.domain.Usuario;
+import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.utils.CpfValidator;
+import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.negocio.endereco.EnderecoValidaCep;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
-public class GestaoClientesFacade {
-    final ClienteDao clienteDao;
-    final TipoClienteDao tipoClienteDao;
-    final UsuarioDao usuarioDao;
-    final DocumentoDao documentoDao;
+public class GestaoClientesFacade implements IFacade {
 
-    @Autowired
-    public GestaoClientesFacade(
-            DocumentoDao documentoDao,
-            ClienteDao clienteDao,
-            TipoClienteDao tipoClienteDao,
-            UsuarioDao usuarioDao) {
-        this.clienteDao = clienteDao;
-        this.tipoClienteDao = tipoClienteDao;
-        this.usuarioDao = usuarioDao;
-        this.documentoDao = documentoDao;
+    // ***********************************************************************
+
+    private final ClienteDao clienteDao;
+    private final TipoClienteDao tipoClienteDao;
+    private final UsuarioDao usuarioDao;
+    private final DocumentoDao documentoDao;
+
+    private StringBuilder sb = new StringBuilder();
+    Map<String, List<IStrategy>> regrasNegocio = new HashMap<>();
+
+    // ***********************************************************************
+
+    @PostConstruct
+    public void postConstruct() {
+        List<IStrategy> rnsSalvar = new ArrayList<>();
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        rnsSalvar.add(new EnderecoValidaCep());
+
+        regrasNegocio.put("SALVAR", rnsSalvar);
+
+        List<IStrategy> rnsAlterar = new ArrayList<>();
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        rnsAlterar.add(new EnderecoValidaCep());
+
+        regrasNegocio.put("ALTERAR", rnsAlterar);
+
+        regrasNegocio.put("EXCLUIR", rnsAlterar);
     }
+
+    // ***********************************************************************
+
 
     public Cliente save(Cliente cliente) {
         Optional<TipoCliente> tipoClienteOptional =
@@ -43,16 +61,16 @@ public class GestaoClientesFacade {
         Optional<Documento> isDocumentAlreadyPresent =
                 this.documentoDao.isCpfAlreadyExists(
                         cliente.getDocumentos().stream()
-                            .findFirst()
-                            .get()
-                            .getCodigo()
+                                .findFirst()
+                                .get()
+                                .getCodigo()
                 );
 
         Optional<Usuario> isEmailAlreadyExist =
                 this.usuarioDao.isEmailAlreadyPresent(cliente
                         .getUsuario().getEmail());
 
-        if(tipoClienteOptional.isEmpty()) {
+        if (tipoClienteOptional.isEmpty()) {
             TipoCliente novoTipoCliente = new TipoCliente(
                     1,
                     "NOVO",
@@ -60,12 +78,12 @@ public class GestaoClientesFacade {
             tipoClienteDao.save(novoTipoCliente);
         }
 
-        if(isDocumentAlreadyPresent.isPresent()) {
+        if (isDocumentAlreadyPresent.isPresent()) {
             throw new IllegalStateException("CPF já esta sendo " +
                     "usado por outro usuário");
         }
 
-        if(isEmailAlreadyExist.isPresent()) {
+        if (isEmailAlreadyExist.isPresent()) {
             throw new IllegalStateException("E-mail já está sendo " +
                     "usado por um usuário no sistema");
         }
@@ -73,8 +91,8 @@ public class GestaoClientesFacade {
         String cpfTemp = cliente.getDocumentos()
                 .stream().findFirst().get().getCodigo();
 
-        if(!CpfValidator.isCPF(cpfTemp)) {
-           throw new IllegalStateException("CPF inválido");
+        if (!CpfValidator.isCPF(cpfTemp)) {
+            throw new IllegalStateException("CPF inválido");
         }
 
         cliente.setTimeStamp(LocalDate.now());
@@ -87,55 +105,6 @@ public class GestaoClientesFacade {
         return this.clienteDao.save(cliente);
     }
 
-    public List<Cliente> viewAll() {
-        List<Cliente> clientes = this.clienteDao.findAll();
-        return clientes.stream()
-                .filter(Cliente::isAtivo)
-                .collect(Collectors.toList());
-    }
-
-    public Cliente updateById(int id, Cliente cliente) {
-        Cliente clienteTemp = this.clienteDao.findById(id)
-                .orElseThrow(() -> new IllegalStateException(
-                        "identificador inválido: "+ id));
-
-
-        /*
-        if(!clienteTemp.equals(cliente)) {
-            Optional<Usuario> isEmailAlreadyExist =
-                    this.usuarioDao.isEmailAlreadyPresent(cliente
-                            .getUsuario().getEmail());
-            if (isEmailAlreadyExist.isPresent()) {
-                throw new IllegalStateException("E-mail já está sendo " +
-                        "usado por um usuário no sistema");
-            }
-        }
-        */
-
-        if(!clienteTemp.isAtivo()) {
-            throw new IllegalStateException("Usuário não está ativo");
-        }
-
-        String cpfTemp = cliente.getDocumentos()
-                .stream().findFirst().get().getCodigo();
-
-        if(!CpfValidator.isCPF(cpfTemp)) {
-            throw new IllegalStateException("CPF inválido");
-        }
-
-        clienteTemp.setId(id);
-        clienteTemp.setAtivo(true);
-        clienteTemp.setTimeStamp(LocalDate.now());
-        clienteTemp.setTipoCliente(cliente.getTipoCliente());
-        clienteTemp.setEnderecos(cliente.getEnderecos());
-        clienteTemp.setDocumentos(cliente.getDocumentos());
-        clienteTemp.setDataNascimento(cliente.getDataNascimento());
-        clienteTemp.setNome(cliente.getNome());
-        clienteTemp.setSobrenome(cliente.getSobrenome());
-        clienteTemp.setUsuario(cliente.getUsuario());
-
-        return this.clienteDao.save(clienteTemp);
-    }
 
     public Cliente disableById(int id) {
         Cliente clienteTemp = this.clienteDao.getOne(id);
@@ -147,7 +116,62 @@ public class GestaoClientesFacade {
         return this.clienteDao.getOne(id);
     }
 
-    public Optional<Cliente> findClienteByUsuarioId(int usuarioId) {
-        return this.clienteDao.findClienteByUsuarioID(usuarioId);
+    public Optional<Cliente> findClienteByUsuarioId(int usuarioID) {
+        return this.clienteDao.findClienteByUsuarioID(usuarioID);
     }
+
+    public Resultado consultarClientePeloUsuarioID(int usuarioID){
+
+//        return this.clienteDao.findClienteByUsuarioID(usuarioID);
+
+        return null;
+    }
+
+
+    @Override
+    public Resultado salvar(EntidadeDominio dominio) {
+        Resultado resultado = new Resultado();
+        List<IStrategy> rns = this.regrasNegocio.get("SALVAR");
+        executarRegras(dominio, rns);
+        if (sb.length() == 0) {
+            this.clienteDao.saveAndFlush((Cliente) dominio);
+            resultado.getEntidades().add(dominio);
+        } else {
+            resultado.getEntidades().add(dominio);
+            resultado.setMensagem(sb.toString());
+        }
+        return resultado;
+    }
+
+    @Override
+    public Resultado alterar(EntidadeDominio dominio) {
+        return null;
+    }
+
+    @Override
+    public Resultado excluir(EntidadeDominio dominio) {
+        return null;
+    }
+
+    @Override
+    public Resultado consultar(EntidadeDominio dominio) {
+        return null;
+    }
+
+    @Override
+    public Resultado visualizar(EntidadeDominio dominio) {
+        return null;
+    }
+
+    public void executarRegras(EntidadeDominio dominio, List<IStrategy> rnsEntidade) {
+        sb.setLength(0);
+        for (IStrategy rn : rnsEntidade) {
+            String msg = rn.processar(dominio);
+            if (msg != null) {
+                sb.append(msg);
+            }
+        }
+
+    }
+
 }

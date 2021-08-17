@@ -6,11 +6,19 @@ import com.fatec.livrariaecommerce.facade.EnderecoFacade;
 import com.fatec.livrariaecommerce.facade.GestaoClientesFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.domain.Endereco;
+import com.fatec.livrariaecommerce.models.dto.CidadeDTO;
 import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,5 +64,20 @@ public class EnderecoController {
     }
 
     // ***********************************************************************
+
+    @GetMapping(path = "/cidades")
+    public ResponseEntity<List<CidadeDTO>> getAllCitiesFromDatabase(@Param("estadoID") int estadoID) {
+        try {
+            List<CidadeDTO> cidadeDTOList = new ArrayList<>();
+            for (Cidade cidade : this.cidadeDao.findAllById(estadoID).orElseThrow(Exception::new)) {
+                cidadeDTOList.add(new CidadeDTO(cidade));
+            }
+            return ResponseEntity.ok(cidadeDTOList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
 }

@@ -27,14 +27,7 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Message> salvarCliente(
-            @RequestBody ClienteDTO clienteDto, HttpSession session) {
-
-        System.out.println("Usuario logado: " + session.getAttribute("loggedUserId"));
-
-        if (session.getAttribute("loggedUserId") == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
+            @RequestBody ClienteDTO clienteDto) {
         Message message = new Message();
         List documentos = new ArrayList<Documento>();
 
@@ -77,11 +70,11 @@ public class ClienteController {
     @GetMapping
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
-            List<Cliente> clientes = this.facade.viewAll();
+//            List<Cliente> clientes = this.facade.viewAll();
             List<ClienteDTO> clienteDTOList = new ArrayList<>();
-            for (Cliente cliente : clientes) {
-                clienteDTOList.add(new ClienteDTO(cliente));
-            }
+//            for (Cliente cliente : clientes) {
+//                clienteDTOList.add(new ClienteDTO(cliente));
+//            }
             return ResponseEntity.ok(clienteDTOList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,10 +98,12 @@ public class ClienteController {
         }
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{userID}")
     public ResponseEntity<Message> atualizarClientePeloId(
-            @PathVariable int id, @RequestBody ClienteDTO clienteDto
+            @PathVariable int userID, @RequestBody ClienteDTO clienteDto
     ) {
+
+
         Message message = new Message();
         ArrayList documentos = new ArrayList<Documento>();
 
@@ -136,7 +131,7 @@ public class ClienteController {
         cliente.setUsuario(usuario);
 
         try {
-            this.facade.updateById(id, cliente);
+//            this.facade.updateById(id, cliente);
             message.setTitle("Sucesso");
             message.setDescription("Cliente foi atualizado com sucesso!");
             return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
