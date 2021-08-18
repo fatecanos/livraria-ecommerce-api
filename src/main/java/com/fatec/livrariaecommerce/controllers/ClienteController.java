@@ -27,20 +27,25 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto) {
-
         try {
             Cliente cliente = new Cliente();
             clienteDto.fill(cliente);
+            Resultado resultado = this.facade.salvar(cliente);
+            Message message = new Message();
 
-            Resultado resultadoCliente = this.facade.salvar(cliente);
-
-            System.out.println("SALVOU ESSa CARAIA");
-
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso");
+                message.setDescription("Cliente cadastrado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-        return null;
     }
 
     @GetMapping
