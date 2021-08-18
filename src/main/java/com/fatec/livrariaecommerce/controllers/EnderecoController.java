@@ -38,7 +38,8 @@ public class EnderecoController {
     @PostMapping(path = "{userId}")
     public ResponseEntity<Message> save(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
         try {
-            Cliente cliente = this.clientesFacade.findClienteByUsuarioId(userId).orElseThrow(Exception::new);
+            Resultado resultadoCliente = this.clientesFacade.findClienteByUsuarioId(userId);
+            Cliente cliente = (Cliente) resultadoCliente.getEntidades().get(0);
             Cidade cidade = this.cidadeDao.getOne(enderecoDto.getCidade().getId());
             TipoEndereco tipoEndereco = this.tipoEnderecoDao.getOne(enderecoDto.getTipoEndereco().getId());
             Endereco endereco = new Endereco(cliente);

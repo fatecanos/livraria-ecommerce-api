@@ -1,19 +1,14 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.ClientesFacade;
-import com.fatec.livrariaecommerce.facade.UsuarioFacade;
 import com.fatec.livrariaecommerce.models.domain.Cliente;
-import com.fatec.livrariaecommerce.models.domain.PerfilUsuario;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
-import com.fatec.livrariaecommerce.models.domain.Usuario;
 import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -48,20 +43,21 @@ public class ClienteController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
-        try {
+//    @GetMapping
+//    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
+//        try {
 //            List<Cliente> clientes = this.facade.viewAll();
-            List<ClienteDTO> clienteDTOList = new ArrayList<>();
-//            for (Cliente cliente : clientes) {
-//                clienteDTOList.add(new ClienteDTO(cliente));
-//            }
-            return ResponseEntity.ok(clienteDTOList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-    }
+////            List<ClienteDTO> clienteDTOList = new ArrayList<>();
+////            for (Cliente cliente : clientes) {
+////                clienteDTOList.add(new ClienteDTO(cliente));
+////            }
+//
+////            return ResponseEntity.ok(clienteDTOList);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 
 //    @DeleteMapping
 //    public ResponseEntity<Message> inativarClientePeloId(
@@ -99,18 +95,17 @@ public class ClienteController {
         return null;
     }
 
-//    @GetMapping(value = "/meus_dados/{id}")
-//    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int id) {
-//        try {
-//            Cliente cliente = this.gestaoClientesFacade.
-//                    findClienteByUsuarioId(id)
-//                    .orElseThrow(Exception::new);
-//            return ResponseEntity.ok(new ClienteDTO(cliente));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//
-//    }
+    @GetMapping(value = "/meus_dados/{id}")
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int id) {
+        try {
+            Resultado resultado = this.facade.
+                    findClienteByUsuarioId(id);
+            return ResponseEntity.ok(ClienteDTO.from((Cliente) resultado.getEntidades().get(0)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
+
+    }
 }

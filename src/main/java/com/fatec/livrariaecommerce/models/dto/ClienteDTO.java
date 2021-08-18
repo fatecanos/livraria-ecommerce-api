@@ -37,7 +37,8 @@ public class ClienteDTO {
                 this.genero, usuario);
     }
 
-    public static ClienteDTO from(Cliente cliente, Usuario usuario) {
+//    public static ClienteDTO from(Cliente cliente, Usuario usuario) {
+    public static ClienteDTO from(Cliente cliente) {
         ClienteDTO dto = new ClienteDTO();
         dto.id = cliente.getId();
         dto.nome = cliente.getNome();
@@ -45,8 +46,8 @@ public class ClienteDTO {
         dto.dataNascimento = cliente.getDataNascimento();
         dto.cpf = cliente.getCpf();
         dto.genero = cliente.getGenero();
-        dto.email = usuario.getEmail();
-        dto.senha = usuario.getSenha();
+//        dto.email = usuario.getEmail();
+//        dto.senha = usuario.getSenha();
         dto.telefones = cliente.getTelefones().stream().map(TelefoneDTO::from).collect(Collectors.toList());
         dto.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::from).collect(Collectors.toList());;
         return dto;

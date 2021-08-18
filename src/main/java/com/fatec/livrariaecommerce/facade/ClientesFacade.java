@@ -5,15 +5,12 @@ import com.fatec.livrariaecommerce.dao.DocumentoDao;
 import com.fatec.livrariaecommerce.dao.TipoClienteDao;
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
 import com.fatec.livrariaecommerce.models.domain.*;
-import com.fatec.livrariaecommerce.models.utils.CpfValidator;
 import com.fatec.livrariaecommerce.negocio.IStrategy;
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.CriptografarSenha;
-import com.fatec.livrariaecommerce.negocio.cliente.endereco.EnderecoValidaCep;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -63,16 +60,9 @@ public class ClientesFacade implements IFacade {
 //        return this.clienteDao.getOne(id);
 //    }
 
-    public Optional<Cliente> findClienteByUsuarioId(int usuarioID) {
-        return this.clienteDao.findClienteByUsuarioID(usuarioID);
-    }
 
     @Override
     public Resultado salvar(EntidadeDominio dominio) {
-
-        Cliente cliente = (Cliente) dominio;
-
-        System.out.println("ME PRINTA O USER: " + cliente.getCpf());
 
         Resultado resultado = new Resultado();
         List<IStrategy> rns = this.regrasNegocio.get("SALVAR");
@@ -99,8 +89,19 @@ public class ClientesFacade implements IFacade {
         return null;
     }
 
+
+    public Resultado findClienteByUsuarioId(int usuarioID) {
+        System.out.println("ID: " + usuarioID);
+        Resultado resultado = new Resultado();
+        resultado.getEntidades().add(this.clienteDao.findClienteByUsuarioID(usuarioID).orElseThrow());
+        System.out.println("Funciona?: " + resultado.getEntidades().get(0));
+        return resultado;
+    }
+
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
+
+
         return null;
     }
 
