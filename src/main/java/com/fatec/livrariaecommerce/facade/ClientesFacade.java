@@ -1,5 +1,6 @@
 package com.fatec.livrariaecommerce.facade;
 
+import com.fatec.livrariaecommerce.command.ExecutarRegras;
 import com.fatec.livrariaecommerce.dao.ClienteDao;
 import com.fatec.livrariaecommerce.dao.DocumentoDao;
 import com.fatec.livrariaecommerce.dao.TipoClienteDao;
@@ -24,7 +25,6 @@ public class ClientesFacade implements IFacade {
     private final UsuarioDao usuarioDao;
     private final DocumentoDao documentoDao;
 
-    private StringBuilder sb = new StringBuilder();
     Map<String, List<IStrategy>> regrasNegocio = new HashMap<>();
 
     // ***********************************************************************
@@ -32,34 +32,21 @@ public class ClientesFacade implements IFacade {
     @PostConstruct
     public void postConstruct() {
         // Instanciar classes de regras de negocio e adicionar na lista de rns
+
         List<IStrategy> rnsSalvar = new ArrayList<>();
-
         rnsSalvar.add(new CriptografarSenha());
-
         regrasNegocio.put("SALVAR", rnsSalvar);
 
 
         List<IStrategy> rnsAlterar = new ArrayList<>();
         rnsAlterar.add(new CriptografarSenha());
-
-
         regrasNegocio.put("ALTERAR", rnsAlterar);
 
-        regrasNegocio.put("EXCLUIR", rnsAlterar);
+        List<IStrategy> rnsExcluir = new ArrayList<>();
+        regrasNegocio.put("EXCLUIR", rnsExcluir);
     }
 
     // ***********************************************************************
-
-//    public Cliente disableById(int id) {
-//        Cliente clienteTemp = this.clienteDao.getOne(id);
-//        clienteTemp.setAtivo(false);
-//        return this.clienteDao.save(clienteTemp);
-//    }
-
-//    public Cliente findClienteById(int id) {
-//        return this.clienteDao.getOne(id);
-//    }
-
 
     @Override
     public Resultado salvar(EntidadeDominio dominio) {
@@ -67,7 +54,7 @@ public class ClientesFacade implements IFacade {
         Resultado resultado = new Resultado();
         List<IStrategy> rns = this.regrasNegocio.get("SALVAR");
 
-        executarRegras(dominio, rns);
+        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
 
         if (sb.length() == 0) {
             this.clienteDao.saveAndFlush((Cliente) dominio);
@@ -79,46 +66,62 @@ public class ClientesFacade implements IFacade {
         return resultado;
     }
 
+    // ***********************************************************************
+
     @Override
     public Resultado alterar(EntidadeDominio dominio) {
+
         return null;
     }
+
+    // ***********************************************************************
 
     @Override
     public Resultado excluir(EntidadeDominio dominio) {
-        return null;
+        Cliente cliente = (Cliente) dominio;
+        Resultado resultado = new Resultado();
+        List<IStrategy> rns = this.regrasNegocio.get("EXCLUIR");
+        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
+        if (sb.length() == 0) {
+            cliente.setAtivo(false);
+            this.clienteDao.saveAndFlush(cliente);
+            resultado.getEntidades().add(dominio);
+        } else {
+            resultado.getEntidades().add(dominio);
+            resultado.setMensagem(sb.toString());
+        }
+        return resultado;
     }
 
+    // ***********************************************************************
 
     public Resultado findClienteByUsuarioId(int usuarioID) {
         System.out.println("ID: " + usuarioID);
         Resultado resultado = new Resultado();
         resultado.getEntidades().add(this.clienteDao.findClienteByUsuarioID(usuarioID).orElseThrow());
-        System.out.println("Funciona?: " + resultado.getEntidades().get(0));
         return resultado;
     }
 
+    // ***********************************************************************
+
+    public Resultado consultarTodosClientes() {
+        Resultado resultado = new Resultado();
+        resultado.getEntidades().addAll(this.clienteDao.findAll());
+        return resultado;
+    }
+
+    // ***********************************************************************
+
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
-
-
         return null;
     }
+
+    // ***********************************************************************
 
     @Override
     public Resultado visualizar(EntidadeDominio dominio) {
         return null;
-    }
-
-    public void executarRegras(EntidadeDominio dominio, List<IStrategy> rnsEntidade) {
-        sb.setLength(0);
-        for (IStrategy rn : rnsEntidade) {
-            String msg = rn.processar(dominio);
-            if (msg != null) {
-                sb.append(msg);
-            }
-        }
-
     }
 
 }
