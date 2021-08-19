@@ -25,11 +25,8 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
 
-        try {
-//            Usuario usuario = this.usuarioFacade
-//                    .findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha())
-//                    .orElseThrow(Exception::new);
 
+        try {
             Usuario usuario = new Usuario();
             loginDTO.fill(usuario);
 
@@ -46,7 +43,7 @@ public class LoginController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 

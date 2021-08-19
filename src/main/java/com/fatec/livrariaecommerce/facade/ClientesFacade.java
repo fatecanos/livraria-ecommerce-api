@@ -84,6 +84,7 @@ public class ClientesFacade implements IFacade {
         StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
         if (sb.length() == 0) {
             cliente.setAtivo(false);
+            cliente.getUsuario().setAtivo(false);
             this.clienteDao.saveAndFlush(cliente);
             resultado.getEntidades().add(dominio);
         } else {
