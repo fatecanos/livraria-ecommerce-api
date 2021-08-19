@@ -2,6 +2,7 @@ package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
 import com.fatec.livrariaecommerce.facade.UsuarioFacade;
+import com.fatec.livrariaecommerce.models.domain.Resultado;
 import com.fatec.livrariaecommerce.models.domain.Usuario;
 import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
 import com.fatec.livrariaecommerce.models.dto.LoginDTO;
@@ -25,11 +26,24 @@ public class LoginController {
     public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
 
         try {
-            Usuario usuario = this.usuarioFacade
-                    .findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha())
-                    .orElseThrow(Exception::new);
+//            Usuario usuario = this.usuarioFacade
+//                    .findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha())
+//                    .orElseThrow(Exception::new);
 
-            return ResponseEntity.ok(new UsuarioDTO(usuario));
+            Usuario usuario = new Usuario();
+            loginDTO.fill(usuario);
+
+            Resultado resultado = this.usuarioFacade
+                    .findByEmailAndSenha(usuario);
+
+            if (resultado.getMensagem() == null) {
+                return ResponseEntity.ok(new UsuarioDTO((Usuario) resultado.getEntidades().get(0)));
+            } else {
+                System.out.println(resultado.getMensagem());
+                new Exception().printStackTrace();
+                return ResponseEntity.badRequest().build();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

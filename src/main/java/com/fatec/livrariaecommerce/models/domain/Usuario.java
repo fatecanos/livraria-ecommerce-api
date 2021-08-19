@@ -35,4 +35,9 @@ public class Usuario extends EntidadeDominio {
         this.perfilUsuario = perfilUsuario;
     }
 
+    public void atualizarDados(String email, String senha){
+        this.email = email;
+        this.senha = senha;
+    }
+
 }

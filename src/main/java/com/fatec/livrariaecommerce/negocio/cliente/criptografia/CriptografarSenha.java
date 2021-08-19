@@ -2,36 +2,29 @@ package com.fatec.livrariaecommerce.negocio.cliente.criptografia;
 
 import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
-import com.fatec.livrariaecommerce.models.domain.Usuario;
 import com.fatec.livrariaecommerce.negocio.IStrategy;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.crypto.Cipher;
+import java.security.Key;
+import java.util.Base64;
 
 public class CriptografarSenha implements IStrategy {
-
-
     @Override
     public String processar(EntidadeDominio dominio) {
 
         Cliente cliente = (Cliente) dominio;
+        String encodedPwd = "";
+        try {
+            Key key = GeradorChave.generateKey();
+            Cipher c = Cipher.getInstance(GeradorChave.ALGORITHM);
+            c.init(Cipher.ENCRYPT_MODE, key);
+            byte[] encVal = c.doFinal(cliente.getUsuario().getSenha().getBytes());
+            encodedPwd = Base64.getEncoder().encodeToString(encVal);
 
-        MessageDigest algorithm = null;
-        try {
-            algorithm = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(CriptografarSenha.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro ao tentar criptografar a senha!";
         }
-        byte messageDigest[] = null;
-        try {
-            messageDigest = algorithm.digest(cliente.getUsuario().getSenha().getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CriptografarSenha.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        cliente.getUsuario().setSenha(messageDigest.toString());
+        cliente.getUsuario().setSenha(encodedPwd);
         return null;
     }
 }
