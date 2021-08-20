@@ -47,7 +47,7 @@ public class ClienteController {
         }
     }
 
-    @GetMapping(path = "todosClientes")
+    @GetMapping(path = "listarTodosClientes")
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
             List<Cliente> clienteList = new ArrayList<>();
