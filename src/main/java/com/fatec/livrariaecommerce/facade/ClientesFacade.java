@@ -39,7 +39,6 @@ public class ClientesFacade implements IFacade {
 
 
         List<IStrategy> rnsAlterar = new ArrayList<>();
-        rnsAlterar.add(new CriptografarSenha());
         regrasNegocio.put("ALTERAR", rnsAlterar);
 
         List<IStrategy> rnsExcluir = new ArrayList<>();
@@ -71,7 +70,19 @@ public class ClientesFacade implements IFacade {
     @Override
     public Resultado alterar(EntidadeDominio dominio) {
 
-        return null;
+        Cliente cliente = (Cliente) dominio;
+        Resultado resultado = new Resultado();
+        List<IStrategy> rns = this.regrasNegocio.get("ALTERAR");
+        StringBuilder sb = ExecutarRegras.executarRegras(cliente, rns);
+
+        if (sb.length() == 0) {
+            this.clienteDao.saveAndFlush(cliente);
+            resultado.getEntidades().add(cliente);
+        } else {
+            resultado.getEntidades().add(cliente);
+            resultado.setMensagem(sb.toString());
+        }
+        return resultado;
     }
 
     // ***********************************************************************
@@ -97,9 +108,18 @@ public class ClientesFacade implements IFacade {
     // ***********************************************************************
 
     public Resultado findClienteByUsuarioId(int usuarioID) {
-        System.out.println("ID: " + usuarioID);
+        System.out.println("Usuario ID: " + usuarioID);
         Resultado resultado = new Resultado();
         resultado.getEntidades().add(this.clienteDao.findClienteByUsuarioID(usuarioID).orElseThrow());
+        return resultado;
+    }
+
+    // ***********************************************************************
+
+    public Resultado findUsuarioByID(int usuarioID) {
+        System.out.println("Usuario ID: " + usuarioID);
+        Resultado resultado = new Resultado();
+        resultado.getEntidades().add(this.usuarioDao.getOne(usuarioID));
         return resultado;
     }
 

@@ -37,7 +37,6 @@ public class ClienteDTO {
                 this.genero, usuario);
     }
 
-//    public static ClienteDTO from(Cliente cliente, Usuario usuario) {
     public static ClienteDTO from(Cliente cliente) {
         ClienteDTO dto = new ClienteDTO();
         dto.id = cliente.getId();

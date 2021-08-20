@@ -4,8 +4,8 @@ import com.fatec.livrariaecommerce.facade.ClientesFacade;
 import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
+import com.fatec.livrariaecommerce.models.domain.Usuario;
 import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
-import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +70,7 @@ public class ClienteController {
         Message message = new Message();
         try {
 
+
             Resultado resultadoCliente = this.facade.findClienteByUsuarioId(usuarioID);
             Cliente cliente = (Cliente) resultadoCliente.getEntidades().get(0);
             Resultado resultado = this.facade.excluir(cliente);
@@ -91,31 +92,46 @@ public class ClienteController {
         }
     }
 
-    @PutMapping(value = "/{userID}")
-    public ResponseEntity<Message> atualizarClientePeloId(
-            @PathVariable int userID, @RequestBody ClienteDTO clienteDto
-    ) {
+    @PutMapping
+    public ResponseEntity<Message> atualizarClientePeloId(@RequestParam int usuarioID, @RequestBody ClienteDTO clienteDto) {
+        Message message = new Message();
         try {
+            Cliente cliente = new Cliente();
+            Usuario usuario = new Usuario();
+            Resultado usuarioResultado = this.facade.findUsuarioByID(usuarioID);
 
-//            Resultado resultado = this.
-//            this.facade.updateById(id, cliente);
-//            message.setTitle("Sucesso");
-//            message.setDescription("Cliente foi atualizado com sucesso!");
-//            return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
+            if (usuarioResultado.getEntidades() != null) {
+                usuario = (Usuario) usuarioResultado.getEntidades().get(0);
+            } else {
+                new Exception().printStackTrace();
+            }
+
+            cliente.setUsuario(usuario);
+            clienteDto.fill(cliente);
+            Resultado resultado = this.facade.alterar(cliente);
+
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso");
+                message.setDescription("Cliente foi atualizado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
         } catch (Exception ex) {
-//            message.setTitle("Erro");
-//            message.setDescription(ex.getMessage());
-//            return new ResponseEntity<Message>(message, HttpStatus.ACCEPTED);
+            ex.printStackTrace();
+            message.setTitle("Erro");
+            message.setDescription("Houve um erro ao tentar atualizar o cliente.");
+            return ResponseEntity.badRequest().body(message);
         }
-
-        return null;
     }
 
-    @GetMapping(value = "/meus_dados/{id}")
-    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int id) {
+    @GetMapping(value = "/meus_dados/{usuarioID}")
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int usuarioID) {
         try {
             Resultado resultado = this.facade.
-                    findClienteByUsuarioId(id);
+                    findClienteByUsuarioId(usuarioID);
             return ResponseEntity.ok(ClienteDTO.from((Cliente) resultado.getEntidades().get(0)));
         } catch (Exception e) {
             e.printStackTrace();

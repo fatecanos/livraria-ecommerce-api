@@ -17,7 +17,4 @@ public interface ClienteDao
 
     @Query("SELECT c FROM Cliente c WHERE c.usuario.id = :usuarioID")
     Optional<Cliente> findClienteByUsuarioID(@Param("usuarioID") int usuarioID);
-
-
-
 }
