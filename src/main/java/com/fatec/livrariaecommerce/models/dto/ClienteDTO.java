@@ -22,6 +22,7 @@ public class ClienteDTO {
     private String email;
     private String senha;
     private String confirmacaoSenha;
+    private boolean ativo;
     private List<TelefoneDTO> telefones;
     private List<EnderecoDTO> enderecos;
 
@@ -45,8 +46,9 @@ public class ClienteDTO {
         dto.dataNascimento = cliente.getDataNascimento();
         dto.cpf = cliente.getCpf();
         dto.genero = cliente.getGenero();
-//        dto.email = usuario.getEmail();
-//        dto.senha = usuario.getSenha();
+        dto.ativo = cliente.isAtivo();
+        dto.email = cliente.getUsuario().getEmail();
+        dto.senha = cliente.getUsuario().getSenha();
         dto.telefones = cliente.getTelefones().stream().map(TelefoneDTO::from).collect(Collectors.toList());
         dto.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::from).collect(Collectors.toList());;
         return dto;

@@ -116,6 +116,25 @@ public class ClientesFacade implements IFacade {
 
     // ***********************************************************************
 
+    public Resultado ativarUsuario(EntidadeDominio dominio) {
+        Cliente cliente = (Cliente) dominio;
+        Resultado resultado = new Resultado();
+        List<IStrategy> rns = this.regrasNegocio.get("EXCLUIR");
+        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
+        if (sb.length() == 0) {
+            cliente.setAtivo(true);
+            cliente.getUsuario().setAtivo(true);
+            this.clienteDao.saveAndFlush(cliente);
+            resultado.getEntidades().add(dominio);
+        } else {
+            resultado.getEntidades().add(dominio);
+            resultado.setMensagem(sb.toString());
+        }
+        return resultado;
+    }
+
+    // ***********************************************************************
+
     public Resultado findUsuarioByID(int usuarioID) {
         System.out.println("Usuario ID: " + usuarioID);
         Resultado resultado = new Resultado();
@@ -135,7 +154,10 @@ public class ClientesFacade implements IFacade {
 
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
-        return null;
+        Cliente cliente = (Cliente) dominio;
+        Resultado resultado = new Resultado();
+        resultado.getEntidades().add(this.clienteDao.getOne(cliente.getId()));
+        return resultado;
     }
 
     // ***********************************************************************

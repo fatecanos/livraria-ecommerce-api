@@ -23,6 +23,8 @@ public class ClienteController {
 
     private final ClientesFacade facade;
 
+    // ***********************************************************************
+
     @PostMapping
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto) {
@@ -47,6 +49,8 @@ public class ClienteController {
         }
     }
 
+    // ***********************************************************************
+
     @GetMapping(path = "listarTodosClientes")
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
@@ -64,13 +68,13 @@ public class ClienteController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<Message> inativarClientePeloId(
+    // ***********************************************************************
+
+    @DeleteMapping(path = "desativarContaUsuarioByCliente")
+    public ResponseEntity<Message> inativarClientePeloUsuarioId(
             @RequestParam int usuarioID) {
         Message message = new Message();
         try {
-
-
             Resultado resultadoCliente = this.facade.findClienteByUsuarioId(usuarioID);
             Cliente cliente = (Cliente) resultadoCliente.getEntidades().get(0);
             Resultado resultado = this.facade.excluir(cliente);
@@ -91,6 +95,75 @@ public class ClienteController {
             return ResponseEntity.badRequest().body(message);
         }
     }
+
+    // ***********************************************************************
+
+    @DeleteMapping(path = "inativarContaClienteByAdmin")
+    public ResponseEntity<Message> inativarClientePeloId(
+            @RequestParam int clienteID) {
+        Message message = new Message();
+        try {
+            Cliente cliente = new Cliente();
+            cliente.setId(clienteID);
+
+            Resultado clienteResultado = this.facade.consultar(cliente);
+            cliente = (Cliente) clienteResultado.getEntidades().get(0);
+
+            Resultado resultado = this.facade.excluir(cliente);
+
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso");
+                message.setDescription("Cliente foi inativado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            message.setTitle("Erro");
+            message.setDescription("Falha ao tentar inativar o cliente");
+            return ResponseEntity.badRequest().body(message);
+        }
+    }
+
+    // ***********************************************************************
+
+    @PostMapping(path = "/reativarContaClienteByAdmin")
+    public ResponseEntity<Message> reativarClientePeloID(
+            @RequestParam int clienteID) {
+        Message message = new Message();
+        try {
+
+            Cliente cliente = new Cliente();
+            cliente.setId(clienteID);
+
+            Resultado clienteResultado = this.facade.consultar(cliente);
+            cliente = (Cliente) clienteResultado.getEntidades().get(0);
+
+            Resultado resultado = this.facade.ativarUsuario(cliente);
+
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso");
+                message.setDescription("Cliente foi reativado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            message.setTitle("Erro");
+            message.setDescription("Falha ao tentar inativar o cliente");
+            return ResponseEntity.badRequest().body(message);
+        }
+    }
+
+    // ***********************************************************************
 
     @PutMapping
     public ResponseEntity<Message> atualizarClientePeloId(@RequestParam int usuarioID, @RequestBody ClienteDTO clienteDto) {
@@ -127,6 +200,8 @@ public class ClienteController {
         }
     }
 
+    // ***********************************************************************
+
     @GetMapping(value = "/meus_dados/{usuarioID}")
     public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int usuarioID) {
         try {
@@ -140,4 +215,6 @@ public class ClienteController {
 
 
     }
+
+    // ***********************************************************************
 }
