@@ -70,12 +70,13 @@ public class ClienteController {
 
     // ***********************************************************************
 
-    @GetMapping(path = "listarTodosClientes")
+    @GetMapping(path = "/listarTodosClientes")
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
             List<Cliente> clienteList = new ArrayList<>();
 
             Cliente cliente = new Cliente();
+            cliente.setAtivo(true);
 
             Resultado resultado = this.facade.consultar(cliente);
 

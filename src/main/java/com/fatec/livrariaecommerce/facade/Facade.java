@@ -171,11 +171,10 @@ public class Facade implements IFacade {
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
         Resultado resultado = new Resultado();
-        List<IStrategy> rns = this.regrasNegocio.get(dominio.getClass().getName()).get("CONSULTAR");
-        if(rns.size() > 0){
-            StringBuilder sb = this.executarRegras(dominio, rns);
-        }
-
+//        List<IStrategy> rns = this.regrasNegocio.get(dominio.getClass().getName()).get("CONSULTAR");
+//        if(rns.size() > 0){
+//            StringBuilder sb = this.executarRegras(dominio, rns);
+//        }
         resultado.getEntidades().addAll(this.daos.get(dominio.getClass().getName()).consultar(dominio));
         return resultado;
     }

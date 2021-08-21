@@ -32,6 +32,7 @@ public interface CidadeDao extends JpaRepository<Cidade, Integer>, IDAO {
             "   obj.id = ?#{[0].id}")
     void excluir(@Param("dominio") EntidadeDominio entidadeDominio);
 
+
     @Override
     @Query("SELECT " +
             "   obj " +
@@ -39,9 +40,24 @@ public interface CidadeDao extends JpaRepository<Cidade, Integer>, IDAO {
             "   #{#entityName} obj " +
             "WHERE " +
             "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
-            "   OR (?#{[0].estado} IS NOT NULL AND ( " +
-            "           (?#{[0].estado.id} IS NOT NULL AND obj.estado.id = ?#{[0].estado.id}) " +
-            "       ))" +
+            "   OR (?#{[0].nome} IS NOT NULL AND obj.nome = ?#{[0].nome}) " +
+//            "   OR (?#{[0].estado} IS NOT NULL AND ( " +
+//            "           (?#{[0].estado.id} IS NOT NULL AND obj.estado.id = ?#{[0].estado.id}) " +
+//            "       ))" +
             "")
-    List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
+    List<EntidadeDominio> consultar(@Param("dominio") EntidadeDominio entidadeDominio);
+
+    //TODO: UTILIZAR ESTA QUERY PARA CONSULTAR POR ESTADO
+    //    @Query("SELECT " +
+//            "   obj " +
+//            "FROM " +
+//            "   #{#entityName} obj " +
+//            "WHERE " +
+//            "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
+//            "   OR (?#{[0].nome} IS NOT NULL AND obj.nome = ?#{[0].nome}) " +
+//            "   OR (?#{[0].estado} IS NOT NULL AND ( " +
+//            "           (?#{[0].estado.id} IS NOT NULL AND obj.estado.id = ?#{[0].estado.id}) " +
+//            "       ))" +
+//            "")
+
 }
