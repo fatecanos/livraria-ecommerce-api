@@ -74,6 +74,50 @@ public class EnderecoController {
 
     // ***********************************************************************
 
+    @PutMapping(path = "{userId}")
+    public ResponseEntity<Message> alterarEndereco(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
+        try {
+
+            Usuario usuario = new Usuario();
+            usuario.setId(userId);
+
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(usuario);
+            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+
+            Cidade cidade = new Cidade();
+            cidade.setId(enderecoDto.getCidade().getId());
+            cidade = (Cidade) this.facade.consultar(cidade).getEntidades().get(0);
+
+            TipoEndereco tipoEndereco = new TipoEndereco();
+            tipoEndereco.setId(enderecoDto.getTipoEndereco().getId());
+            tipoEndereco = (TipoEndereco) this.facade.consultar(tipoEndereco).getEntidades().get(0);
+
+            Endereco endereco = new Endereco(cliente);
+            enderecoDto.fill(endereco, cidade, tipoEndereco);
+
+            Resultado resultado = this.facade.salvar(endereco);
+
+            Message message = new Message();
+
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso");
+                message.setDescription("Endereco cadastrado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+    // ***********************************************************************
+
     @ResponseBody
     @GetMapping("/{idUsuario}")
     public ResponseEntity<List<EnderecoDTO>> listar(@PathVariable("idUsuario") int idUsuario) {
