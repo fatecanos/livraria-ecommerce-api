@@ -1,11 +1,9 @@
 package com.fatec.livrariaecommerce.facade;
 
 import com.fatec.livrariaecommerce.dao.CategoriaDao;
-import com.fatec.livrariaecommerce.dao.DimensaoDao;
 import com.fatec.livrariaecommerce.dao.GrupoPrecificacaoDao;
 import com.fatec.livrariaecommerce.dao.LivroDao;
 import com.fatec.livrariaecommerce.models.domain.Categoria;
-import com.fatec.livrariaecommerce.models.domain.Dimensoes;
 import com.fatec.livrariaecommerce.models.domain.GrupoPrecificacao;
 import com.fatec.livrariaecommerce.models.domain.Livro;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
@@ -22,22 +20,19 @@ public class LivrosFacade {
     final LivroDao livroDao;
     final GrupoPrecificacaoDao grupoDao;
     final CategoriaDao categoriaDao;
-    final DimensaoDao dimensaoDao;
 
     @Autowired
     public LivrosFacade(
             LivroDao livroDao,
             GrupoPrecificacaoDao grupoDao,
-            CategoriaDao categoriaDao,
-            DimensaoDao dimensaoDao) {
+            CategoriaDao categoriaDao) {
         this.livroDao = livroDao;
         this.grupoDao = grupoDao;
         this.categoriaDao = categoriaDao;
-        this.dimensaoDao = dimensaoDao;
     }
 
     public void salvar(LivroDTO livroDto) throws Exception {
-        Livro originalLivro;
+        Livro originalLivro = new Livro(livroDto);
         GrupoPrecificacao grupo;
         List<Categoria> categorias;
 
@@ -47,31 +42,9 @@ public class LivrosFacade {
                 .map(categoria -> this.categoriaDao.getOne(categoria.getId()))
                 .collect(Collectors.toList());
 
-        originalLivro = new Livro();
-        originalLivro.setAno(livroDto.getAno());
-        originalLivro.setAutor(livroDto.getAutor());
-        originalLivro.setCategorias(categorias);
-        originalLivro.setEdicao(livroDto.getEdicao());
-        originalLivro.setEditora(livroDto.getEditora());
-        originalLivro.setNumeroPaginas(livroDto.getQuantidadePaginas());
-        originalLivro.setIsbn(livroDto.getIsbn());
-        originalLivro.setTitulo(livroDto.getTitulo());
-        originalLivro.setSinopse(livroDto.getSinopse());
-        originalLivro.setCodigoBarras(livroDto.getCodigoBarras());
-
-        //dimensoes
-        Dimensoes dimensoes = new Dimensoes();
-        dimensoes.setAltura(livroDto.getDimensoes().getAltura());
-        dimensoes.setLargura(livroDto.getDimensoes().getLargura());
-        dimensoes.setPeso(livroDto.getDimensoes().getPeso());
-        dimensoes.setProfundidade(livroDto.getDimensoes().getProfundidade());
-
-        originalLivro.setDimensoes(dimensoes);
         originalLivro.setGrupoPrecificacao(grupo);
-
-        originalLivro.setUrl(livroDto.getUrl());
-
         originalLivro.setTimeStamp(LocalDate.now());
+        originalLivro.setCategorias(categorias);
         originalLivro.setAtivo(true);
 
         this.livroDao.save(originalLivro);
@@ -96,6 +69,15 @@ public class LivrosFacade {
         this.livroDao.save(livro);
     }
 
+    public void reativarLivro(int livroId) throws Exception {
+        Livro livro = this.livroDao.getOne(livroId);
+        if(livro.equals(null)) {
+            throw new Exception("erro: livro não encontrado");
+        }
+        livro.setAtivo(true);
+        this.livroDao.save(livro);
+    }
+
     public void atualizar(LivroDTO livroDto) throws Exception {
         Livro livro = this.livroDao.getOne(livroDto.getId());
 
@@ -113,17 +95,15 @@ public class LivrosFacade {
         livro.setEdicao(livroDto.getEdicao());
         livro.setAutor(livroDto.getAutor());
 
+        livro.setAltura(livroDto.getAltura());
+        livro.setLargura(livroDto.getLargura());
+        livro.setProfundidade(livroDto.getProfundidade());
+        livro.setPeso(livroDto.getPeso());
+
         livro.setCategorias(livroDto.getCategorias());
         livro.setGrupoPrecificacao(
                 this.grupoDao.getOne(livroDto.getGrupoPrecificacaoId())
         );
-
-        Dimensoes dimensoes = this.dimensaoDao.getOne(livroDto.getDimensoes().getId());
-        dimensoes.setProfundidade(livroDto.getDimensoes().getProfundidade());
-        dimensoes.setPeso(livroDto.getDimensoes().getPeso());
-        dimensoes.setLargura(livroDto.getDimensoes().getLargura());
-
-        livro.setDimensoes(dimensoes);
 
         this.livroDao.save(livro);
     }

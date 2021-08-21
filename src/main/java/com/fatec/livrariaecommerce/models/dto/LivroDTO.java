@@ -2,12 +2,12 @@ package com.fatec.livrariaecommerce.models.dto;
 
 import com.fatec.livrariaecommerce.models.domain.Categoria;
 import com.fatec.livrariaecommerce.models.domain.Livro;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
 public class LivroDTO {
     private int id;
     private String titulo;
@@ -19,11 +19,15 @@ public class LivroDTO {
     private String isbn;
     private String quantidadePaginas;
     private String sinopse;
-    private DimensaoDTO dimensoes;
+    private double altura;
+    private double largura;
+    private double peso;
+    private double profundidade;
     private int grupoPrecificacaoId;
     private String codigoBarras;
     private String url;
     private boolean isAtivo;
+    private LocalDate timestamp;
 
     public LivroDTO(Livro livro) {
         this.id = livro.getId();
@@ -36,12 +40,13 @@ public class LivroDTO {
         this.isbn = livro.getIsbn();
         this.quantidadePaginas = livro.getNumeroPaginas();
         this.sinopse = livro.getSinopse();
-        //this.dimensoes =
+        this.altura = livro.getAltura();
+        this.largura = livro.getLargura();
+        this.peso = livro.getPeso();
+        this.profundidade = livro.getProfundidade();
         this.grupoPrecificacaoId = livro.getGrupoPrecificacao().getId();
         this.codigoBarras = livro.getCodigoBarras();
         this.url = livro.getUrl();
         this.isAtivo = livro.isAtivo();
-
-
     }
 }
