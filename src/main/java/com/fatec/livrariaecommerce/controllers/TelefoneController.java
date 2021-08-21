@@ -34,9 +34,6 @@ public class TelefoneController {
 
             telefoneDTO.fill(telefone);
 
-            System.out.println("CAraio, e esse tel DTO: " + telefoneDTO.getTelefone());
-            System.out.println("CAraio, e esse tel: " + telefone.getTelefone());
-
             Resultado resultado = this.facade.salvar(telefone);
 
             Message message = new Message();

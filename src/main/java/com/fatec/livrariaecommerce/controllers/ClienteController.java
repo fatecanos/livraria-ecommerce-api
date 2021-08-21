@@ -52,6 +52,24 @@ public class ClienteController {
 
     // ***********************************************************************
 
+    @GetMapping(value = "/meus_dados/{usuarioID}")
+    public ResponseEntity<ClienteDTO> consultarClientePeloID(@PathVariable int usuarioID) {
+        try {
+            Usuario usuario = new Usuario();
+            usuario.setId(usuarioID);
+
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(usuario);
+            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+            return ResponseEntity.ok(ClienteDTO.from(cliente));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // ***********************************************************************
+
     @GetMapping(path = "listarTodosClientes")
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
