@@ -28,11 +28,11 @@ public class CidadeController {
     private final IFacade facade;
 
     @GetMapping
-    public ResponseEntity<List<CidadeDTO>> getAllCitiesFromDatabase(@Param("estadoID") int estadoID) {
+    public ResponseEntity<List<CidadeDTO>> getAllCitiesFromDatabase(@Param("idEstado") int idEstado) {
         try {
 
             Estado estado = new Estado();
-            estado.setId(estadoID);
+            estado.setId(idEstado);
 
             Cidade cidade = new Cidade();
             cidade.setEstado(estado);

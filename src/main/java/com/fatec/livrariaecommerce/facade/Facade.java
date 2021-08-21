@@ -71,6 +71,10 @@ public class Facade implements IFacade {
         List<IStrategy> rnsExcluirCliente = new ArrayList<>();
         regrasNegocioCliente.put("EXCLUIR", rnsExcluirCliente);
 
+        List<IStrategy> rnsConsultarCliente = new ArrayList<>();
+        regrasNegocioCliente.put("CONSULTAR", rnsConsultarCliente);
+
+
         this.regrasNegocio.put(Cliente.class.getName(), regrasNegocioCliente);
 
         // ***********************************************************************
@@ -91,6 +95,9 @@ public class Facade implements IFacade {
         List<IStrategy> rnsExcluirEndereco = new ArrayList<>();
         regrasNegocioEndereco.put("EXCLUIR", rnsExcluirEndereco);
 
+        List<IStrategy> rnsConsultarEndereco = new ArrayList<>();
+        regrasNegocioEndereco.put("CONSULTAR", rnsConsultarEndereco);
+
         this.regrasNegocio.put(Endereco.class.getName(), regrasNegocioEndereco);
 
         // ***********************************************************************
@@ -110,21 +117,33 @@ public class Facade implements IFacade {
         List<IStrategy> rnsExcluirTelefone = new ArrayList<>();
         regrasNegocioTelefone.put("EXCLUIR", rnsExcluirTelefone);
 
+        List<IStrategy> rnsConsultarTelefone = new ArrayList<>();
+        regrasNegocioTelefone.put("CONSULTAR", rnsConsultarTelefone);
+
         this.regrasNegocio.put(Telefone.class.getName(), regrasNegocioTelefone);
 
         // ***********************************************************************
         // Usuario
         // ***********************************************************************
-
         Map<String, List<IStrategy>> regrasNegocioUsuario = new HashMap<>();
 
         // Instanciar classes de regras de negocio e adicionar na lista de rns
-
         List<IStrategy> rnsConsultarUsuario = new ArrayList<>();
         rnsConsultarUsuario.add(new DescriptografarSenha());
         regrasNegocioUsuario.put("CONSULTAR", rnsConsultarUsuario);
 
         this.regrasNegocio.put(Usuario.class.getName(), regrasNegocioUsuario);
+
+        // ***********************************************************************
+        // Cidade
+        // ***********************************************************************
+        Map<String, List<IStrategy>> regrasNegocioCidade = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsConsultarCidade = new ArrayList<>();
+        regrasNegocioCidade.put("CONSULTAR", rnsConsultarCidade);
+
+        this.regrasNegocio.put(Cidade.class.getName(), regrasNegocioCidade);
     }
 
     // ***********************************************************************
@@ -171,10 +190,10 @@ public class Facade implements IFacade {
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
         Resultado resultado = new Resultado();
-//        List<IStrategy> rns = this.regrasNegocio.get(dominio.getClass().getName()).get("CONSULTAR");
-//        if(rns.size() > 0){
-//            StringBuilder sb = this.executarRegras(dominio, rns);
-//        }
+        List<IStrategy> rns = this.regrasNegocio.get(dominio.getClass().getName()).get("CONSULTAR");
+        if(rns != null && rns.size() > 0){
+            StringBuilder sb = this.executarRegras(dominio, rns);
+        }
         resultado.getEntidades().addAll(this.daos.get(dominio.getClass().getName()).consultar(dominio));
         return resultado;
     }

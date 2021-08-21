@@ -44,12 +44,13 @@ public interface ClienteDao
             "   #{#entityName} obj " +
             "WHERE " +
             "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
+            "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = TRUE) " +
             "   OR (?#{[0].nome} IS NOT NULL AND obj.nome = ?#{[0].nome}) " +
             "   OR (?#{[0].sobrenome} IS NOT NULL AND obj.sobrenome = ?#{[0].sobrenome}) " +
-            "   OR (?#{[0].usuario} IS NOT NULL AND ( " +
-            "           (?#{[0].usuario.id} IS NOT NULL AND obj.usuario.id = ?#{[0].usuario.id}) " +
-            "           OR (?#{[0].usuario.email} IS NOT NULL AND obj.usuario.email = ?#{[0].usuario.email}) " +
-            "       ))" +
+//            "   OR (?#{[0].usuario} IS NOT NULL AND ( " +
+//            "           (?#{[0].usuario.id} IS NOT NULL AND obj.usuario.id = ?#{[0].usuario.id}) " +
+//            "           OR (?#{[0].usuario.email} IS NOT NULL AND obj.usuario.email = ?#{[0].usuario.email}) " +
+//            "       ))" +
             "")
     List<EntidadeDominio> consultar(@Param("dominio") EntidadeDominio entidadeDominio);
 }

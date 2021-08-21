@@ -1,11 +1,7 @@
 package com.fatec.livrariaecommerce.controllers;
 
-import com.fatec.livrariaecommerce.facade.ClientesFacade;
 import com.fatec.livrariaecommerce.facade.IFacade;
-import com.fatec.livrariaecommerce.models.domain.Cliente;
-import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
-import com.fatec.livrariaecommerce.models.domain.Resultado;
-import com.fatec.livrariaecommerce.models.domain.Usuario;
+import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
@@ -73,20 +69,12 @@ public class ClienteController {
     @GetMapping(path = "/listarTodosClientes")
     public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
         try {
-            List<Cliente> clienteList = new ArrayList<>();
-
             Cliente cliente = new Cliente();
             cliente.setAtivo(true);
-
-            Resultado resultado = this.facade.consultar(cliente);
-
-//            for (EntidadeDominio dominio : resultado.getEntidades()) {
-//                clienteList.add((Cliente) dominio);
-//            }
-//            List<ClienteDTO> clienteDTOList = clienteList.stream().map(ClienteDTO::from).collect(Collectors.toList());
-//            return ResponseEntity.ok(clienteDTOList);
-
-            return ResponseEntity.ok().build();
+            List<ClienteDTO> clientes = this.facade.consultar(cliente).getEntidades().stream().map(cli -> {
+                return ClienteDTO.from((Cliente) cli);
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(clientes);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
