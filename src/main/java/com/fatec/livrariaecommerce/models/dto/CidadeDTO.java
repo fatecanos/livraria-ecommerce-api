@@ -16,4 +16,11 @@ public class CidadeDTO {
         this.nome = cidade.getNome();
     }
 
+    public static CidadeDTO from (Cidade cidade){
+        CidadeDTO dto = new CidadeDTO();
+        dto.id = cidade.getId();
+        dto.nome = cidade.getNome();
+        return dto;
+    }
+
 }
