@@ -52,22 +52,27 @@ public class ClienteController {
 
     // ***********************************************************************
 
-//    @GetMapping(path = "listarTodosClientes")
-//    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
-//        try {
-//            List<Cliente> clienteList = new ArrayList<>();
-//            Resultado resultado = this.facade.consultarTodosClientes();
-//
+    @GetMapping(path = "listarTodosClientes")
+    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
+        try {
+            List<Cliente> clienteList = new ArrayList<>();
+
+            Cliente cliente = new Cliente();
+
+            Resultado resultado = this.facade.consultar(cliente);
+
 //            for (EntidadeDominio dominio : resultado.getEntidades()) {
 //                clienteList.add((Cliente) dominio);
 //            }
 //            List<ClienteDTO> clienteDTOList = clienteList.stream().map(ClienteDTO::from).collect(Collectors.toList());
 //            return ResponseEntity.ok(clienteDTOList);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     // ***********************************************************************
 

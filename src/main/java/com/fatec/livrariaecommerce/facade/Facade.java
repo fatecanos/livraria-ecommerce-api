@@ -137,6 +137,7 @@ public class Facade implements IFacade {
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
         Resultado resultado = new Resultado();
+//        resultado.getEntidades().addAll(this.daos.get(dominio.getClass().getName()).consultar(dominio));
         resultado.getEntidades().addAll(this.daos.get(dominio.getClass().getName()).consultar(dominio));
         return resultado;
     }

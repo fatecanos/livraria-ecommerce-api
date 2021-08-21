@@ -1,6 +1,7 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
+import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.facade.UsuarioFacade;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
 import com.fatec.livrariaecommerce.models.domain.Usuario;
@@ -20,36 +21,35 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/login")
 public class LoginController {
 
-    private final UsuarioFacade usuarioFacade;
+    private final IFacade facade;
 
-//    @PostMapping
-//    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
-//
-//
-//        try {
-//            Usuario usuario = new Usuario();
-//            loginDTO.fill(usuario);
-//
-//            Resultado resultado = this.usuarioFacade
-//                    .findByEmailAndSenha(usuario);
-//
-//            if (resultado.getMensagem() == null) {
-//                return ResponseEntity.ok(new UsuarioDTO((Usuario) resultado.getEntidades().get(0)));
-//            } else {
-//                System.out.println(resultado.getMensagem());
-//                new Exception().printStackTrace();
-//                return ResponseEntity.badRequest().build();
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @PostMapping
+    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
+
+
+        try {
+            Usuario usuario = new Usuario();
+            loginDTO.fill(usuario);
+
+            Resultado resultado = this.facade
+                    .consultar(usuario);
+
+            if (resultado.getMensagem() == null) {
+                return ResponseEntity.ok(new UsuarioDTO((Usuario) resultado.getEntidades().get(0)));
+            } else {
+                System.out.println(resultado.getMensagem());
+                new Exception().printStackTrace();
+                return ResponseEntity.badRequest().build();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/logout")
     public ResponseEntity logout(HttpSession session) {
-        session.setAttribute("loggedUserId", null);
         return ResponseEntity.ok().build();
     }
 
