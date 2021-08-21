@@ -54,4 +54,39 @@ public class TelefoneController {
 
     }
 
+    @PutMapping(path = "{usuarioID}")
+    public ResponseEntity<Message> alterarTelefone(@PathVariable int usuarioID, @RequestBody TelefoneDTO telefoneDTO) {
+        try {
+
+            Usuario usuario = new Usuario();
+            usuario.setId(usuarioID);
+
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(usuario);
+            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+
+            Telefone telefone = new Telefone(cliente);
+
+            telefoneDTO.fill(telefone);
+
+            Resultado resultado = this.facade.alterar(telefone);
+
+            Message message = new Message();
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso!");
+                message.setDescription("Telefone alterado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro!");
+                message.setDescription("Erro ao alterar telefone!");
+                return ResponseEntity.badRequest().body(message);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
 }
