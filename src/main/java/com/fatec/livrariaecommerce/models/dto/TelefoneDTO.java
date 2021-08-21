@@ -1,7 +1,11 @@
 package com.fatec.livrariaecommerce.models.dto;
 
 import com.fatec.livrariaecommerce.models.domain.Telefone;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 public class TelefoneDTO {
 
     private int id;

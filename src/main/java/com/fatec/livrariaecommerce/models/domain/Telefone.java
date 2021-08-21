@@ -14,10 +14,6 @@ public class Telefone extends EntidadeDominio{
 
     // ***********************************************************************
 
-//    @Id
-//    @SequenceGenerator(name = "telefone_sequence", sequenceName = "telefone_sequence", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "telefone_sequence")
-//    int id;
     String telefone;
 
     @JoinColumn(name = "cliente", foreignKey = @ForeignKey(name = "fk_telefone_cliente"))
@@ -31,7 +27,7 @@ public class Telefone extends EntidadeDominio{
     }
 
     public void atualizarDados(int id, String telefone){
-//        this.id = id;
+        super.setId(id);
         this.telefone = telefone;
     }
 

@@ -42,7 +42,7 @@ public class Cliente extends EntidadeDominio {
 
     public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,
                                String genero, Usuario usuario) {
-//        this.id = id;
+        super.setId(id);
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.dataNascimento = dataNascimento;

@@ -32,7 +32,7 @@ public class EnderecoController {
     // ***********************************************************************
 
     @PostMapping(path = "{userId}")
-    public ResponseEntity<Message> save(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
+    public ResponseEntity<Message> salvarEndereco(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
         try {
 
             Usuario usuario = new Usuario();

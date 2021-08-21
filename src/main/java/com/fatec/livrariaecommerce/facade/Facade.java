@@ -26,7 +26,7 @@ public class Facade implements IFacade {
     // ***********************************************************************
 
     public Facade(ClienteDao clienteDao, UsuarioDao usuarioDao, EnderecoDao enderecoDao, CidadeDao cidadeDao,
-                  TipoEnderecoDao tipoEnderecoDao) {
+                  TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao) {
 
         // ClienteDao
         this.daos.put(Cliente.class.getName(), clienteDao);
@@ -42,6 +42,9 @@ public class Facade implements IFacade {
 
         // TipoEnderecoDao
         this.daos.put(TipoEndereco.class.getName(), tipoEnderecoDao);
+
+        // TelefoneDao
+        this.daos.put(Telefone.class.getName(), telefoneDao);
 
     }
 
@@ -91,6 +94,22 @@ public class Facade implements IFacade {
 
         // ***********************************************************************
 
+        // Telefone
+        // ***********************************************************************
+
+        Map<String, List<IStrategy>> regrasNegocioTelefone = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarTelefone = new ArrayList<>();
+        regrasNegocioTelefone.put("SALVAR", rnsSalvarTelefone);
+
+        List<IStrategy> rnsAlterarTelefone = new ArrayList<>();
+        regrasNegocioTelefone.put("ALTERAR", rnsAlterarTelefone);
+
+        List<IStrategy> rnsExcluirTelefone = new ArrayList<>();
+        regrasNegocioTelefone.put("EXCLUIR", rnsExcluirTelefone);
+
+        this.regrasNegocio.put(Telefone.class.getName(), regrasNegocioTelefone);
     }
 
     // ***********************************************************************
