@@ -44,8 +44,8 @@ public interface UsuarioDao
             "WHERE " +
             "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
             "   OR (?#{[0].email} IS NOT NULL AND obj.email = ?#{[0].email}) " +
-            "   OR (?#{[0].senha} IS NOT NULL AND obj.senha = ?#{[0].senha}) " +
-            "   OR (?#{[0].perfilUsuario} IS NOT NULL AND obj.perfilUsuario = ?#{[0].perfilUsuario}) " +
+            "   AND (?#{[0].senha} IS NOT NULL AND obj.senha = ?#{[0].senha}) " +
+//            "   OR (?#{[0].perfilUsuario} IS NOT NULL AND obj.perfilUsuario = ?#{[0].perfilUsuario}) " +
             "")
     List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
 }

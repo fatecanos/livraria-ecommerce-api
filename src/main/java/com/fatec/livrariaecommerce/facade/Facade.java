@@ -4,6 +4,7 @@ import com.fatec.livrariaecommerce.dao.*;
 import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.negocio.IStrategy;
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.CriptografarSenha;
+import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarSenha;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -110,6 +111,20 @@ public class Facade implements IFacade {
         regrasNegocioTelefone.put("EXCLUIR", rnsExcluirTelefone);
 
         this.regrasNegocio.put(Telefone.class.getName(), regrasNegocioTelefone);
+
+        // ***********************************************************************
+        // Usuario
+        // ***********************************************************************
+
+        Map<String, List<IStrategy>> regrasNegocioUsuario = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+
+        List<IStrategy> rnsConsultarUsuario = new ArrayList<>();
+        rnsConsultarUsuario.add(new DescriptografarSenha());
+        regrasNegocioUsuario.put("CONSULTAR", rnsConsultarUsuario);
+
+        this.regrasNegocio.put(Usuario.class.getName(), regrasNegocioUsuario);
     }
 
     // ***********************************************************************
@@ -156,7 +171,11 @@ public class Facade implements IFacade {
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
         Resultado resultado = new Resultado();
-//        resultado.getEntidades().addAll(this.daos.get(dominio.getClass().getName()).consultar(dominio));
+        List<IStrategy> rns = this.regrasNegocio.get(dominio.getClass().getName()).get("CONSULTAR");
+        if(rns.size() > 0){
+            StringBuilder sb = this.executarRegras(dominio, rns);
+        }
+
         resultado.getEntidades().addAll(this.daos.get(dominio.getClass().getName()).consultar(dominio));
         return resultado;
     }

@@ -25,15 +25,11 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
-
-
         try {
             Usuario usuario = new Usuario();
             loginDTO.fill(usuario);
-
             Resultado resultado = this.facade
                     .consultar(usuario);
-
             if (resultado.getMensagem() == null) {
                 return ResponseEntity.ok(new UsuarioDTO((Usuario) resultado.getEntidades().get(0)));
             } else {

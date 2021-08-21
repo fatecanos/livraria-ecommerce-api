@@ -1,6 +1,7 @@
 package com.fatec.livrariaecommerce.negocio.cliente.criptografia;
 import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
+import com.fatec.livrariaecommerce.models.domain.Usuario;
 import com.fatec.livrariaecommerce.negocio.IStrategy;
 import javax.crypto.Cipher;
 import java.security.Key;
@@ -8,7 +9,7 @@ import java.util.Base64;
 
 
 //https://stackoverflow.com/a/54905278/10952599
-public class DescriptografarSenha {
+public class DescriptografarSenha implements IStrategy{
 
     public static String decodeSenha(String senha){
         String decodedPWD = "";
@@ -38,5 +39,12 @@ public class DescriptografarSenha {
             e.printStackTrace();
         }
         return encodedPwd;
+    }
+
+    @Override
+    public String processar(EntidadeDominio dominio) {
+        Usuario usuario = (Usuario) dominio;
+        usuario.setSenha(encodeSenha(usuario.getSenha()));
+        return null;
     }
 }
