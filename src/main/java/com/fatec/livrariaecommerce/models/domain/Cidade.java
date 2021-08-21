@@ -10,17 +10,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "cidade")
 public class Cidade extends EntidadeDominio {
-	@Id
-	@SequenceGenerator(
-			name="cidades_sequences",
-			sequenceName="cidades_sequences",
-			allocationSize=1
-	)
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator = "cidades_sequences"
-	)
-	private int id;
+//	@Id
+//	@SequenceGenerator(
+//			name="cidades_sequences",
+//			sequenceName="cidades_sequences",
+//			allocationSize=1
+//	)
+//	@GeneratedValue(
+//			strategy = GenerationType.SEQUENCE,
+//			generator = "cidades_sequences"
+//	)
+//	private int id;
 	private String nome;
 
 	@ManyToOne(cascade = CascadeType.ALL)

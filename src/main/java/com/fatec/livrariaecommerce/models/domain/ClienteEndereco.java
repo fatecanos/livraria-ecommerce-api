@@ -12,10 +12,10 @@ import javax.persistence.Table;
 @Getter
 @Entity
 @Table(name = "cliente_endereco")
-public class ClienteEndereco {
+public class ClienteEndereco extends EntidadeDominio {
 
-    @Id
-    private int id;
+//    @Id
+//    private int id;
 
     @Column(name = "cliente_id")
     private int clienteId;

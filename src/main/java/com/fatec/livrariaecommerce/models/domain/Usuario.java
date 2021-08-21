@@ -9,17 +9,17 @@ import javax.persistence.*;
 @Getter
 @Entity
 public class Usuario extends EntidadeDominio {
-    @Id
-    @SequenceGenerator(
-            name = "usuario_sequences",
-            sequenceName = "usuario_sequences",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "usuario_sequences"
-    )
-    private int id;
+//    @Id
+//    @SequenceGenerator(
+//            name = "usuario_sequences",
+//            sequenceName = "usuario_sequences",
+//            allocationSize = 1
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "usuario_sequences"
+//    )
+//    private int id;
     private String email;
     private String senha;
     @Enumerated(EnumType.STRING)

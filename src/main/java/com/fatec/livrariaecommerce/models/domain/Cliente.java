@@ -18,10 +18,10 @@ public class Cliente extends EntidadeDominio {
 
     // ***********************************************************************
 
-    @Id
-    @SequenceGenerator(name = "clientes_sequence", sequenceName = "clientes_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_sequence")
-    private int id;
+//    @Id
+//    @SequenceGenerator(name = "clientes_sequence", sequenceName = "clientes_sequence", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_sequence")
+//    private int id;
     private String nome;
     private String sobrenome;
     private LocalDate dataNascimento;
@@ -42,7 +42,7 @@ public class Cliente extends EntidadeDominio {
 
     public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,
                                String genero, Usuario usuario) {
-        this.id = id;
+//        this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.dataNascimento = dataNascimento;

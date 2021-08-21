@@ -1,6 +1,5 @@
 package com.fatec.livrariaecommerce.facade;
 
-import com.fatec.livrariaecommerce.command.ExecutarRegras;
 import com.fatec.livrariaecommerce.dao.ClienteDao;
 import com.fatec.livrariaecommerce.dao.DocumentoDao;
 import com.fatec.livrariaecommerce.dao.TipoClienteDao;
@@ -50,19 +49,21 @@ public class ClientesFacade implements IFacade {
     @Override
     public Resultado salvar(EntidadeDominio dominio) {
 
-        Resultado resultado = new Resultado();
-        List<IStrategy> rns = this.regrasNegocio.get("SALVAR");
-
-        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
-
-        if (sb.length() == 0) {
-            this.clienteDao.saveAndFlush((Cliente) dominio);
-            resultado.getEntidades().add(dominio);
-        } else {
-            resultado.getEntidades().add(dominio);
-            resultado.setMensagem(sb.toString());
-        }
-        return resultado;
+//        Resultado resultado = new Resultado();
+//        List<IStrategy> rns = this.regrasNegocio.get("SALVAR");
+//
+//        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
+//
+//        if (sb.length() == 0) {
+//            this.clienteDao.saveAndFlush((Cliente) dominio);
+//            resultado.getEntidades().add(dominio);
+//        } else {
+//            resultado.getEntidades().add(dominio);
+//            resultado.setMensagem(sb.toString());
+//        }
+//        return resultado;
+        
+        return null;
     }
 
     // ***********************************************************************
@@ -70,67 +71,72 @@ public class ClientesFacade implements IFacade {
     @Override
     public Resultado alterar(EntidadeDominio dominio) {
 
-        Cliente cliente = (Cliente) dominio;
-        Resultado resultado = new Resultado();
-        List<IStrategy> rns = this.regrasNegocio.get("ALTERAR");
-        StringBuilder sb = ExecutarRegras.executarRegras(cliente, rns);
-
-        if (sb.length() == 0) {
-            this.clienteDao.saveAndFlush(cliente);
-            resultado.getEntidades().add(cliente);
-        } else {
-            resultado.getEntidades().add(cliente);
-            resultado.setMensagem(sb.toString());
-        }
-        return resultado;
+//        Cliente cliente = (Cliente) dominio;
+//        Resultado resultado = new Resultado();
+//        List<IStrategy> rns = this.regrasNegocio.get("ALTERAR");
+//        StringBuilder sb = ExecutarRegras.executarRegras(cliente, rns);
+//
+//        if (sb.length() == 0) {
+//            this.clienteDao.saveAndFlush(cliente);
+//            resultado.getEntidades().add(cliente);
+//        } else {
+//            resultado.getEntidades().add(cliente);
+//            resultado.setMensagem(sb.toString());
+//        }
+//        return resultado;
+        
+        return null;
     }
 
     // ***********************************************************************
 
     @Override
     public Resultado excluir(EntidadeDominio dominio) {
-        Cliente cliente = (Cliente) dominio;
-        Resultado resultado = new Resultado();
-        List<IStrategy> rns = this.regrasNegocio.get("EXCLUIR");
-        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
-        if (sb.length() == 0) {
-            cliente.setAtivo(false);
-            cliente.getUsuario().setAtivo(false);
-            this.clienteDao.saveAndFlush(cliente);
-            resultado.getEntidades().add(dominio);
-        } else {
-            resultado.getEntidades().add(dominio);
-            resultado.setMensagem(sb.toString());
-        }
-        return resultado;
+//        Cliente cliente = (Cliente) dominio;
+//        Resultado resultado = new Resultado();
+//        List<IStrategy> rns = this.regrasNegocio.get("EXCLUIR");
+//        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
+//        if (sb.length() == 0) {
+//            cliente.setAtivo(false);
+//            cliente.getUsuario().setAtivo(false);
+//            this.clienteDao.saveAndFlush(cliente);
+//            resultado.getEntidades().add(dominio);
+//        } else {
+//            resultado.getEntidades().add(dominio);
+//            resultado.setMensagem(sb.toString());
+//        }
+//        return resultado;
+        return null;
     }
 
     // ***********************************************************************
 
-    public Resultado findClienteByUsuarioId(int usuarioID) {
-        System.out.println("Usuario ID: " + usuarioID);
-        Resultado resultado = new Resultado();
-        resultado.getEntidades().add(this.clienteDao.findClienteByUsuarioID(usuarioID).orElseThrow());
-        return resultado;
-    }
+//    public Resultado findClienteByUsuarioId(int usuarioID) {
+//        System.out.println("Usuario ID: " + usuarioID);
+//        Resultado resultado = new Resultado();
+//        resultado.getEntidades().add(this.clienteDao.findClienteByUsuarioID(usuarioID).orElseThrow());
+//        return resultado;
+//    }
 
     // ***********************************************************************
 
     public Resultado ativarUsuario(EntidadeDominio dominio) {
-        Cliente cliente = (Cliente) dominio;
-        Resultado resultado = new Resultado();
-        List<IStrategy> rns = this.regrasNegocio.get("EXCLUIR");
-        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
-        if (sb.length() == 0) {
-            cliente.setAtivo(true);
-            cliente.getUsuario().setAtivo(true);
-            this.clienteDao.saveAndFlush(cliente);
-            resultado.getEntidades().add(dominio);
-        } else {
-            resultado.getEntidades().add(dominio);
-            resultado.setMensagem(sb.toString());
-        }
-        return resultado;
+//        Cliente cliente = (Cliente) dominio;
+//        Resultado resultado = new Resultado();
+//        List<IStrategy> rns = this.regrasNegocio.get("EXCLUIR");
+//        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
+//        if (sb.length() == 0) {
+//            cliente.setAtivo(true);
+//            cliente.getUsuario().setAtivo(true);
+//            this.clienteDao.saveAndFlush(cliente);
+//            resultado.getEntidades().add(dominio);
+//        } else {
+//            resultado.getEntidades().add(dominio);
+//            resultado.setMensagem(sb.toString());
+//        }
+//        return resultado;
+        
+        return null;
     }
 
     // ***********************************************************************

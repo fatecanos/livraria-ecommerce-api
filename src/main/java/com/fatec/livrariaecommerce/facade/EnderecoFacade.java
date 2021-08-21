@@ -1,6 +1,5 @@
 package com.fatec.livrariaecommerce.facade;
 
-import com.fatec.livrariaecommerce.command.ExecutarRegras;
 import com.fatec.livrariaecommerce.dao.*;
 import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.domain.Endereco;
@@ -49,46 +48,48 @@ public class EnderecoFacade implements IFacade{
 
     @Override
     public Resultado salvar(EntidadeDominio dominio) {
-        Resultado resultado = new Resultado();
-
-        // Recupera regras de negocio com base na operacao
-        List<IStrategy> rns = this.regrasNegocio.get("SALVAR");
-
-        // Executa regras de negocio
-        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
-
-        // Deu erro ?
-        if (sb.length() == 0) {
-            this.enderecoDao.saveAndFlush((Endereco) dominio);
-            resultado.getEntidades().add(dominio);
-        } else {
-            resultado.getEntidades().add(dominio);
-            resultado.setMensagem(sb.toString());
-        }
-
-        return resultado;
+//        Resultado resultado = new Resultado();
+//
+//        // Recupera regras de negocio com base na operacao
+//        List<IStrategy> rns = this.regrasNegocio.get("SALVAR");
+//
+//        // Executa regras de negocio
+//        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
+//
+//        // Deu erro ?
+//        if (sb.length() == 0) {
+//            this.enderecoDao.saveAndFlush((Endereco) dominio);
+//            resultado.getEntidades().add(dominio);
+//        } else {
+//            resultado.getEntidades().add(dominio);
+//            resultado.setMensagem(sb.toString());
+//        }
+//
+//        return resultado;
+        return null;
     }
 
     @Override
     public Resultado alterar(EntidadeDominio dominio) {
-        Resultado resultado = new Resultado();
-
-        // Recupera regras de negocio com base na operacao
-        List<IStrategy> rns = this.regrasNegocio.get("ATUALIZAR");
-
-        // Executa regras de negocio
-        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
-
-        // Deu erro ?
-        if (sb.length() == 0) {
-            this.enderecoDao.saveAndFlush((Endereco) dominio);
-            resultado.getEntidades().add(dominio);
-        } else {
-            resultado.getEntidades().add(dominio);
-            resultado.setMensagem(sb.toString());
-        }
-
-        return resultado;
+//        Resultado resultado = new Resultado();
+//
+//        // Recupera regras de negocio com base na operacao
+//        List<IStrategy> rns = this.regrasNegocio.get("ATUALIZAR");
+//
+//        // Executa regras de negocio
+//        StringBuilder sb = ExecutarRegras.executarRegras(dominio, rns);
+//
+//        // Deu erro ?
+//        if (sb.length() == 0) {
+//            this.enderecoDao.saveAndFlush((Endereco) dominio);
+//            resultado.getEntidades().add(dominio);
+//        } else {
+//            resultado.getEntidades().add(dominio);
+//            resultado.setMensagem(sb.toString());
+//        }
+//
+//        return resultado;
+        return null;
     }
 
     @Override

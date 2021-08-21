@@ -21,10 +21,10 @@ public class Endereco extends EntidadeDominio {
 
     // ***********************************************************************
 
-    @Id
-    @SequenceGenerator(name = "enderecos_sequences", sequenceName = "encerecos_sequences", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enderecos_sequences")
-    private int id;
+//    @Id
+//    @SequenceGenerator(name = "enderecos_sequences", sequenceName = "encerecos_sequences", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enderecos_sequences")
+//    private int id;
     private String nome;
     private String logradouro;
     private String bairro;
@@ -54,7 +54,7 @@ public class Endereco extends EntidadeDominio {
 
     public void atualizarDados(int id, String nome, String logradouro, String bairro, String numero, String cep, String complemento,
                     Cidade cidade, TipoEndereco tipoEndereco) {
-        this.id = id;
+        super.setId(id);
         this.nome = nome;
         this.logradouro = logradouro;
         this.bairro = bairro;

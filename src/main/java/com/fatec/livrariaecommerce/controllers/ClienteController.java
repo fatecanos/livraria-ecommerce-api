@@ -1,6 +1,7 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.ClientesFacade;
+import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    private final ClientesFacade facade;
+    private final IFacade facade;
 
     // ***********************************************************************
 
@@ -51,50 +52,50 @@ public class ClienteController {
 
     // ***********************************************************************
 
-    @GetMapping(path = "listarTodosClientes")
-    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
-        try {
-            List<Cliente> clienteList = new ArrayList<>();
-            Resultado resultado = this.facade.consultarTodosClientes();
-
-            for (EntidadeDominio dominio : resultado.getEntidades()) {
-                clienteList.add((Cliente) dominio);
-            }
-            List<ClienteDTO> clienteDTOList = clienteList.stream().map(ClienteDTO::from).collect(Collectors.toList());
-            return ResponseEntity.ok(clienteDTOList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//    @GetMapping(path = "listarTodosClientes")
+//    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
+//        try {
+//            List<Cliente> clienteList = new ArrayList<>();
+//            Resultado resultado = this.facade.consultarTodosClientes();
+//
+//            for (EntidadeDominio dominio : resultado.getEntidades()) {
+//                clienteList.add((Cliente) dominio);
+//            }
+//            List<ClienteDTO> clienteDTOList = clienteList.stream().map(ClienteDTO::from).collect(Collectors.toList());
+//            return ResponseEntity.ok(clienteDTOList);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 
     // ***********************************************************************
 
-    @DeleteMapping(path = "desativarContaUsuarioByCliente")
-    public ResponseEntity<Message> inativarClientePeloUsuarioId(
-            @RequestParam int usuarioID) {
-        Message message = new Message();
-        try {
-            Resultado resultadoCliente = this.facade.findClienteByUsuarioId(usuarioID);
-            Cliente cliente = (Cliente) resultadoCliente.getEntidades().get(0);
-            Resultado resultado = this.facade.excluir(cliente);
-            if (resultado.getMensagem() == null) {
-                message.setTitle("Sucesso");
-                message.setDescription("Cliente foi inativado com sucesso!");
-                return ResponseEntity.ok(message);
-            } else {
-                message.setTitle("Erro");
-                message.setDescription(resultado.getMensagem());
-                return ResponseEntity.badRequest().body(message);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            message.setTitle("Erro");
-            message.setDescription("Falha ao tentar inativar o cliente");
-            return ResponseEntity.badRequest().body(message);
-        }
-    }
+//    @DeleteMapping(path = "desativarContaUsuarioByCliente")
+//    public ResponseEntity<Message> inativarClientePeloUsuarioId(
+//            @RequestParam int usuarioID) {
+//        Message message = new Message();
+//        try {
+//            Resultado resultadoCliente = this.facade.findClienteByUsuarioId(usuarioID);
+//            Cliente cliente = (Cliente) resultadoCliente.getEntidades().get(0);
+//            Resultado resultado = this.facade.excluir(cliente);
+//            if (resultado.getMensagem() == null) {
+//                message.setTitle("Sucesso");
+//                message.setDescription("Cliente foi inativado com sucesso!");
+//                return ResponseEntity.ok(message);
+//            } else {
+//                message.setTitle("Erro");
+//                message.setDescription(resultado.getMensagem());
+//                return ResponseEntity.badRequest().body(message);
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            message.setTitle("Erro");
+//            message.setDescription("Falha ao tentar inativar o cliente");
+//            return ResponseEntity.badRequest().body(message);
+//        }
+//    }
 
     // ***********************************************************************
 
@@ -131,90 +132,90 @@ public class ClienteController {
 
     // ***********************************************************************
 
-    @PostMapping(path = "/reativarContaClienteByAdmin")
-    public ResponseEntity<Message> reativarClientePeloID(
-            @RequestParam int clienteID) {
-        Message message = new Message();
-        try {
-
-            Cliente cliente = new Cliente();
-            cliente.setId(clienteID);
-
-            Resultado clienteResultado = this.facade.consultar(cliente);
-            cliente = (Cliente) clienteResultado.getEntidades().get(0);
-
-            Resultado resultado = this.facade.ativarUsuario(cliente);
-
-            if (resultado.getMensagem() == null) {
-                message.setTitle("Sucesso");
-                message.setDescription("Cliente foi reativado com sucesso!");
-                return ResponseEntity.ok(message);
-            } else {
-                message.setTitle("Erro");
-                message.setDescription(resultado.getMensagem());
-                return ResponseEntity.badRequest().body(message);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            message.setTitle("Erro");
-            message.setDescription("Falha ao tentar inativar o cliente");
-            return ResponseEntity.badRequest().body(message);
-        }
-    }
-
-    // ***********************************************************************
-
-    @PutMapping
-    public ResponseEntity<Message> atualizarClientePeloId(@RequestParam int usuarioID, @RequestBody ClienteDTO clienteDto) {
-        Message message = new Message();
-        try {
-            Cliente cliente = new Cliente();
-            Usuario usuario = new Usuario();
-            Resultado usuarioResultado = this.facade.findUsuarioByID(usuarioID);
-
-            if (usuarioResultado.getEntidades() != null) {
-                usuario = (Usuario) usuarioResultado.getEntidades().get(0);
-            } else {
-                new Exception().printStackTrace();
-            }
-
-            cliente.setUsuario(usuario);
-            clienteDto.fill(cliente);
-            Resultado resultado = this.facade.alterar(cliente);
-
-            if (resultado.getMensagem() == null) {
-                message.setTitle("Sucesso");
-                message.setDescription("Cliente foi atualizado com sucesso!");
-                return ResponseEntity.ok(message);
-            } else {
-                message.setTitle("Erro");
-                message.setDescription(resultado.getMensagem());
-                return ResponseEntity.badRequest().body(message);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            message.setTitle("Erro");
-            message.setDescription("Houve um erro ao tentar atualizar o cliente.");
-            return ResponseEntity.badRequest().body(message);
-        }
-    }
+//    @PostMapping(path = "/reativarContaClienteByAdmin")
+//    public ResponseEntity<Message> reativarClientePeloID(
+//            @RequestParam int clienteID) {
+//        Message message = new Message();
+//        try {
+//
+//            Cliente cliente = new Cliente();
+//            cliente.setId(clienteID);
+//
+//            Resultado clienteResultado = this.facade.consultar(cliente);
+//            cliente = (Cliente) clienteResultado.getEntidades().get(0);
+//
+//            Resultado resultado = this.facade.ativarUsuario(cliente);
+//
+//            if (resultado.getMensagem() == null) {
+//                message.setTitle("Sucesso");
+//                message.setDescription("Cliente foi reativado com sucesso!");
+//                return ResponseEntity.ok(message);
+//            } else {
+//                message.setTitle("Erro");
+//                message.setDescription(resultado.getMensagem());
+//                return ResponseEntity.badRequest().body(message);
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            message.setTitle("Erro");
+//            message.setDescription("Falha ao tentar inativar o cliente");
+//            return ResponseEntity.badRequest().body(message);
+//        }
+//    }
 
     // ***********************************************************************
 
-    @GetMapping(value = "/meus_dados/{usuarioID}")
-    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int usuarioID) {
-        try {
-            Resultado resultado = this.facade.
-                    findClienteByUsuarioId(usuarioID);
-            return ResponseEntity.ok(ClienteDTO.from((Cliente) resultado.getEntidades().get(0)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
+//    @PutMapping
+//    public ResponseEntity<Message> atualizarClientePeloId(@RequestParam int usuarioID, @RequestBody ClienteDTO clienteDto) {
+//        Message message = new Message();
+//        try {
+//            Cliente cliente = new Cliente();
+//            Usuario usuario = new Usuario();
+//            Resultado usuarioResultado = this.facade.findUsuarioByID(usuarioID);
+//
+//            if (usuarioResultado.getEntidades() != null) {
+//                usuario = (Usuario) usuarioResultado.getEntidades().get(0);
+//            } else {
+//                new Exception().printStackTrace();
+//            }
+//
+//            cliente.setUsuario(usuario);
+//            clienteDto.fill(cliente);
+//            Resultado resultado = this.facade.alterar(cliente);
+//
+//            if (resultado.getMensagem() == null) {
+//                message.setTitle("Sucesso");
+//                message.setDescription("Cliente foi atualizado com sucesso!");
+//                return ResponseEntity.ok(message);
+//            } else {
+//                message.setTitle("Erro");
+//                message.setDescription(resultado.getMensagem());
+//                return ResponseEntity.badRequest().body(message);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            message.setTitle("Erro");
+//            message.setDescription("Houve um erro ao tentar atualizar o cliente.");
+//            return ResponseEntity.badRequest().body(message);
+//        }
+//    }
 
+    // ***********************************************************************
 
-    }
+//    @GetMapping(value = "/meus_dados/{usuarioID}")
+//    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable int usuarioID) {
+//        try {
+//            Resultado resultado = this.facade.
+//                    findClienteByUsuarioId(usuarioID);
+//            return ResponseEntity.ok(ClienteDTO.from((Cliente) resultado.getEntidades().get(0)));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//
+//    }
 
     // ***********************************************************************
 }

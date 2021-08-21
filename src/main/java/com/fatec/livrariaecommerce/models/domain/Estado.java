@@ -10,17 +10,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "estado")
 public class Estado extends EntidadeDominio {
-    @Id
-    @SequenceGenerator(
-            name = "estados_sequences",
-            sequenceName = "estados_sequences",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "estados_sequences"
-    )
-    private int id;
+//    @Id
+//    @SequenceGenerator(
+//            name = "estados_sequences",
+//            sequenceName = "estados_sequences",
+//            allocationSize = 1
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "estados_sequences"
+//    )
+//    private int id;
     private String uf;
     private String nome;
 
@@ -28,7 +28,7 @@ public class Estado extends EntidadeDominio {
     }
 
     public Estado(Estado estado) {
-        this.id = estado.getId();
+//        this.id = estado.getId();
 //        this.descricao = estado.getDescricao();
     }
 

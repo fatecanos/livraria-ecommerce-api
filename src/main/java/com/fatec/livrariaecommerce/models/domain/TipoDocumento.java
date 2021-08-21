@@ -6,17 +6,17 @@ import javax.persistence.*;
 @Entity
 public class TipoDocumento extends EntidadeDominio {
 
-	@Id
-	@SequenceGenerator(
-			name="tipo_doc_sequence",
-			sequenceName="tipo_doc_sequence",
-			allocationSize=1
-	)
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator = "tipo_doc_sequence"
-	)
-	private int id;
+//	@Id
+//	@SequenceGenerator(
+//			name="tipo_doc_sequence",
+//			sequenceName="tipo_doc_sequence",
+//			allocationSize=1
+//	)
+//	@GeneratedValue(
+//			strategy = GenerationType.SEQUENCE,
+//			generator = "tipo_doc_sequence"
+//	)
+//	private int id;
 	private String descricao;
 	private String nome;
 
@@ -28,14 +28,6 @@ public class TipoDocumento extends EntidadeDominio {
 		this.descricao = descricao;
 		this.nome = nome;
 		this.setAtivo(true);
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getDescricao() {

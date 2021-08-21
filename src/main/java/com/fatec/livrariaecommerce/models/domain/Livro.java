@@ -13,17 +13,17 @@ import java.util.List;
 @Entity
 @Table
 public class Livro extends EntidadeDominio {
-    @Id
-    @SequenceGenerator(
-            name="livros_sequence",
-            sequenceName="clientes_sequence",
-            allocationSize=1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "livros_sequence"
-    )
-    private int id;
+//    @Id
+//    @SequenceGenerator(
+//            name="livros_sequence",
+//            sequenceName="clientes_sequence",
+//            allocationSize=1
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "livros_sequence"
+//    )
+//    private int id;
     private String autor;
     private String ano;
     private String titulo;
@@ -51,7 +51,7 @@ public class Livro extends EntidadeDominio {
 
     public Livro(LocalDate timeStamp, boolean isAtivo, int id, String autor, String ano, String titulo, String editora, String edicao, String isbn, String numeroPaginas, String sinopse, String url, List<Categoria> categorias, Dimensoes dimensoes, GrupoPrecificacao grupoPrecificacao) {
         super();
-        this.id = id;
+//        this.id = id;
         this.autor = autor;
         this.ano = ano;
         this.titulo = titulo;

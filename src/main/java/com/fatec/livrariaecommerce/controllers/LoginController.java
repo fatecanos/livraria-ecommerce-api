@@ -22,30 +22,30 @@ public class LoginController {
 
     private final UsuarioFacade usuarioFacade;
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
-
-
-        try {
-            Usuario usuario = new Usuario();
-            loginDTO.fill(usuario);
-
-            Resultado resultado = this.usuarioFacade
-                    .findByEmailAndSenha(usuario);
-
-            if (resultado.getMensagem() == null) {
-                return ResponseEntity.ok(new UsuarioDTO((Usuario) resultado.getEntidades().get(0)));
-            } else {
-                System.out.println(resultado.getMensagem());
-                new Exception().printStackTrace();
-                return ResponseEntity.badRequest().build();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
+//
+//
+//        try {
+//            Usuario usuario = new Usuario();
+//            loginDTO.fill(usuario);
+//
+//            Resultado resultado = this.usuarioFacade
+//                    .findByEmailAndSenha(usuario);
+//
+//            if (resultado.getMensagem() == null) {
+//                return ResponseEntity.ok(new UsuarioDTO((Usuario) resultado.getEntidades().get(0)));
+//            } else {
+//                System.out.println(resultado.getMensagem());
+//                new Exception().printStackTrace();
+//                return ResponseEntity.badRequest().build();
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @GetMapping("/logout")
     public ResponseEntity logout(HttpSession session) {

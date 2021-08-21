@@ -1,6 +1,5 @@
 package com.fatec.livrariaecommerce.facade;
 
-import com.fatec.livrariaecommerce.command.ExecutarRegras;
 import com.fatec.livrariaecommerce.dao.UsuarioDao;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
@@ -31,33 +30,35 @@ public class UsuarioFacade implements IFacade {
 
     // ***********************************************************************
 
-    public Resultado findByEmailAndSenha(EntidadeDominio dominio) {
-        Usuario usuario = (Usuario) dominio;
-        Optional<Usuario> optionalUsuario;
-        Resultado resultado = new Resultado();
-        List<IStrategy> rns = this.regrasNegocio.get("CONSULTAR");
-        StringBuilder sb = ExecutarRegras.executarRegras(usuario, rns);
-
-        if (sb.length() == 0) {
-//            String decodedSenha = DescriptografarSenha
-//                    .decodeSenha(DescriptografarSenha.encodeSenha(usuario.getSenha()));
-            String decodedSenha = DescriptografarSenha.encodeSenha(usuario.getSenha());
-            optionalUsuario = this.usuarioDao.findByEmailAndSenha(usuario.getEmail(), decodedSenha);
-            if (optionalUsuario.isEmpty()) {
-                resultado.setMensagem("Erro ao recuperar usuário. Credenciais inválidas.");
-            } else {
-                if(optionalUsuario.get().isAtivo()){
-                    resultado.getEntidades().add(optionalUsuario.get());
-                }else{
-                    resultado.setMensagem("A conta do usuário está desativada.");
-                }
-            }
-        } else {
-//            resultado.getEntidades().add(dominio);
-            resultado.setMensagem(sb.toString());
-        }
-        return resultado;
-    }
+//    public Resultado findByEmailAndSenha(EntidadeDominio dominio) {
+//        Usuario usuario = (Usuario) dominio;
+//        Optional<Usuario> optionalUsuario;
+//        Resultado resultado = new Resultado();
+//        List<IStrategy> rns = this.regrasNegocio.get("CONSULTAR");
+//        StringBuilder sb = ExecutarRegras.executarRegras(usuario, rns);
+//
+//        if (sb.length() == 0) {
+////            String decodedSenha = DescriptografarSenha
+////                    .decodeSenha(DescriptografarSenha.encodeSenha(usuario.getSenha()));
+//            String decodedSenha = DescriptografarSenha.encodeSenha(usuario.getSenha());
+//
+////            optionalUsuario = this.usuarioDao.findByEmailAndSenha(usuario.getEmail(), decodedSenha);
+//
+//            if (optionalUsuario.isEmpty()) {
+//                resultado.setMensagem("Erro ao recuperar usuário. Credenciais inválidas.");
+//            } else {
+//                if(optionalUsuario.get().isAtivo()){
+//                    resultado.getEntidades().add(optionalUsuario.get());
+//                }else{
+//                    resultado.setMensagem("A conta do usuário está desativada.");
+//                }
+//            }
+//        } else {
+////            resultado.getEntidades().add(dominio);
+//            resultado.setMensagem(sb.toString());
+//        }
+//        return resultado;
+//    }
 
     // ***********************************************************************
 

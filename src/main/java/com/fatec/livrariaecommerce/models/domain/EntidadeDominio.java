@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,6 +14,12 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class EntidadeDominio {
+
+    @Access(AccessType.FIELD)
+    @Column(name = "id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @javax.persistence.Id
+    private int id;
 
     @CreatedDate
     @Column(name = "data_criacao", nullable = false, updatable = false)
