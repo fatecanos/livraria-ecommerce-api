@@ -49,8 +49,25 @@ public class ClienteDTO {
         dto.ativo = cliente.isAtivo();
         dto.email = cliente.getUsuario().getEmail();
         dto.senha = cliente.getUsuario().getSenha();
-        dto.telefones = cliente.getTelefones().stream().map(TelefoneDTO::from).collect(Collectors.toList());
-        dto.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::from).collect(Collectors.toList());;
+
+//        dto.telefones = cliente.getTelefones().stream().map(TelefoneDTO::from).collect(Collectors.toList());
+        List<TelefoneDTO> telefoneDTOS = new ArrayList<>();
+        for (Telefone telefone : cliente.getTelefones()) {
+            if (telefone.isAtivo()) {
+                telefoneDTOS.add(TelefoneDTO.from(telefone));
+            }
+        }
+        dto.telefones = telefoneDTOS;
+
+//        dto.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::from).collect(Collectors.toList());
+        List<EnderecoDTO> enderecoDTOS = new ArrayList<>();
+        for (Endereco endereco : cliente.getEnderecos()) {
+            if (endereco.isAtivo()) {
+                enderecoDTOS.add(EnderecoDTO.from(endereco));
+            }
+        }
+        dto.enderecos = enderecoDTOS;
+
         return dto;
     }
 
