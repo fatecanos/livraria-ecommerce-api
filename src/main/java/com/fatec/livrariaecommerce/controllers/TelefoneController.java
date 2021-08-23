@@ -89,4 +89,31 @@ public class TelefoneController {
 
     }
 
+    @DeleteMapping(path = "{idTelefone}")
+    public ResponseEntity<Message> excluirTelefone(@PathVariable("idTelefone") int idTelefone) {
+
+        System.out.println("Funciona n ? " + idTelefone);
+
+        try {
+            Telefone telefone = new Telefone();
+            telefone.setId(idTelefone);
+            Message message = new Message();
+            Resultado resultado = this.facade.excluir(telefone);
+
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso!");
+                message.setDescription("Telefone desativado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro!");
+                message.setDescription("Ocorreu um erro ao tentar desativar a conta.");
+                return ResponseEntity.badRequest().body(message);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

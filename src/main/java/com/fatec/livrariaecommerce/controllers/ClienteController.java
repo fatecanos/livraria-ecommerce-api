@@ -26,18 +26,28 @@ public class ClienteController {
     public ResponseEntity<Message> salvarCliente(
             @RequestBody ClienteDTO clienteDto) {
         try {
-            Cliente cliente = new Cliente();
-            clienteDto.fill(cliente);
-            Resultado resultado = this.facade.salvar(cliente);
             Message message = new Message();
 
-            if (resultado.getMensagem() == null) {
+            Usuario usuario = new Usuario();
+            usuario.setEmail(clienteDto.getEmail());
+            Resultado usuarioResultado = this.facade.consultar(usuario);
+            if (!usuarioResultado.getEntidades().isEmpty()) {
+                message.setTitle("Erro");
+                message.setDescription("Este email já está cadastrado");
+                return ResponseEntity.badRequest().body(message);
+            }
+
+            Cliente cliente = new Cliente();
+            clienteDto.fill(cliente);
+            Resultado clienteResultado = this.facade.salvar(cliente);
+
+            if (clienteResultado.getMensagem() == null) {
                 message.setTitle("Sucesso");
                 message.setDescription("Cliente cadastrado com sucesso!");
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro");
-                message.setDescription(resultado.getMensagem());
+                message.setDescription(clienteResultado.getMensagem());
                 return ResponseEntity.badRequest().body(message);
             }
         } catch (Exception e) {
@@ -56,7 +66,12 @@ public class ClienteController {
 
             Cliente cliente = new Cliente();
             cliente.setUsuario(usuario);
+
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+//            System.out.println("E esse lnet: " + this.facade.consultar(cliente).getEntidades().size());
+//            System.out.println("Me diz algumas informaçções: " + usuario.getId());
+//            System.out.println("Me diz outras informaçções: " + cliente.getId());
+//            System.out.println("Me diz outras ativos: " + cliente.isAtivo());
             return ResponseEntity.ok(ClienteDTO.from(cliente));
         } catch (Exception e) {
             e.printStackTrace();
