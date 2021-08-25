@@ -30,7 +30,6 @@ public class CidadeController {
     @GetMapping
     public ResponseEntity<List<CidadeDTO>> getAllCitiesFromDatabase(@Param("idEstado") int idEstado) {
         try {
-
             Estado estado = new Estado();
             estado.setId(idEstado);
 

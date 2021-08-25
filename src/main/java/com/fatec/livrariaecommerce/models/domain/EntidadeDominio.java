@@ -19,7 +19,7 @@ public abstract class EntidadeDominio {
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @javax.persistence.Id
-    private int id;
+    private Integer id;
 
     @CreatedDate
     @Column(name = "data_criacao", nullable = false, updatable = false)
@@ -27,11 +27,10 @@ public abstract class EntidadeDominio {
 
     @Basic
     @Column(name = "ativo", nullable = false)
-    private boolean ativo;
+    private Boolean ativo;
 
-
-    public EntidadeDominio() {
-        this.dataCriacao = LocalDateTime.now();
-        this.ativo = true;
-    }
+//    public EntidadeDominio() {
+//        this.dataCriacao = LocalDateTime.now();
+//        this.ativo = true;
+//    }
 }

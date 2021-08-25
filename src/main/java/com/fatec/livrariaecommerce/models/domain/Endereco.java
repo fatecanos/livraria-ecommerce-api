@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 
@@ -21,16 +22,14 @@ public class Endereco extends EntidadeDominio {
 
     // ***********************************************************************
 
-//    @Id
-//    @SequenceGenerator(name = "enderecos_sequences", sequenceName = "encerecos_sequences", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enderecos_sequences")
-//    private int id;
     private String nome;
     private String logradouro;
+    private String tipoLogradouro;
     private String bairro;
     private String numero;
     private String cep;
     private String complemento;
+    private String pais;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cidade_id")
@@ -52,9 +51,13 @@ public class Endereco extends EntidadeDominio {
 
     // ***********************************************************************
 
-    public void atualizarDados(int id, String nome, String logradouro, String bairro, String numero, String cep, String complemento,
-                    Cidade cidade, TipoEndereco tipoEndereco) {
+    public void atualizarDados(int id, String nome, String logradouro, String bairro, String numero, String cep,
+                               String complemento, String pais, String tipoLogradouro, Cidade cidade, TipoEndereco tipoEndereco) {
         super.setId(id);
+        super.setAtivo(true);
+        if(this.getId() == 0 || this.getId() == null){
+            super.setDataCriacao(LocalDateTime.now());
+        }
         this.nome = nome;
         this.logradouro = logradouro;
         this.bairro = bairro;
@@ -63,6 +66,8 @@ public class Endereco extends EntidadeDominio {
         this.complemento = complemento;
         this.cidade = cidade;
         this.tipoEndereco = tipoEndereco;
+        this.tipoLogradouro = tipoLogradouro;
+        this.pais = pais;
     }
 
     // ***********************************************************************

@@ -3,9 +3,11 @@ package com.fatec.livrariaecommerce.models.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -18,10 +20,6 @@ public class Cliente extends EntidadeDominio {
 
     // ***********************************************************************
 
-//    @Id
-//    @SequenceGenerator(name = "clientes_sequence", sequenceName = "clientes_sequence", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_sequence")
-//    private int id;
     private String nome;
     private String sobrenome;
     private LocalDate dataNascimento;
@@ -32,10 +30,14 @@ public class Cliente extends EntidadeDominio {
     private Usuario usuario;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @Where(clause = "ativo = true")
+    @OrderBy(value = "id")
     private List<Endereco> enderecos;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @Where(clause = "ativo = true")
+    @OrderBy(value = "id")
     private List<Telefone> telefones;
 
     // ***********************************************************************
@@ -43,6 +45,10 @@ public class Cliente extends EntidadeDominio {
     public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,
                                String genero, Usuario usuario) {
         super.setId(id);
+        super.setAtivo(true);
+        if (this.getId() == 0 || this.getId() == null) {
+            super.setDataCriacao(LocalDateTime.now());
+        }
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.dataNascimento = dataNascimento;

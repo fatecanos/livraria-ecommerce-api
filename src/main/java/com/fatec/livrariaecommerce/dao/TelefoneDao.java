@@ -42,9 +42,7 @@ public interface TelefoneDao extends JpaRepository<Telefone, Integer>, IDAO {
             "WHERE " +
             "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
             "   OR (?#{[0].telefone} IS NOT NULL AND obj.telefone = ?#{[0].telefone}) " +
-            "   OR (?#{[0].cliente} IS NOT NULL AND ( " +
-            "           (?#{[0].cliente.id} IS NOT NULL AND obj.cliente.id = ?#{[0].cliente.id}) " +
-            "       )) " +
+            "   OR (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
             "ORDER BY " +
             "   obj.id" +
             "")

@@ -144,6 +144,17 @@ public class Facade implements IFacade {
         regrasNegocioCidade.put("CONSULTAR", rnsConsultarCidade);
 
         this.regrasNegocio.put(Cidade.class.getName(), regrasNegocioCidade);
+
+        // ***********************************************************************
+        // Tipo Endereco
+        // ***********************************************************************
+        Map<String, List<IStrategy>> regrasNegocioTipoEndereco = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsConsultarTipoEndereco = new ArrayList<>();
+        regrasNegocioTipoEndereco.put("CONSULTAR", rnsConsultarTipoEndereco);
+
+        this.regrasNegocio.put(TipoEndereco.class.getName(), regrasNegocioTipoEndereco);
     }
 
     // ***********************************************************************

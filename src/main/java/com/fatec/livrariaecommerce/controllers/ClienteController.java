@@ -7,8 +7,6 @@ import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,20 +56,15 @@ public class ClienteController {
 
     // ***********************************************************************
 
-    @GetMapping(value = "/meus_dados/{usuarioID}")
+    @GetMapping(value = "/meusdados/{usuarioID}")
     public ResponseEntity<ClienteDTO> consultarClientePeloID(@PathVariable int usuarioID) {
         try {
             Usuario usuario = new Usuario();
             usuario.setId(usuarioID);
-
             Cliente cliente = new Cliente();
             cliente.setUsuario(usuario);
-
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
-//            System.out.println("E esse lnet: " + this.facade.consultar(cliente).getEntidades().size());
-//            System.out.println("Me diz algumas informaçções: " + usuario.getId());
-//            System.out.println("Me diz outras informaçções: " + cliente.getId());
-//            System.out.println("Me diz outras ativos: " + cliente.isAtivo());
+
             return ResponseEntity.ok(ClienteDTO.from(cliente));
         } catch (Exception e) {
             e.printStackTrace();

@@ -44,6 +44,11 @@ public class EnderecoController {
 
             Cidade cidade = new Cidade();
             cidade.setId(enderecoDto.getCidade().getId());
+
+//            cidade.setEstado(new Estado());
+//            System.out.println("ME DIZZ ESSE aqui: " + cidade.getEstado());
+//            System.out.println("ME DIZZ ESSE EM: " + cidade.getEstado().getId());
+//            cidade.setEstado(null);
             cidade = (Cidade) this.facade.consultar(cidade).getEntidades().get(0);
 
             TipoEndereco tipoEndereco = new TipoEndereco();
