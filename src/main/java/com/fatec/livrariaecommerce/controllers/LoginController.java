@@ -1,15 +1,11 @@
 package com.fatec.livrariaecommerce.controllers;
 
-import com.fatec.livrariaecommerce.dao.UsuarioDao;
 import com.fatec.livrariaecommerce.facade.IFacade;
-import com.fatec.livrariaecommerce.facade.UsuarioFacade;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
 import com.fatec.livrariaecommerce.models.domain.Usuario;
-import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
 import com.fatec.livrariaecommerce.models.dto.LoginDTO;
 import com.fatec.livrariaecommerce.models.dto.UsuarioDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

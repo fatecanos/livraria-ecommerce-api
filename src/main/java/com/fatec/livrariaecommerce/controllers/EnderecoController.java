@@ -1,24 +1,15 @@
 package com.fatec.livrariaecommerce.controllers;
 
-import com.fatec.livrariaecommerce.dao.CidadeDao;
-import com.fatec.livrariaecommerce.dao.TipoEnderecoDao;
-import com.fatec.livrariaecommerce.facade.ClientesFacade;
-import com.fatec.livrariaecommerce.facade.EnderecoFacade;
 import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.domain.Endereco;
-import com.fatec.livrariaecommerce.models.dto.CidadeDTO;
 import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
