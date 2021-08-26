@@ -2,7 +2,6 @@ package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
-import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
