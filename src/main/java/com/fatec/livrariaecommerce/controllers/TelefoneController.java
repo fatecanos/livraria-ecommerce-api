@@ -1,15 +1,16 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
-import com.fatec.livrariaecommerce.models.domain.Cliente;
-import com.fatec.livrariaecommerce.models.domain.Resultado;
-import com.fatec.livrariaecommerce.models.domain.Telefone;
-import com.fatec.livrariaecommerce.models.domain.Usuario;
+import com.fatec.livrariaecommerce.models.domain.*;
+import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -88,6 +89,29 @@ public class TelefoneController {
         }
 
     }
+
+    @GetMapping(path = "/{idUsuario}")
+    public ResponseEntity<List<TelefoneDTO>> consultarTelefones(@PathVariable("idUsuario") int idUsuario) {
+
+        try {
+            Telefone telefone = new Telefone();
+            Usuario usuario = new Usuario();
+            usuario.setId(idUsuario);
+
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(usuario);
+            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+            telefone.setCliente(cliente);
+            List<TelefoneDTO> telefones = this.facade.consultar(telefone).getEntidades().stream().map(tel -> {
+                return TelefoneDTO.from((Telefone) tel);
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(telefones);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
     @DeleteMapping(path = "{idTelefone}")
     public ResponseEntity<Message> excluirTelefone(@PathVariable("idTelefone") int idTelefone) {
