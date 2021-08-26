@@ -7,6 +7,7 @@ import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,11 @@ public class ClienteController {
 
             Usuario usuario = new Usuario();
             usuario.setEmail(clienteDto.getEmail());
+
+            //verificar na regra de negocio senha == null
+            usuario.setSenha(clienteDto.getSenha());
             Resultado usuarioResultado = this.facade.consultar(usuario);
+
             if (!usuarioResultado.getEntidades().isEmpty()) {
                 message.setTitle("Erro");
                 message.setDescription("Este email já está cadastrado");
@@ -75,10 +80,18 @@ public class ClienteController {
     // ***********************************************************************
 
     @GetMapping(path = "/listarTodosClientes")
-    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
+    public ResponseEntity<List<ClienteDTO>> obterTodosClientes(
+            @RequestParam(value = "filtro", defaultValue = "") String filtro) {
         try {
             Cliente cliente = new Cliente();
-            cliente.setAtivo(true);
+
+            //incluir no filtro de params
+//            cliente.setAtivo(true);
+
+            cliente.setNome(filtro);
+            cliente.setSobrenome(filtro);
+            cliente.setCpf(filtro);
+
             List<ClienteDTO> clientes = this.facade.consultar(cliente).getEntidades().stream().map(cli -> {
                 return ClienteDTO.from((Cliente) cli);
             }).collect(Collectors.toList());

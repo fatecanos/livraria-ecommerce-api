@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,17 +42,42 @@ public interface ClienteDao
             "   obj.id = ?#{[0].id}")
     void excluir(@Param("dominio") EntidadeDominio entidadeDominio);
 
-    @Override
     @Query("SELECT " +
             "   obj " +
             "FROM " +
             "   #{#entityName} obj " +
             "WHERE " +
-            "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
-            "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = TRUE) " +
-            "   OR (?#{[0].nome} IS NOT NULL AND obj.nome = ?#{[0].nome}) " +
-            "   OR (?#{[0].sobrenome} IS NOT NULL AND obj.sobrenome = ?#{[0].sobrenome}) " +
-            "   OR (?#{[0].usuario} IS NOT NULL AND obj.usuario = ?#{[0].usuario}) " +
+            "   (?#{[0].ativo} IS NOT NULL AND obj.ativo = TRUE) " +
+            "   OR (?#{[0].nome} IS NOT NULL AND (UPPER(obj.nome) LIKE(CONCAT('%', UPPER(?#{[0].nome}),'%')))) " +
+            "   OR (?#{[0].cpf} IS NOT NULL AND (UPPER(obj.cpf) LIKE(CONCAT('%', UPPER(?#{[0].cpf}),'%')))) " +
+            "   OR (?#{[0].sobrenome} IS NOT NULL AND (UPPER(obj.sobrenome) LIKE(CONCAT('%', UPPER(?#{[0].sobrenome}),'%')))) " +
             "")
-    List<EntidadeDominio> consultar(@Param("dominio") EntidadeDominio entidadeDominio);
+    List<EntidadeDominio> consultarTabela(@Param("dominio") EntidadeDominio entidadeDominio);
+
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   obj.usuario.id = :usuarioId" +
+            "")
+    Cliente consultarUsuarioId(@Param("usuarioId") Integer usuarioId);
+
+    @Override
+    default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
+
+        Cliente cliente = (Cliente) entidadeDominio;
+
+        if (cliente.getId() != null) {
+            return Collections.singletonList(this.getOne(entidadeDominio.getId()));
+        } else if (cliente.getNome() != null || cliente.getCpf() != null || cliente.getSobrenome() != null) {
+            return this.consultarTabela(cliente);
+        } else if (cliente.getUsuario() != null && cliente.getUsuario().getId() != null) {
+            return Collections.singletonList(this.consultarUsuarioId(cliente.getUsuario().getId()));
+        } else {
+            return this.consultarTabela(cliente);
+        }
+    }
+
 }
