@@ -40,6 +40,11 @@ public class Cliente extends EntidadeDominio {
     @OrderBy(value = "id")
     private List<Telefone> telefones;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @Where(clause = "ativo = true")
+    @OrderBy(value = "id")
+    private List<CartaoCredito> cartoesCredito;
+
     // ***********************************************************************
 
     public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,

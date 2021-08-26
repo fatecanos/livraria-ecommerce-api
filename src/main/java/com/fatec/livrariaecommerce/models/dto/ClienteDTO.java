@@ -25,6 +25,7 @@ public class ClienteDTO {
     private boolean ativo;
     private List<TelefoneDTO> telefones;
     private List<EnderecoDTO> enderecos;
+    private List<CartaoCreditoDTO> cartoesCredito;
 
     public void fill(Cliente dominio) {
         Usuario usuario;
@@ -51,6 +52,7 @@ public class ClienteDTO {
         dto.senha = cliente.getUsuario().getSenha();
         dto.telefones = cliente.getTelefones().stream().map(TelefoneDTO::from).collect(Collectors.toList());
         dto.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::from).collect(Collectors.toList());
+        dto.cartoesCredito = cliente.getCartoesCredito().stream().map(CartaoCreditoDTO::from).collect(Collectors.toList());
         return dto;
     }
 
