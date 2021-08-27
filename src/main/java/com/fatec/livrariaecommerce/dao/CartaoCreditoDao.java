@@ -4,9 +4,11 @@ import com.fatec.livrariaecommerce.models.domain.CartaoCredito;
 import com.fatec.livrariaecommerce.models.domain.Cidade;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface CartaoCreditoDao extends JpaRepository<CartaoCredito, Integer>, IDAO {
@@ -22,6 +24,8 @@ public interface CartaoCreditoDao extends JpaRepository<CartaoCredito, Integer>,
     }
 
     @Override
+    @Transactional
+    @Modifying
     @Query("UPDATE " +
             "  #{#entityName} obj " +
             "SET " +
