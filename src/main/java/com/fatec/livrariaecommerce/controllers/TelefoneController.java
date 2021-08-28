@@ -114,9 +114,6 @@ public class TelefoneController {
 
     @DeleteMapping(path = "{idTelefone}")
     public ResponseEntity<Message> excluirTelefone(@PathVariable("idTelefone") int idTelefone) {
-
-        System.out.println("Funciona n ? " + idTelefone);
-
         try {
             Telefone telefone = new Telefone();
             telefone.setId(idTelefone);

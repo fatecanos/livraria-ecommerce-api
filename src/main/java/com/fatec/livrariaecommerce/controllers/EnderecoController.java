@@ -70,6 +70,37 @@ public class EnderecoController {
 
     // ***********************************************************************
 
+
+    @DeleteMapping(path = "{idEndereco}")
+    public ResponseEntity<Message> excluirEndereco(@PathVariable("idEndereco") int idEndereco) {
+
+        try {
+            Endereco endereco = new Endereco();
+            endereco.setId(idEndereco);
+            Message message = new Message();
+            Resultado resultado = this.facade.excluir(endereco);
+
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso!");
+                message.setDescription("Endereco desativado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro!");
+                message.setDescription("Ocorreu um erro ao tentar desativar o endereço.");
+                return ResponseEntity.badRequest().body(message);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
+
+    }
+
+
+    // ***********************************************************************
+
     @PutMapping(path = "{userId}")
     public ResponseEntity<Message> alterarEndereco(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
         try {
