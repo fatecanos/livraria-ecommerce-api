@@ -39,6 +39,18 @@ public class ClienteDTO {
                 this.genero, usuario);
     }
 
+    public void fillDtoList(Cliente dominio, List<Endereco> enderecoList, List<Telefone> telefoneList) {
+        Usuario usuario;
+        if (dominio.getUsuario() == null) {
+            usuario = new Usuario(this.getEmail(), this.getSenha(), PerfilUsuario.CLIENTE);
+        } else {
+            usuario = dominio.getUsuario();
+        }
+        dominio.atualizarDados(this.id, this.nome, this.sobrenome, this.dataNascimento, this.cpf,
+                this.genero, enderecoList, telefoneList, usuario);
+
+    }
+
     public static ClienteDTO from(Cliente cliente) {
         ClienteDTO dto = new ClienteDTO();
         dto.id = cliente.getId();

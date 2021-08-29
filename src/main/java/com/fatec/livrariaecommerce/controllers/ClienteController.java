@@ -3,11 +3,14 @@ package com.fatec.livrariaecommerce.controllers;
 import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.dto.ClienteDTO;
+import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
+import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,8 +40,40 @@ public class ClienteController {
                 return ResponseEntity.badRequest().body(message);
             }
 
+            List<Endereco> enderecoList = new ArrayList<>();
+            List<Telefone> telefoneList = new ArrayList<>();
+
             Cliente cliente = new Cliente();
             clienteDto.fill(cliente);
+
+            if (!clienteDto.getEnderecos().isEmpty()) {
+                Endereco endereco = new Endereco(cliente);
+                for (EnderecoDTO enderecoDTO : clienteDto.getEnderecos()) {
+                    Cidade cidade = new Cidade();
+                    cidade.setId(enderecoDTO.getCidade().getId());
+                    cidade = (Cidade) this.facade.consultar(cidade).getEntidades().get(0);
+
+                    TipoEndereco tipoEndereco = new TipoEndereco();
+                    tipoEndereco.setId(enderecoDTO.getTipoEndereco().getId());
+                    tipoEndereco = (TipoEndereco) this.facade.consultar(tipoEndereco).getEntidades().get(0);
+
+                    enderecoDTO.fill(endereco, cidade, tipoEndereco);
+                }
+                enderecoList.add(endereco);
+            }
+
+            if (!clienteDto.getTelefones().isEmpty()) {
+                Telefone telefone = new Telefone(cliente);
+                for (TelefoneDTO telefoneDTO : clienteDto.getTelefones()) {
+                    telefoneDTO.fill(telefone);
+                }
+                telefoneList.add(telefone);
+            }
+
+            if (!enderecoList.isEmpty() && !telefoneList.isEmpty()) {
+                clienteDto.fillDtoList(cliente, enderecoList, telefoneList);
+            }
+
             Resultado clienteResultado = this.facade.salvar(cliente);
 
             if (clienteResultado.getMensagem() == null) {
