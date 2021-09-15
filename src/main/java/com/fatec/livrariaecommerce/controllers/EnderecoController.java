@@ -33,16 +33,8 @@ public class EnderecoController {
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
 
-            Cidade cidade = new Cidade();
-            cidade.setId(enderecoDto.getCidade().getId());
-            cidade = (Cidade) this.facade.consultar(cidade).getEntidades().get(0);
-
-            TipoEndereco tipoEndereco = new TipoEndereco();
-            tipoEndereco.setId(enderecoDto.getTipoEndereco().getId());
-            tipoEndereco = (TipoEndereco) this.facade.consultar(tipoEndereco).getEntidades().get(0);
-
             Endereco endereco = new Endereco(cliente);
-            enderecoDto.fill(endereco, cidade, tipoEndereco);
+            enderecoDto.fill(endereco);
 
             Resultado resultado = this.facade.salvar(endereco);
 
@@ -107,16 +99,8 @@ public class EnderecoController {
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
 
-            Cidade cidade = new Cidade();
-            cidade.setId(enderecoDto.getCidade().getId());
-            cidade = (Cidade) this.facade.consultar(cidade).getEntidades().get(0);
-
-            TipoEndereco tipoEndereco = new TipoEndereco();
-            tipoEndereco.setId(enderecoDto.getTipoEndereco().getId());
-            tipoEndereco = (TipoEndereco) this.facade.consultar(tipoEndereco).getEntidades().get(0);
-
             Endereco endereco = new Endereco(cliente);
-            enderecoDto.fill(endereco, cidade, tipoEndereco);
+            enderecoDto.fill(endereco);
 
             Resultado resultado = this.facade.salvar(endereco);
 

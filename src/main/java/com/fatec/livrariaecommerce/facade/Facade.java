@@ -5,6 +5,7 @@ import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.negocio.IStrategy;
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.CriptografarSenha;
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarSenha;
+import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -62,7 +63,10 @@ public class Facade implements IFacade {
         Map<String, List<IStrategy>> regrasNegocioCliente = new HashMap<>();
         // Instanciar classes de regras de negocio e adicionar na lista de rns
         List<IStrategy> rnsSalvarCliente = new ArrayList<>();
+
         rnsSalvarCliente.add(new CriptografarSenha());
+        rnsSalvarCliente.add(new ValidaEmail(this));
+
         regrasNegocioCliente.put("SALVAR", rnsSalvarCliente);
 
         List<IStrategy> rnsAlterarCliente = new ArrayList<>();

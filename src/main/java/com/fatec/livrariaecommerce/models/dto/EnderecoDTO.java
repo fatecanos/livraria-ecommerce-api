@@ -26,7 +26,13 @@ public class EnderecoDTO {
 
     // ***********************************************************************
 
-    public void fill(Endereco dominio, Cidade cidade, TipoEndereco tipoEndereco) {
+    public void fill(Endereco dominio) {
+        Cidade cidade = new Cidade();
+        cidade.setId(this.cidade.getId());
+
+        TipoEndereco tipoEndereco = new TipoEndereco();
+        tipoEndereco.setId(this.tipoEndereco.getId());
+
         dominio.atualizarDados(this.id, this.nome, this.logradouro, this.bairro, this.numero, this.cep,
                 this.complemento, this.pais, this.tipoLogradouro, cidade, tipoEndereco);
     }

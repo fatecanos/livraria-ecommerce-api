@@ -29,50 +29,9 @@ public class ClienteController {
             @RequestBody ClienteDTO clienteDto) {
         try {
             Message message = new Message();
-            Usuario usuario = new Usuario();
-            usuario.setEmail(clienteDto.getEmail());
-            usuario.setSenha(clienteDto.getSenha());
-
-            Resultado usuarioResultado = this.facade.consultar(usuario);
-            if (!usuarioResultado.getEntidades().isEmpty()) {
-                message.setTitle("Erro");
-                message.setDescription("Este email já está cadastrado");
-                return ResponseEntity.badRequest().body(message);
-            }
-
-            List<Endereco> enderecoList = new ArrayList<>();
-            List<Telefone> telefoneList = new ArrayList<>();
 
             Cliente cliente = new Cliente();
             clienteDto.fill(cliente);
-
-            if (!clienteDto.getEnderecos().isEmpty()) {
-                Endereco endereco = new Endereco(cliente);
-                for (EnderecoDTO enderecoDTO : clienteDto.getEnderecos()) {
-                    Cidade cidade = new Cidade();
-                    cidade.setId(enderecoDTO.getCidade().getId());
-                    cidade = (Cidade) this.facade.consultar(cidade).getEntidades().get(0);
-
-                    TipoEndereco tipoEndereco = new TipoEndereco();
-                    tipoEndereco.setId(enderecoDTO.getTipoEndereco().getId());
-                    tipoEndereco = (TipoEndereco) this.facade.consultar(tipoEndereco).getEntidades().get(0);
-
-                    enderecoDTO.fill(endereco, cidade, tipoEndereco);
-                }
-                enderecoList.add(endereco);
-            }
-
-            if (!clienteDto.getTelefones().isEmpty()) {
-                Telefone telefone = new Telefone(cliente);
-                for (TelefoneDTO telefoneDTO : clienteDto.getTelefones()) {
-                    telefoneDTO.fill(telefone);
-                }
-                telefoneList.add(telefone);
-            }
-
-            if (!enderecoList.isEmpty() && !telefoneList.isEmpty()) {
-                clienteDto.fillDtoList(cliente, enderecoList, telefoneList);
-            }
 
             Resultado clienteResultado = this.facade.salvar(cliente);
 
@@ -263,6 +222,7 @@ public class ClienteController {
             usuario.setAtivo(true);
             cliente.setUsuario(usuario);
 
+            //TODO: IF IN DAO OR CONSULT AND PERSIST
 //            TODO: NULL ERROR IN ALTERAR METHOD
             Resultado resultado = this.facade.alterar(cliente);
             if (resultado.getMensagem() == null) {

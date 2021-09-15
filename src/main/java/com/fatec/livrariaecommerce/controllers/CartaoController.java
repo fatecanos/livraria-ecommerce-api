@@ -33,8 +33,10 @@ public class CartaoController {
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
 
 //            TODO: PASS BILLING REAL ADDRESS
-            endereco.setId(1);
+            endereco.setId(19);
             endereco.setAtivo(true);
+
+            System.out.println("Chega aqui n");
 
             CartaoCredito cartaoCredito = new CartaoCredito(cliente);
             cartaoCreditoDTO.fill(cartaoCredito, endereco);

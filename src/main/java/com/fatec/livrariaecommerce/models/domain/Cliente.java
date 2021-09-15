@@ -67,20 +67,4 @@ public class Cliente extends EntidadeDominio {
 //        this.cartoesCredito = cartoesCredito;
     }
 
-    public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,
-                               String genero, Usuario usuario) {
-        super.setId(id);
-        super.setAtivo(true);
-        if (this.getId() == 0 || this.getId() == null) {
-            super.setDataCriacao(LocalDateTime.now());
-        }
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.dataNascimento = dataNascimento;
-        this.cpf = cpf;
-        this.genero = genero;
-        this.usuario = usuario;
-    }
-
-
 }
