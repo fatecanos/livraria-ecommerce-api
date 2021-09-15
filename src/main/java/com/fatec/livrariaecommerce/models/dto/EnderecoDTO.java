@@ -10,8 +10,6 @@ import lombok.Getter;
 @Data
 public class EnderecoDTO {
 
-    //TODO: O QUE VAI ACONTECER: SALVAR ENDERECO/ALTERAR E EXCLUIR (PARA AMNHÃ) DEPOIS COMEÇAR CARTÃO
-
     // ***********************************************************************
 
     private int id;
@@ -28,7 +26,13 @@ public class EnderecoDTO {
 
     // ***********************************************************************
 
-    public void fill(Endereco dominio, Cidade cidade, TipoEndereco tipoEndereco) {
+    public void fill(Endereco dominio) {
+        Cidade cidade = new Cidade();
+        cidade.setId(this.cidade.getId());
+
+        TipoEndereco tipoEndereco = new TipoEndereco();
+        tipoEndereco.setId(this.tipoEndereco.getId());
+
         dominio.atualizarDados(this.id, this.nome, this.logradouro, this.bairro, this.numero, this.cep,
                 this.complemento, this.pais, this.tipoLogradouro, cidade, tipoEndereco);
     }
@@ -43,9 +47,7 @@ public class EnderecoDTO {
         dto.numero = endereco.getNumero();
         dto.bairro = endereco.getBairro();
         dto.complemento = endereco.getComplemento();
-
         dto.tipoEndereco = endereco.getTipoEndereco();
-
         dto.cidade = endereco.getCidade();
         dto.pais = endereco.getPais();
         dto.cep = endereco.getCep();

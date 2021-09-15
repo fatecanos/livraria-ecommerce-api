@@ -47,8 +47,10 @@ public class Cliente extends EntidadeDominio {
 
     // ***********************************************************************
 
+
     public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,
-                               String genero, Usuario usuario) {
+                               String genero, List<Endereco> enderecos, List<Telefone> telefones, Usuario usuario) {
+
         super.setId(id);
         super.setAtivo(true);
         if (this.getId() == 0 || this.getId() == null) {
@@ -60,7 +62,9 @@ public class Cliente extends EntidadeDominio {
         this.cpf = cpf;
         this.genero = genero;
         this.usuario = usuario;
+        this.enderecos = enderecos;
+        this.telefones = telefones;
+//        this.cartoesCredito = cartoesCredito;
     }
-
 
 }

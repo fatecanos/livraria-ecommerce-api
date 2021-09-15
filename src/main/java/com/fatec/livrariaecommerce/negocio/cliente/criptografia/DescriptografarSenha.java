@@ -44,7 +44,9 @@ public class DescriptografarSenha implements IStrategy{
     @Override
     public String processar(EntidadeDominio dominio) {
         Usuario usuario = (Usuario) dominio;
-        usuario.setSenha(encodeSenha(usuario.getSenha()));
+        if(usuario.getSenha() != null){
+            usuario.setSenha(encodeSenha(usuario.getSenha()));
+        }
         return null;
     }
 }

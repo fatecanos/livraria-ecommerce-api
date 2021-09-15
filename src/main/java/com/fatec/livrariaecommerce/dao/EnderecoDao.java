@@ -5,11 +5,13 @@ import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.Endereco;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -27,6 +29,8 @@ public interface EnderecoDao extends JpaRepository<Endereco, Integer>, IDAO {
     }
 
     @Override
+    @Transactional
+    @Modifying
     @Query("UPDATE " +
             "  #{#entityName} obj " +
             "SET " +

@@ -31,11 +31,11 @@ public class Endereco extends EntidadeDominio {
     private String complemento;
     private String pais;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "cidade_id")
     private Cidade cidade;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "tipo_endereco_id")
     private TipoEndereco tipoEndereco;
 

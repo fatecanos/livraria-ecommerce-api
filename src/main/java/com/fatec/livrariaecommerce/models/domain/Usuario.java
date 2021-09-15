@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -20,6 +21,10 @@ public class Usuario extends EntidadeDominio {
     }
 
     public Usuario(String email, String senha, PerfilUsuario perfilUsuario) {
+        super.setAtivo(true);
+        if (this.getId() == null) {
+            super.setDataCriacao(LocalDateTime.now());
+        }
         this.email = email;
         this.senha = senha;
         this.perfilUsuario = perfilUsuario;

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,8 +33,10 @@ public class CartaoController {
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
 
 //            TODO: PASS BILLING REAL ADDRESS
-            endereco.setId(1);
+            endereco.setId(19);
             endereco.setAtivo(true);
+
+            System.out.println("Chega aqui n");
 
             CartaoCredito cartaoCredito = new CartaoCredito(cliente);
             cartaoCreditoDTO.fill(cartaoCredito, endereco);
@@ -100,14 +103,25 @@ public class CartaoController {
         return null;
     }
 
-    @GetMapping(path = "{cartaoID}")
-    public ResponseEntity<Message> obterCartaoPeloID() {
-        return null;
-    }
+    @GetMapping(path = "/{idUsuario}")
+    public ResponseEntity<List<CartaoCreditoDTO>> consultarCartoes(@PathVariable("idUsuario") int idUsuario) {
+     try{
+         CartaoCredito cartaoCredito = new CartaoCredito();
+         Usuario usuario = new Usuario();
+         usuario.setId(idUsuario);
 
-    @GetMapping
-    public ResponseEntity<Message> obterCartoes() {
-        return null;
+         Cliente cliente = new Cliente();
+         cliente.setUsuario(usuario);
+         cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+         cartaoCredito.setCliente(cliente);
+         List<CartaoCreditoDTO> cartoes = this.facade.consultar(cartaoCredito).getEntidades().stream().map(card -> {
+             return CartaoCreditoDTO.from((CartaoCredito) card);
+         }).collect(Collectors.toList());
+         return ResponseEntity.ok(cartoes);
+     }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.badRequest().build();
+     }
     }
 
 }

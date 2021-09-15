@@ -34,9 +34,27 @@ public class ClienteDTO {
         } else {
             usuario = dominio.getUsuario();
         }
+        List<Endereco> enderecoList = new ArrayList<>();
+        List<Telefone> telefoneList = new ArrayList<>();
+
+        if (!this.getEnderecos().isEmpty()) {
+            Endereco endereco = new Endereco(dominio);
+            for (EnderecoDTO enderecoDTO : this.getEnderecos()) {
+                enderecoDTO.fill(endereco);
+            }
+            enderecoList.add(endereco);
+        }
+
+        if (!this.getTelefones().isEmpty()) {
+            Telefone telefone = new Telefone(dominio);
+            for (TelefoneDTO telefoneDTO : this.getTelefones()) {
+                telefoneDTO.fill(telefone);
+            }
+            telefoneList.add(telefone);
+        }
 
         dominio.atualizarDados(this.id, this.nome, this.sobrenome, this.dataNascimento, this.cpf,
-                this.genero, usuario);
+                this.genero, enderecoList, telefoneList, usuario);
     }
 
     public static ClienteDTO from(Cliente cliente) {
