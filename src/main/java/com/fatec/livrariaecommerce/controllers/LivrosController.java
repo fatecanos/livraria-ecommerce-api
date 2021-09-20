@@ -1,101 +1,64 @@
 package com.fatec.livrariaecommerce.controllers;
 
+import com.fatec.livrariaecommerce.facade.IFacade;
+import com.fatec.livrariaecommerce.models.domain.Resultado;
 import com.fatec.livrariaecommerce.models.utils.Message;
-import com.fatec.livrariaecommerce.models.domain.GrupoPrecificacao;
 import com.fatec.livrariaecommerce.models.domain.Livro;
-import com.fatec.livrariaecommerce.models.dto.CategoriaDTO;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
+
+@CrossOrigin
 @RestController
 @RequestMapping("/livros")
 public class LivrosController {
 
-//    private final CategoriasFacade categoriasFacade;
-//    private final GrupoPrecificacaoFacade gruposPrecoFacade;
-//    private final LivrosFacade livrosFacade;
+    private final IFacade facade;
 
-//    @Autowired
-//    public LivrosController(
-//            LivrosFacade livrosFacade,
-//            CategoriasFacade categoriasFacade,
-//            GrupoPrecificacaoFacade gruposPrecoFacade) {
-//        this.livrosFacade = livrosFacade;
-//        this.categoriasFacade = categoriasFacade;
-//        this.gruposPrecoFacade = gruposPrecoFacade;
-//    }
+    // ***********************************************************************
 
-    @CrossOrigin
-    @GetMapping("/categorias")
-    public ResponseEntity<List<CategoriaDTO>> obterCategorias() {
-//        List<CategoriaDTO> categorias;
-//        try {
-//            categorias = this.categoriasFacade.listar();
-//
-//            return ResponseEntity.ok(categorias);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.notFound().build();
-//        }
-
-        return null;
-    }
-
-    @CrossOrigin
-    @GetMapping("/grupo-precificacao")
-    public ResponseEntity<List<GrupoPrecificacao>> obterGruposPreficicacao() {
-//        List<GrupoPrecificacao> grupos;
-//        grupos = this.gruposPrecoFacade.obterGrupos();
-//        if(grupos.isEmpty())
-//            return ResponseEntity.notFound().build();
-//        return ResponseEntity.ok(grupos);
-        return null;
-    }
-
-    @CrossOrigin
     @PostMapping
-    public ResponseEntity<Message>
-    salvarLivro(@RequestBody LivroDTO livroDto) throws Exception {
-//        Message mensagem = new Message();
-//        mensagem.setTitle("sucesso");
-//        mensagem.setDescription("cadastro do livro efetuado");
-//
-//        this.livrosFacade.salvar(livroDto);
-//
-//        return ResponseEntity.ok(mensagem);
-        return null;
+    public ResponseEntity<Message> salvarLivro(@RequestBody LivroDTO livroDTO) {
+        try {
+            Message message = new Message();
+            Livro livro = new Livro();
+            livroDTO.fill(livro);
+            Resultado resultado = this.facade.salvar(livro);
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso");
+                message.setDescription("Livro cadastrado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
 
     }
 
-    @CrossOrigin
     @GetMapping
-    public ResponseEntity<List<Livro>> obterLivros() {
-//        List<Livro> livros = this.livrosFacade.obterLivros();
-//        if(livros.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(livros);
-        return null;
-    }
-
-    @CrossOrigin
-    @DeleteMapping
-    public void inativar(@RequestParam int id) throws Exception {
-//        this.livrosFacade.inativarLivro(id);
-
-    }
-
-    @CrossOrigin
-    @PutMapping
-    public ResponseEntity<Message>
-    atualizar(@RequestBody LivroDTO livroDto) throws Exception {
-//        System.out.println("Chegou o DTO"+ livroDto.toString());
-//        this.livrosFacade.atualizar(livroDto);
-//        return ResponseEntity.ok().build();
-        return null;
+    public ResponseEntity<List<LivroDTO>> consultarLivros(){
+        try{
+            Livro livro = new Livro();
+            livro.setAtivo(true);
+            List<LivroDTO> livroDTOList = this.facade.consultar(livro).getEntidades().stream().map(lvr -> {
+                return LivroDTO.from((Livro) lvr);
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(livroDTOList);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
