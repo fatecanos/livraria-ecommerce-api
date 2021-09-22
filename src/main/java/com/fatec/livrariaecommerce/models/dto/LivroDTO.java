@@ -1,12 +1,10 @@
 package com.fatec.livrariaecommerce.models.dto;
 
-import com.fatec.livrariaecommerce.models.domain.Categoria;
-import com.fatec.livrariaecommerce.models.domain.Dimensoes;
-import com.fatec.livrariaecommerce.models.domain.GrupoPrecificacao;
-import com.fatec.livrariaecommerce.models.domain.Livro;
+import com.fatec.livrariaecommerce.models.domain.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,9 +28,12 @@ public class LivroDTO {
     private DimensaoDTO dimensoes;
     private GrupoPrecificacao grupoPrecificacao;
     private boolean ativo;
-    private List<Categoria> categorias;
+    private List<CategoriaDTO> categorias;
 
     public void fill(Livro dominio) {
+
+        List<Categoria> categoriaList = new ArrayList<>();
+
         Dimensoes dimensoes;
         if (dominio.getDimensoes() == null) {
             dimensoes = new Dimensoes(this.getDimensoes().getAltura(), this.getDimensoes().getLargura(),
@@ -40,9 +41,18 @@ public class LivroDTO {
         } else {
             dimensoes = dominio.getDimensoes();
         }
+
+        if (!this.getCategorias().isEmpty()) {
+            Categoria categoria = new Categoria();
+            for (CategoriaDTO categoriaDTO : this.getCategorias()) {
+                categoriaDTO.fill(categoria);
+            }
+            categoriaList.add(categoria);
+        }
+
         dominio.atualizarDados(this.id, this.titulo, this.autor, this.ano, this.editora, this.edicao, this.isbn,
                 this.numeroPaginas, this.sinopse, this.url, this.codigoBarras, this.valorCompra, this.valorVenda, this.estoque,
-                dimensoes, this.grupoPrecificacao, this.categorias);
+                dimensoes, this.grupoPrecificacao, categoriaList);
     }
 
     public static LivroDTO from(Livro livro) {
@@ -64,7 +74,7 @@ public class LivroDTO {
         dto.estoque = livro.getEstoque();
         dto.dimensoes = DimensaoDTO.from(livro.getDimensoes());
         dto.grupoPrecificacao = livro.getGrupoPrecificacao();
-        dto.categorias = livro.getCategorias();
+        dto.categorias = livro.getCategorias().stream().map(CategoriaDTO::from).collect(Collectors.toList());;
         return dto;
     }
 }

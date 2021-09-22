@@ -61,4 +61,18 @@ public class LivrosController {
         }
     }
 
+    @GetMapping("detalhes/{idLivro}")
+    public ResponseEntity<LivroDTO> consultarLivroPorID(@PathVariable int idLivro){
+        try{
+            Livro livro = new Livro();
+            livro.setId(idLivro);
+            Resultado resultado = this.facade.consultar(livro);
+            livro = (Livro) resultado.getEntidades().get(0);
+            return ResponseEntity.ok(LivroDTO.from(livro));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
