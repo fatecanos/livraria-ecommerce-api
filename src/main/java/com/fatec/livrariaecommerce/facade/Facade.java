@@ -28,7 +28,8 @@ public class Facade implements IFacade {
     // ***********************************************************************
 
     public Facade(ClienteDao clienteDao, UsuarioDao usuarioDao, EnderecoDao enderecoDao, CidadeDao cidadeDao,
-                  TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao, CartaoCreditoDao cartaoCreditoDao, LivroDao livroDao) {
+                  TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao, CartaoCreditoDao cartaoCreditoDao,
+                  LivroDao livroDao, VendaDao vendaDao) {
 
         // ClienteDao
         this.daos.put(Cliente.class.getName(), clienteDao);
@@ -53,6 +54,9 @@ public class Facade implements IFacade {
 
         //LivroDao
         this.daos.put(Livro.class.getName(), livroDao);
+
+        //VendaDao
+        this.daos.put(Venda.class.getName(), vendaDao);
 
     }
 
@@ -191,6 +195,27 @@ public class Facade implements IFacade {
 
         this.regrasNegocio.put(Livro.class.getName(), regrasNegocioLivro);
 
+
+        // ***********************************************************************
+        // Livro
+        Map<String, List<IStrategy>> regrasNegocioVenda = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarVenda = new ArrayList<>();
+        regrasNegocioVenda.put("SALVAR", rnsSalvarVenda);
+
+        List<IStrategy> rnsAlterarVenda = new ArrayList<>();
+        regrasNegocioVenda.put("ALTERAR", rnsAlterarVenda);
+
+        List<IStrategy> rnsExcluirVenda = new ArrayList<>();
+        regrasNegocioVenda.put("EXCLUIR", rnsExcluirVenda);
+
+        List<IStrategy> rnsConsultarVenda = new ArrayList<>();
+        regrasNegocioVenda.put("CONSULTAR", rnsConsultarVenda);
+
+        this.regrasNegocio.put(Venda.class.getName(), regrasNegocioVenda);
+
+
     }
 
     // ***********************************************************************
@@ -239,18 +264,11 @@ public class Facade implements IFacade {
     @Override
     public Resultado consultar(EntidadeDominio dominio) {
         Resultado resultado = new Resultado();
-
-        System.out.println("Vai me diz: " + dominio.getClass().getName());
-
         List<IStrategy> rns = this.regrasNegocio.get(dominio.getClass().getName()).get("CONSULTAR");
         if (rns != null && rns.size() > 0) {
             StringBuilder sb = this.executarRegras(dominio, rns);
         }
         resultado.getEntidades().addAll(this.daos.get(dominio.getClass().getName()).consultar(dominio));
-
-        System.out.println("Vai me diz o lengtao: " + resultado.getEntidades().size());
-
-
         return resultado;
     }
 
