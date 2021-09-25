@@ -21,11 +21,23 @@ public class Venda extends EntidadeDominio {
     private int idEndereco;
     private double valorTotal;
 
+    //armazenar aqui
+//    private int idCliente;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venda")
     @OrderBy(value = "id")
     private List<ItensPedido> itensPedidos;
 
-    public void atualizarDados(int id, int idEndereco, List<ItensPedido> itensPedidos){
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venda")
+    @OrderBy(value = "id")
+    private List<FormaPagamento> formaPagamentoList;
+
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "forma_pagamento")
+//    @OrderBy(value = "id")
+//    private List<Cupom> formaPagamentoList;
+
+
+    public void atualizarDados(int id, int idEndereco, List<ItensPedido> itensPedidos, List<FormaPagamento> formaPagamentoList){
         super.setId(id);
         super.setAtivo(true);
         if (this.getId() == 0 || this.getId() == null) {
@@ -33,5 +45,6 @@ public class Venda extends EntidadeDominio {
         }
         this.idEndereco = idEndereco;
         this.itensPedidos = itensPedidos;
+        this.formaPagamentoList = formaPagamentoList;
     }
 }

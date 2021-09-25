@@ -16,7 +16,7 @@ public class ItensPedidoDTO {
     private double valorUnitario;
     private double valorTotal;
 
-//    transformar em regra de negócio
+//    transformar os valores em regra de negócio
 
     public void fill(ItensPedido dominio) {
         dominio.atualizarDados(this.id, this.idLivro, this.nomeLivro, this.qtdComprada, this.valorUnitario,
