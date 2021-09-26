@@ -21,9 +21,6 @@ public class Venda extends EntidadeDominio {
     private int idEndereco;
     private double valorTotal;
 
-    //armazenar aqui
-//    private int idCliente;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venda")
     @OrderBy(value = "id")
     private List<ItensPedido> itensPedidos;
@@ -32,19 +29,33 @@ public class Venda extends EntidadeDominio {
     @OrderBy(value = "id")
     private List<FormaPagamento> formaPagamentoList;
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "forma_pagamento")
-//    @OrderBy(value = "id")
-//    private List<Cupom> formaPagamentoList;
+
+    //não pode ter mais de 1 cupom na mesma venda
+    //regra de negócio para consultar a
+
+    //criar functio
+
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @OrderBy(value = "id")
+    private List<Cupom> cupoms;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "cliente")
+    private Cliente cliente;
 
 
-    public void atualizarDados(int id, int idEndereco, List<ItensPedido> itensPedidos, List<FormaPagamento> formaPagamentoList){
+    public void atualizarDados(int id, int idEndereco, Cliente cliente, double valorTotal, List<ItensPedido> itensPedidos,
+                               List<FormaPagamento> formaPagamentoList, List<Cupom> cupoms) {
         super.setId(id);
         super.setAtivo(true);
         if (this.getId() == 0 || this.getId() == null) {
             super.setDataCriacao(LocalDateTime.now());
         }
         this.idEndereco = idEndereco;
+        this.cliente = cliente;
+        this.valorTotal = valorTotal;
         this.itensPedidos = itensPedidos;
         this.formaPagamentoList = formaPagamentoList;
+        this.cupoms = cupoms;
     }
 }

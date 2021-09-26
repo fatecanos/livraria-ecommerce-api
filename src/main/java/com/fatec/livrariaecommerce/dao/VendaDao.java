@@ -46,4 +46,19 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
     List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
 
 
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "Venda obj " +
+            "INNER JOIN obj.cupoms cp ON cp.id = :idCupom")
+    List<EntidadeDominio> consultarCupom(@Param("idCupom") int idCupom);
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "Venda obj " +
+            "WHERE obj.cupoms.size > 0")
+    List<EntidadeDominio> consultarComCupom();
+
+
 }

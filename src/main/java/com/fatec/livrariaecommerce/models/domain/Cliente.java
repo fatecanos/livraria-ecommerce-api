@@ -45,11 +45,16 @@ public class Cliente extends EntidadeDominio {
     @OrderBy(value = "id")
     private List<CartaoCredito> cartoesCredito;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @Where(clause = "ativo = true")
+    @OrderBy(value = "id")
+    private List<Cupom> cupoms;
+
     // ***********************************************************************
 
 
     public void atualizarDados(int id, String nome, String sobrenome, LocalDate dataNascimento, String cpf,
-                               String genero, List<Endereco> enderecos, List<Telefone> telefones, Usuario usuario) {
+                               String genero, List<Endereco> enderecos, List<Telefone> telefones, List<CartaoCredito> cartoesCredito, List<Cupom> cupoms, Usuario usuario) {
 
         super.setId(id);
         super.setAtivo(true);
@@ -64,7 +69,8 @@ public class Cliente extends EntidadeDominio {
         this.usuario = usuario;
         this.enderecos = enderecos;
         this.telefones = telefones;
-//        this.cartoesCredito = cartoesCredito;
+        this.cartoesCredito = cartoesCredito;
+        this.cupoms = cupoms;
     }
 
 }

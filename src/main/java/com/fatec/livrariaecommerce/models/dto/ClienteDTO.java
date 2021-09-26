@@ -26,6 +26,7 @@ public class ClienteDTO {
     private List<TelefoneDTO> telefones;
     private List<EnderecoDTO> enderecos;
     private List<CartaoCreditoDTO> cartoesCredito;
+    private List<CupomDTO> cupoms;
 
     public void fill(Cliente dominio) {
         Usuario usuario;
@@ -36,6 +37,8 @@ public class ClienteDTO {
         }
         List<Endereco> enderecoList = new ArrayList<>();
         List<Telefone> telefoneList = new ArrayList<>();
+        List<CartaoCredito> cartoesList = new ArrayList<>();
+        List<Cupom> cupomList = new ArrayList<>();
 
         if (!this.getEnderecos().isEmpty()) {
             Endereco endereco = new Endereco(dominio);
@@ -53,8 +56,24 @@ public class ClienteDTO {
             telefoneList.add(telefone);
         }
 
+        if (!this.getCartoesCredito().isEmpty()) {
+            for (CartaoCreditoDTO cartaoCreditoDTO : this.getCartoesCredito()) {
+                CartaoCredito cartaoCredito = new CartaoCredito(dominio);
+                cartaoCreditoDTO.fill(cartaoCredito);
+                cartoesList.add(cartaoCredito);
+            }
+        }
+
+        if (!this.getCupoms().isEmpty()) {
+            for (CupomDTO cupomDTO : this.getCupoms()) {
+                Cupom cupom = new Cupom(dominio);
+                cupomDTO.fill(cupom);
+                cupomList.add(cupom);
+            }
+        }
+
         dominio.atualizarDados(this.id, this.nome, this.sobrenome, this.dataNascimento, this.cpf,
-                this.genero, enderecoList, telefoneList, usuario);
+                this.genero, enderecoList, telefoneList, cartoesList, cupomList, usuario);
     }
 
     public static ClienteDTO from(Cliente cliente) {
@@ -71,6 +90,7 @@ public class ClienteDTO {
         dto.telefones = cliente.getTelefones().stream().map(TelefoneDTO::from).collect(Collectors.toList());
         dto.enderecos = cliente.getEnderecos().stream().map(EnderecoDTO::from).collect(Collectors.toList());
         dto.cartoesCredito = cliente.getCartoesCredito().stream().map(CartaoCreditoDTO::from).collect(Collectors.toList());
+        dto.cupoms = cliente.getCupoms().stream().map(CupomDTO::from).collect(Collectors.toList());
         return dto;
     }
 

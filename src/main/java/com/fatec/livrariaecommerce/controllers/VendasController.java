@@ -40,7 +40,7 @@ public class VendasController {
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");
-                message.setDescription("Erro ao efetuar a venda telefone!");
+                message.setDescription(resultado.getMensagem());
                 return ResponseEntity.badRequest().body(message);
             }
 
