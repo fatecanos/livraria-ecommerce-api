@@ -52,18 +52,11 @@ public class VendasController {
         }
     }
 
-    @GetMapping(path = "{usuarioID}")
-    public ResponseEntity<List<VendaDTO>> consultarVendas(@PathVariable int usuarioID) {
+    @GetMapping
+    public ResponseEntity<List<VendaDTO>> consultarVendas() {
         try {
-            Usuario usuario = new Usuario();
-            usuario.setId(usuarioID);
-
-            Cliente cliente = new Cliente();
-            cliente.setUsuario(usuario);
-            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
-
             Venda venda = new Venda();
-            venda.setCliente(cliente);
+            venda.setAtivo(true);
             List<VendaDTO> vendaDTOList = this.facade.consultar(venda).getEntidades().stream().map(ven -> {
                 return VendaDTO.from((Venda) ven);
             }).collect(Collectors.toList());
@@ -74,12 +67,19 @@ public class VendasController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<VendaDTO>> consultarVendasCliente() {
+    @GetMapping(path = "{usuarioID}")
+    public ResponseEntity<List<VendaDTO>> consultarVendasCliente(@PathVariable int usuarioID) {
         try {
 
+            Usuario usuario = new Usuario();
+            usuario.setId(usuarioID);
+
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(usuario);
+            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+
             Venda venda = new Venda();
-            venda.setAtivo(true);
+            venda.setCliente(cliente);
             List<VendaDTO> vendaDTOList = this.facade.consultar(venda).getEntidades().stream().map(ven -> {
                 return VendaDTO.from((Venda) ven);
             }).collect(Collectors.toList());

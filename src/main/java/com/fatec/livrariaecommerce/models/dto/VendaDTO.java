@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.JoinColumn;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Data
@@ -19,6 +21,9 @@ public class VendaDTO {
     private int idEndereco;
     private int idCliente;
     private double valorTotal;
+    private String numero;
+    private StatusVenda status;
+    private LocalDateTime dataCriacao;
     private List<ItensPedidoDTO> itensPedido;
     private List<FormaPagamentoDTO> formasPagamento;
     private List<CupomDTO> cupoms;
@@ -54,7 +59,9 @@ public class VendaDTO {
         Cliente cliente = new Cliente();
         cliente.setId(idCliente);
 
-        dominio.atualizarDados(this.id, this.idEndereco, cliente, this.valorTotal, itensPedidos,
+        String numero = String.format("%04d", new Random().nextInt(10000));
+
+        dominio.atualizarDados(this.id, this.idEndereco, cliente, this.valorTotal, numero, this.status, itensPedidos,
                 formaPagamentoList, cupomList);
     }
 
@@ -64,6 +71,9 @@ public class VendaDTO {
         dto.idEndereco = venda.getIdEndereco();
         dto.idCliente = venda.getCliente().getId();
         dto.valorTotal = venda.getValorTotal();
+        dto.numero = venda.getNumero();
+        dto.status = venda.getStatusVenda();
+        dto.dataCriacao = venda.getDataCriacao();
         dto.itensPedido = venda.getItensPedidos().stream().map(ItensPedidoDTO::from).collect(Collectors.toList());
         dto.formasPagamento = venda.getFormaPagamentoList().stream().map(FormaPagamentoDTO::from).collect(Collectors.toList());
         dto.cupoms = venda.getCupoms().stream().map(CupomDTO::from).collect(Collectors.toList());

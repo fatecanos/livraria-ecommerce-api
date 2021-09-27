@@ -26,7 +26,6 @@ public class CupomDTO {
         dto.valor = dominio.getValor();
         dto.tipoCupom = dominio.getTipoCupom();
         return dto;
-        //todo: continuar a implementação do DTO de cupom no LADO DO CLIENTE e depois na VENDA
     }
 
 }
