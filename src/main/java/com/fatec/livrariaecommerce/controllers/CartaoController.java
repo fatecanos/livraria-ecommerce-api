@@ -20,11 +20,8 @@ public class CartaoController {
     private final IFacade facade;
 
     @PostMapping(path = "{idUsuario}")
-    public ResponseEntity<Message> salvarCartao(@PathVariable int idUsuario, @RequestBody CartaoCreditoDTO cartaoCreditoDTO) {
+    public ResponseEntity<CartaoCreditoDTO> salvarCartao(@PathVariable int idUsuario, @RequestBody CartaoCreditoDTO cartaoCreditoDTO) {
         try {
-            Message message = new Message();
-            Endereco endereco = new Endereco();
-
             Usuario usuario = new Usuario();
             usuario.setId(idUsuario);
 
@@ -38,13 +35,9 @@ public class CartaoController {
             Resultado resultado = this.facade.salvar(cartaoCredito);
 
             if (resultado.getMensagem() == null) {
-                message.setTitle("Sucesso!");
-                message.setDescription("Cartão cadastrado com sucesso!");
-                return ResponseEntity.ok(message);
+                return ResponseEntity.ok(CartaoCreditoDTO.from((CartaoCredito) resultado.getEntidades().get(0)));
             } else {
-                message.setTitle("Erro");
-                message.setDescription("Erro ao cadastrar o cartão.");
-                return ResponseEntity.badRequest().body(message);
+                return ResponseEntity.badRequest().build();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,7 +51,6 @@ public class CartaoController {
         try {
             Message message = new Message();
             Endereco endereco = new Endereco();
-
             Usuario usuario = new Usuario();
             usuario.setId(idUsuario);
 
@@ -95,23 +87,23 @@ public class CartaoController {
 
     @GetMapping(path = "/{idUsuario}")
     public ResponseEntity<List<CartaoCreditoDTO>> consultarCartoes(@PathVariable("idUsuario") int idUsuario) {
-     try{
-         CartaoCredito cartaoCredito = new CartaoCredito();
-         Usuario usuario = new Usuario();
-         usuario.setId(idUsuario);
+        try {
+            CartaoCredito cartaoCredito = new CartaoCredito();
+            Usuario usuario = new Usuario();
+            usuario.setId(idUsuario);
 
-         Cliente cliente = new Cliente();
-         cliente.setUsuario(usuario);
-         cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
-         cartaoCredito.setCliente(cliente);
-         List<CartaoCreditoDTO> cartoes = this.facade.consultar(cartaoCredito).getEntidades().stream().map(card -> {
-             return CartaoCreditoDTO.from((CartaoCredito) card);
-         }).collect(Collectors.toList());
-         return ResponseEntity.ok(cartoes);
-     }catch (Exception e){
-         e.printStackTrace();
-         return ResponseEntity.badRequest().build();
-     }
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(usuario);
+            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+            cartaoCredito.setCliente(cliente);
+            List<CartaoCreditoDTO> cartoes = this.facade.consultar(cartaoCredito).getEntidades().stream().map(card -> {
+                return CartaoCreditoDTO.from((CartaoCredito) card);
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(cartoes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

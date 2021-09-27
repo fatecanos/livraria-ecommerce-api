@@ -23,31 +23,20 @@ public class EnderecoController {
     // ***********************************************************************
 
     @PostMapping(path = "{userId}")
-    public ResponseEntity<Message> salvarEndereco(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
+    public ResponseEntity<EnderecoDTO> salvarEndereco(@PathVariable int userId, @RequestBody EnderecoDTO enderecoDto) {
         try {
-
             Usuario usuario = new Usuario();
             usuario.setId(userId);
-
             Cliente cliente = new Cliente();
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
-
             Endereco endereco = new Endereco(cliente);
             enderecoDto.fill(endereco);
-
             Resultado resultado = this.facade.salvar(endereco);
-
-            Message message = new Message();
-
             if (resultado.getMensagem() == null) {
-                message.setTitle("Sucesso");
-                message.setDescription("Endereco cadastrado com sucesso!");
-                return ResponseEntity.ok(message);
+                return ResponseEntity.ok(EnderecoDTO.from((Endereco) resultado.getEntidades().get(0)));
             } else {
-                message.setTitle("Erro");
-                message.setDescription(resultado.getMensagem());
-                return ResponseEntity.badRequest().body(message);
+                return ResponseEntity.badRequest().build();
             }
         } catch (Exception e) {
             e.printStackTrace();

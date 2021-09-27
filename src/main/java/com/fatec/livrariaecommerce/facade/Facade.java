@@ -255,7 +255,7 @@ public class Facade implements IFacade {
         StringBuilder sb = this.executarRegras(dominio, rns);
 
         if (sb.length() == 0) {
-            this.daos.get(dominio.getClass().getName()).salvar(dominio);
+            dominio = this.daos.get(dominio.getClass().getName()).salvar(dominio);
             resultado.getEntidades().add(dominio);
         } else {
             resultado.getEntidades().add(dominio);
