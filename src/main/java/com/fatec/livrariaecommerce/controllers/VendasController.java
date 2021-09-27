@@ -1,7 +1,9 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
+import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
+import com.fatec.livrariaecommerce.models.domain.Usuario;
 import com.fatec.livrariaecommerce.models.domain.Venda;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
 import com.fatec.livrariaecommerce.models.dto.VendaDTO;
@@ -50,8 +52,30 @@ public class VendasController {
         }
     }
 
+    @GetMapping(path = "{usuarioID}")
+    public ResponseEntity<List<VendaDTO>> consultarVendas(@PathVariable int usuarioID) {
+        try {
+            Usuario usuario = new Usuario();
+            usuario.setId(usuarioID);
+
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(usuario);
+            cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
+
+            Venda venda = new Venda();
+            venda.setCliente(cliente);
+            List<VendaDTO> vendaDTOList = this.facade.consultar(venda).getEntidades().stream().map(ven -> {
+                return VendaDTO.from((Venda) ven);
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(vendaDTOList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping
-    public ResponseEntity<List<VendaDTO>> consultarVendas() {
+    public ResponseEntity<List<VendaDTO>> consultarVendasCliente() {
         try {
 
             Venda venda = new Venda();
