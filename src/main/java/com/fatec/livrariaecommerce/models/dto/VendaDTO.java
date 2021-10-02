@@ -61,7 +61,9 @@ public class VendaDTO {
 
         String numero = String.format("%04d", new Random().nextInt(10000));
 
-        dominio.atualizarDados(this.id, this.idEndereco, cliente, this.valorTotal, numero, this.status, itensPedidos,
+        StatusVenda initialStatus = StatusVenda.EM_PROCESSAMENTO;
+
+        dominio.atualizarDados(this.id, this.idEndereco, cliente, this.valorTotal, numero, initialStatus, itensPedidos,
                 formaPagamentoList, cupomList);
     }
 

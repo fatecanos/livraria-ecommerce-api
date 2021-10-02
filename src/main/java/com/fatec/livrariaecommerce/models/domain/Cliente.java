@@ -45,6 +45,7 @@ public class Cliente extends EntidadeDominio {
     @OrderBy(value = "id")
     private List<CartaoCredito> cartoesCredito;
 
+    //TODO: REMOVER A CLAUSULA WHERE PARA O CUPOM QUE NÃO É DO CLIENTE NÃO APARECER EM LISTAGENS
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     @Where(clause = "ativo = true")
     @OrderBy(value = "id")

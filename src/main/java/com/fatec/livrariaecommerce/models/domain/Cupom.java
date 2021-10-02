@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @Table(name = "cupom")
 public class Cupom extends EntidadeDominio {
 
+    //todo: pensar na possibilidade de radio button com opção de selecionar ou digitar cupom
+    //todo: quando cupom promocional == cliente null
+
     private String nome;
     private double valor;
     private TipoCupom tipoCupom;

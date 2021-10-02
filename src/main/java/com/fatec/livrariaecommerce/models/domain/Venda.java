@@ -18,6 +18,9 @@ import java.util.List;
 @Table(name = "venda")
 public class Venda extends EntidadeDominio {
 
+    //todo: guardar endereço TROCAR DETACH E REFRESH
+    //todo sem colocar WHERE(ativo = true)
+
     private int idEndereco;
     private double valorTotal;
     private String numero;
