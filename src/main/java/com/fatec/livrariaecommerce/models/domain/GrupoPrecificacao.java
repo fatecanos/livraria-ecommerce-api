@@ -9,29 +9,12 @@ import javax.persistence.*;
 @Setter
 @Getter
 
-
-
 @Entity
 @Table
 public class GrupoPrecificacao extends EntidadeDominio{
-//    @Id
-//    @SequenceGenerator(
-//            name="clientes_sequence",
-//            sequenceName="grupo_precificacao_seq",
-//            allocationSize=1
-//    )
-//    @GeneratedValue(
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "grupo_precificacao_seq"
-//    )
-//    private int id;
+
+    private String nome;
     private String descricao;
+    private Double margem;
 
-    public GrupoPrecificacao() {
-    }
-
-    public GrupoPrecificacao(int id, String descricao) {
-//        this.id = id;
-        this.descricao = descricao;
-    }
 }

@@ -6,6 +6,9 @@ import com.fatec.livrariaecommerce.negocio.IStrategy;
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.CriptografarSenha;
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarSenha;
 import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
+import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
+import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
+import com.fatec.livrariaecommerce.negocio.venda.ValidaCupom;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +31,8 @@ public class Facade implements IFacade {
     // ***********************************************************************
 
     public Facade(ClienteDao clienteDao, UsuarioDao usuarioDao, EnderecoDao enderecoDao, CidadeDao cidadeDao,
-                  TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao, CartaoCreditoDao cartaoCreditoDao) {
+                  TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao, CartaoCreditoDao cartaoCreditoDao,
+                  LivroDao livroDao, VendaDao vendaDao, CupomDao cupomDao) {
 
         // ClienteDao
         this.daos.put(Cliente.class.getName(), clienteDao);
@@ -50,6 +54,15 @@ public class Facade implements IFacade {
 
         //CartaoCreditoDao
         this.daos.put(CartaoCredito.class.getName(), cartaoCreditoDao);
+
+        //LivroDao
+        this.daos.put(Livro.class.getName(), livroDao);
+
+        //VendaDao
+        this.daos.put(Venda.class.getName(), vendaDao);
+
+        //CupomDao
+        this.daos.put(Cupom.class.getName(), cupomDao);
 
     }
 
@@ -169,6 +182,69 @@ public class Facade implements IFacade {
 
         this.regrasNegocio.put(CartaoCredito.class.getName(), regrasNegocioCartaoCredito);
 
+        // ***********************************************************************
+        // Livro
+        Map<String, List<IStrategy>> regrasNegocioLivro = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarLivro = new ArrayList<>();
+        regrasNegocioLivro.put("SALVAR", rnsSalvarLivro);
+
+        List<IStrategy> rnsAlterarLivro = new ArrayList<>();
+        regrasNegocioLivro.put("ALTERAR", rnsAlterarLivro);
+
+        List<IStrategy> rnsExcluirLivro = new ArrayList<>();
+        regrasNegocioLivro.put("EXCLUIR", rnsExcluirLivro);
+
+        List<IStrategy> rnsConsultarLivro = new ArrayList<>();
+        regrasNegocioLivro.put("CONSULTAR", rnsConsultarLivro);
+
+        this.regrasNegocio.put(Livro.class.getName(), regrasNegocioLivro);
+
+
+        // ***********************************************************************
+        // Livro
+        Map<String, List<IStrategy>> regrasNegocioVenda = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarVenda = new ArrayList<>();
+        rnsSalvarVenda.add(new ValidaCupom((VendaDao) this.daos.get(Venda.class.getName())));
+        regrasNegocioVenda.put("SALVAR", rnsSalvarVenda);
+
+        List<IStrategy> rnsAlterarVenda = new ArrayList<>();
+        rnsAlterarVenda.add(new AlteraStatusVenda());
+        regrasNegocioVenda.put("ALTERAR", rnsAlterarVenda);
+
+        List<IStrategy> rnsExcluirVenda = new ArrayList<>();
+        regrasNegocioVenda.put("EXCLUIR", rnsExcluirVenda);
+
+        List<IStrategy> rnsConsultarVenda = new ArrayList<>();
+        regrasNegocioVenda.put("CONSULTAR", rnsConsultarVenda);
+
+        this.regrasNegocio.put(Venda.class.getName(), regrasNegocioVenda);
+
+
+        // ***********************************************************************
+        // Livro
+        Map<String, List<IStrategy>> regrasNegocioCupom = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarCupom = new ArrayList<>();
+        regrasNegocioCupom.put("SALVAR", rnsSalvarCupom);
+
+        List<IStrategy> rnsAlterarCupom = new ArrayList<>();
+        regrasNegocioCupom.put("ALTERAR", rnsAlterarCupom);
+
+        List<IStrategy> rnsExcluirCupom = new ArrayList<>();
+        regrasNegocioCupom.put("EXCLUIR", rnsExcluirCupom);
+
+        List<IStrategy> rnsConsultarCupom = new ArrayList<>();
+        rnsConsultarCupom.add(new ValidaCupomUsados((VendaDao) this.daos.get(Venda.class.getName())));
+        regrasNegocioCupom.put("CONSULTAR", rnsConsultarCupom);
+
+        this.regrasNegocio.put(Cupom.class.getName(), regrasNegocioCupom);
+
+
     }
 
     // ***********************************************************************
@@ -181,7 +257,7 @@ public class Facade implements IFacade {
         StringBuilder sb = this.executarRegras(dominio, rns);
 
         if (sb.length() == 0) {
-            this.daos.get(dominio.getClass().getName()).salvar(dominio);
+            dominio = this.daos.get(dominio.getClass().getName()).salvar(dominio);
             resultado.getEntidades().add(dominio);
         } else {
             resultado.getEntidades().add(dominio);

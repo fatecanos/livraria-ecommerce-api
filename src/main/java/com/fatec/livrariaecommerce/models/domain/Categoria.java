@@ -1,36 +1,21 @@
 package com.fatec.livrariaecommerce.models.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+
+@Getter
+@Setter
 
 @Entity
 @Table
 public class Categoria extends EntidadeDominio {
-//    @Id
-//    @SequenceGenerator(
-//            name="categorias_sequence",
-//            sequenceName="clientes_sequence",
-//            allocationSize=1
-//    )
-//    @GeneratedValue(
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "categorias_sequence"
-//    )
-//    private int id;
     private String descricao;
 
-    public Categoria() {
-    }
+    public void atualizarDados(int id, String descricao){
 
-    public Categoria(int id, String descricao) {
-//        this.id = id;
-        this.descricao = descricao;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
+        super.setId(id);
         this.descricao = descricao;
     }
 }

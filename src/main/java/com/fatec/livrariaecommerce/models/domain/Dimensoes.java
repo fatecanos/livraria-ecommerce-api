@@ -1,27 +1,27 @@
 package com.fatec.livrariaecommerce.models.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-@Table
-@Data
-public class Dimensoes extends EntidadeDominio {
-//    @Id
-//    @SequenceGenerator(
-//            name="dimensoes_sequence",
-//            sequenceName="dimensoes_sequence",
-//            allocationSize=1
-//    )
-//    @GeneratedValue(
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "dimensoes_sequence"
-//    )
-//    private int id;
+@Setter
+@Getter
+
+@NoArgsConstructor
+
+@Embeddable
+public class Dimensoes {
     private double altura;
     private double largura;
     private double peso;
     private double profundidade;
 
+    public Dimensoes(double altura, double largura, double peso, double profundidade) {
+        this.altura = altura;
+        this.largura = largura;
+        this.peso = peso;
+        this.profundidade = profundidade;
+    }
 }

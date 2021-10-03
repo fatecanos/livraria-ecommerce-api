@@ -16,9 +16,9 @@ public class CartaoCreditoDTO {
     private String nomeImpressoCartao;
     private String numeroCartao;
 
-    public void fill(CartaoCredito dominio, Endereco endereco) {
+    public void fill(CartaoCredito dominio) {
         dominio.atualizarDados(this.id, this.bandeira, this.numeroCartao, this.codigoSeguranca,
-                this.nomeImpressoCartao, this.isPreferencial, endereco);
+                this.nomeImpressoCartao, this.isPreferencial);
     }
 
     public static CartaoCreditoDTO from(CartaoCredito cartaoCredito) {

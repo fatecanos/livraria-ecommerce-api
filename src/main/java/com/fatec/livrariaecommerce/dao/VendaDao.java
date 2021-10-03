@@ -1,27 +1,26 @@
 package com.fatec.livrariaecommerce.dao;
 
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
-import com.fatec.livrariaecommerce.models.domain.Livro;
 import com.fatec.livrariaecommerce.models.domain.Telefone;
+import com.fatec.livrariaecommerce.models.domain.Venda;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 
-public interface LivroDao extends JpaRepository<Livro, Integer>, IDAO {
+public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
 
     @Override
     default EntidadeDominio salvar(EntidadeDominio entidadeDominio) {
-        return this.saveAndFlush((Livro) entidadeDominio);
+        return this.saveAndFlush((Venda) entidadeDominio);
     }
 
     @Override
     default EntidadeDominio alterar(EntidadeDominio entidadeDominio) {
-        return this.saveAndFlush((Livro) entidadeDominio);
+        return this.saveAndFlush((Venda) entidadeDominio);
     }
 
     @Override
@@ -35,30 +34,33 @@ public interface LivroDao extends JpaRepository<Livro, Integer>, IDAO {
             "   obj.id = ?#{[0].id}")
     void excluir(@Param("dominio") EntidadeDominio entidadeDominio);
 
-
+    @Override
     @Query("SELECT " +
             "   obj " +
             "FROM " +
             "   #{#entityName} obj " +
             "WHERE " +
-            "   (?#{[0].ativo} IS NOT NULL AND obj.ativo = TRUE) " +
-            "   OR (?#{[0].autor} IS NOT NULL AND obj.autor = ?#{[0].autor}) " +
-            "   OR (?#{[0].titulo} IS NOT NULL AND obj.titulo = ?#{[0].titulo}) " +
-            "   OR (?#{[0].editora} IS NOT NULL AND obj.editora = ?#{[0].editora}) " +
+            "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
+            "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = ?#{[0].ativo}) " +
+            "   OR (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
+            "   OR (?#{[0].statusVenda} IS NOT NULL AND obj.statusVenda = ?#{[0].statusVenda}) " +
             "")
-    List<EntidadeDominio> consultarTabela(@Param("dominio") EntidadeDominio entidadeDominio);
+    List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
 
-    @Override
-    default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
 
-        Livro livro = (Livro) entidadeDominio;
-        if (livro.getId() != null) {
-            return Collections.singletonList(this.getOne(entidadeDominio.getId()));
-        } else {
-            return this.consultarTabela(livro);
-        }
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "Venda obj " +
+            "INNER JOIN obj.cupoms cp ON cp.id = :idCupom")
+    List<EntidadeDominio> consultarCupom(@Param("idCupom") int idCupom);
 
-    }
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "Venda obj " +
+            "WHERE obj.cupoms.size > 0")
+    List<EntidadeDominio> consultarComCupom();
 
 
 }

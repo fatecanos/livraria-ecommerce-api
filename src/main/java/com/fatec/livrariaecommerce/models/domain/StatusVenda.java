@@ -1,0 +1,15 @@
+package com.fatec.livrariaecommerce.models.domain;
+
+public enum StatusVenda {
+    EM_PROCESSAMENTO,
+    PAGAMENTO_REALIZADO,
+
+    //TODO: PEDIDO PODE SER CANCELADO ENQUANTO NAO ESTÁ EM_TRANSPORTE (ADM TB PODE)
+    PEDIDO_CANCELADO,
+    //    ENVIADO_PARA_TRANSPORTADORA,
+    EM_TRANSPORTE,
+    ENTREGUE,
+
+
+
+}
