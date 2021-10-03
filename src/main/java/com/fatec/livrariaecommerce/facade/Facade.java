@@ -8,7 +8,7 @@ import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarS
 import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
-import com.fatec.livrariaecommerce.negocio.venda.SalvarCartaoFuturaCompra;
+import com.fatec.livrariaecommerce.negocio.cartao.SalvarCartaoFuturaCompra;
 import com.fatec.livrariaecommerce.negocio.venda.ValidaCupom;
 import org.springframework.stereotype.Service;
 

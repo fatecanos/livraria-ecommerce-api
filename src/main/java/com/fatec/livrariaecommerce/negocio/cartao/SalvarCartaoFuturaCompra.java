@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.negocio.venda;
+package com.fatec.livrariaecommerce.negocio.cartao;
 
 import com.fatec.livrariaecommerce.models.domain.CartaoCredito;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
