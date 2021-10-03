@@ -7,6 +7,7 @@ import com.fatec.livrariaecommerce.negocio.cliente.criptografia.CriptografarSenh
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarSenha;
 import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
+import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
 import com.fatec.livrariaecommerce.negocio.venda.ValidaCupom;
 import org.springframework.stereotype.Service;
 
@@ -211,6 +212,7 @@ public class Facade implements IFacade {
         regrasNegocioVenda.put("SALVAR", rnsSalvarVenda);
 
         List<IStrategy> rnsAlterarVenda = new ArrayList<>();
+        rnsAlterarVenda.add(new AlteraStatusVenda());
         regrasNegocioVenda.put("ALTERAR", rnsAlterarVenda);
 
         List<IStrategy> rnsExcluirVenda = new ArrayList<>();

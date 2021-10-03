@@ -1,10 +1,7 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
-import com.fatec.livrariaecommerce.models.domain.Cliente;
-import com.fatec.livrariaecommerce.models.domain.Resultado;
-import com.fatec.livrariaecommerce.models.domain.Usuario;
-import com.fatec.livrariaecommerce.models.domain.Venda;
+import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
 import com.fatec.livrariaecommerce.models.dto.VendaDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
@@ -29,12 +26,9 @@ public class VendasController {
     @PostMapping
     public ResponseEntity<Message> salvarVenda(@RequestBody VendaDTO vendaDTO) {
         try {
-
             Venda venda = new Venda();
             vendaDTO.fill(venda);
-
             Resultado resultado = this.facade.salvar(venda);
-
             Message message = new Message();
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
@@ -70,10 +64,8 @@ public class VendasController {
     @GetMapping(path = "{usuarioID}")
     public ResponseEntity<List<VendaDTO>> consultarVendasCliente(@PathVariable int usuarioID) {
         try {
-
             Usuario usuario = new Usuario();
             usuario.setId(usuarioID);
-
             Cliente cliente = new Cliente();
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
@@ -88,6 +80,21 @@ public class VendasController {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PutMapping(path = "{idVenda}")
+    public void alterarStatusVenda(@PathVariable int idVenda){
+
+        Venda venda = new Venda();
+        venda.setId(idVenda);
+
+        StatusVenda[] statusVenda = StatusVenda.values();
+        System.out.println("Contents of the enum are: ");
+        //Iterating enum using the for loop
+        for(StatusVenda status: statusVenda) {
+            System.out.println(status);
+        }
+//        this.facade.alterar(venda);
     }
 
 }
