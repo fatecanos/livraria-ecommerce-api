@@ -41,9 +41,9 @@ public class ClienteDTO {
         List<Cupom> cupomList = new ArrayList<>();
 
         if (!this.getEnderecos().isEmpty()) {
-            Endereco endereco = new Endereco(dominio);
+            Endereco endereco = new Endereco();
             for (EnderecoDTO enderecoDTO : this.getEnderecos()) {
-                enderecoDTO.fill(endereco);
+                enderecoDTO.fill(endereco, dominio);
             }
             enderecoList.add(endereco);
         }
@@ -66,8 +66,8 @@ public class ClienteDTO {
 
         if (!this.getCupoms().isEmpty()) {
             for (CupomDTO cupomDTO : this.getCupoms()) {
-                Cupom cupom = new Cupom(dominio);
-                cupomDTO.fill(cupom);
+                Cupom cupom = new Cupom();
+                cupomDTO.fill(cupom, dominio);
                 cupomList.add(cupom);
             }
         }

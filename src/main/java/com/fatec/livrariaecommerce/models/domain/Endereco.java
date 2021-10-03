@@ -52,10 +52,10 @@ public class Endereco extends EntidadeDominio {
     // ***********************************************************************
 
     public void atualizarDados(int id, String nome, String logradouro, String bairro, String numero, String cep,
-                               String complemento, String pais, String tipoLogradouro, Cidade cidade, TipoEndereco tipoEndereco) {
+                               String complemento, String pais, String tipoLogradouro, Cliente cliente, Cidade cidade, TipoEndereco tipoEndereco) {
         super.setId(id);
         super.setAtivo(true);
-        if(this.getId() == 0 || this.getId() == null){
+        if (this.getId() == 0 || this.getId() == null) {
             super.setDataCriacao(LocalDateTime.now());
         }
         this.nome = nome;
@@ -64,6 +64,7 @@ public class Endereco extends EntidadeDominio {
         this.numero = numero;
         this.cep = cep;
         this.complemento = complemento;
+        this.cliente = cliente;
         this.cidade = cidade;
         this.tipoEndereco = tipoEndereco;
         this.tipoLogradouro = tipoLogradouro;

@@ -17,7 +17,7 @@ public class VendaDTO {
 
     private int id;
 
-    @JoinColumn(name = "id_endereco")
+    //TODO: NOTIFICAR ALTERAÇÃO NO FRONT
     private int idEndereco;
     private int idCliente;
     private double valorTotal;
@@ -32,6 +32,8 @@ public class VendaDTO {
         List<ItensPedido> itensPedidos = new ArrayList<>();
         List<FormaPagamento> formaPagamentoList = new ArrayList<>();
         List<Cupom> cupomList = new ArrayList<>();
+        Cliente cliente = new Cliente();
+        cliente.setId(idCliente);
 
         if (!this.getItensPedido().isEmpty()) {
             for (ItensPedidoDTO itensPedidoDTO : this.getItensPedido()) {
@@ -52,18 +54,17 @@ public class VendaDTO {
         if (!this.getCupoms().isEmpty()) {
             for (CupomDTO cupomDTO : this.getCupoms()) {
                 Cupom cupom = new Cupom();
-                cupomDTO.fill(cupom);
+                cupomDTO.fill(cupom, cliente);
                 cupomList.add(cupom);
             }
         }
-        Cliente cliente = new Cliente();
-        cliente.setId(idCliente);
+
 
         String numero = String.format("%04d", new Random().nextInt(10000));
 
         StatusVenda initialStatus = StatusVenda.EM_PROCESSAMENTO;
 
-        dominio.atualizarDados(this.id, this.idEndereco, cliente, this.valorTotal, numero, initialStatus, itensPedidos,
+        dominio.atualizarDados(this.id, idEndereco, cliente, this.valorTotal, numero, initialStatus, itensPedidos,
                 formaPagamentoList, cupomList);
     }
 

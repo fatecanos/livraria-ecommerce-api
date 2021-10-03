@@ -22,17 +22,18 @@ public class ItensPedido extends EntidadeDominio {
     private int qtdComprada;
     private double valorUnitario;
     private double valorTotal;
-//    "situacao": ""
+    private StatusPedido statusPedido;
 
     @JoinColumn(name = "venda", foreignKey = @ForeignKey(name = "fk_itens_venda"))
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     private Venda venda;
 
-    public ItensPedido(Venda venda){
+    public ItensPedido(Venda venda) {
         this.venda = venda;
     }
 
-    public void atualizarDados(int id, int idLivro, String nomeLivro, int qtdComprada, double valorUnitario, double valorTotal){
+    public void atualizarDados(int id, int idLivro, String nomeLivro, int qtdComprada, double valorUnitario,
+                               double valorTotal, StatusPedido statusPedido) {
         super.setId(id);
         super.setAtivo(true);
         if (this.getId() == 0 || this.getId() == null) {
@@ -43,5 +44,6 @@ public class ItensPedido extends EntidadeDominio {
         this.qtdComprada = qtdComprada;
         this.valorUnitario = valorUnitario;
         this.valorTotal = valorTotal;
+        this.statusPedido = statusPedido;
     }
 }
