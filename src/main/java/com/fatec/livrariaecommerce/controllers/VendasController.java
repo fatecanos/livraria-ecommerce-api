@@ -87,14 +87,8 @@ public class VendasController {
 
         Venda venda = new Venda();
         venda.setId(idVenda);
-
-        StatusVenda[] statusVenda = StatusVenda.values();
-        System.out.println("Contents of the enum are: ");
-        //Iterating enum using the for loop
-        for(StatusVenda status: statusVenda) {
-            System.out.println(status);
-        }
-//        this.facade.alterar(venda);
+        Resultado resultadoVenda = this.facade.consultar(venda);
+        this.facade.alterar(resultadoVenda.getEntidades().get(0));
     }
 
 }

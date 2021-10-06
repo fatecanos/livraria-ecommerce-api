@@ -9,6 +9,7 @@ import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
 import com.fatec.livrariaecommerce.negocio.cartao.SalvarCartaoFuturaCompra;
+import com.fatec.livrariaecommerce.negocio.venda.ValidaCartaoCredito;
 import com.fatec.livrariaecommerce.negocio.venda.ValidaCupom;
 import org.springframework.stereotype.Service;
 
@@ -205,7 +206,7 @@ public class Facade implements IFacade {
 
 
         // ***********************************************************************
-        // Livro
+        // Venda
         Map<String, List<IStrategy>> regrasNegocioVenda = new HashMap<>();
 
         // Instanciar classes de regras de negocio e adicionar na lista de rns
@@ -214,7 +215,8 @@ public class Facade implements IFacade {
         regrasNegocioVenda.put("SALVAR", rnsSalvarVenda);
 
         List<IStrategy> rnsAlterarVenda = new ArrayList<>();
-        rnsAlterarVenda.add(new AlteraStatusVenda());
+        rnsAlterarVenda.add(new AlteraStatusVenda((VendaDao) this.daos.get(Venda.class.getName())));
+//        rnsAlterarVenda.add(new ValidaCartaoCredito((CartaoCreditoDao) this.daos.get(CartaoCredito.class.getName())));
         regrasNegocioVenda.put("ALTERAR", rnsAlterarVenda);
 
         List<IStrategy> rnsExcluirVenda = new ArrayList<>();
@@ -227,7 +229,7 @@ public class Facade implements IFacade {
 
 
         // ***********************************************************************
-        // Livro
+        // Cupom
         Map<String, List<IStrategy>> regrasNegocioCupom = new HashMap<>();
 
         // Instanciar classes de regras de negocio e adicionar na lista de rns
@@ -275,6 +277,7 @@ public class Facade implements IFacade {
 
         StringBuilder sb = this.executarRegras(dominio, rns);
 
+        //TODO: TESTAR SE IRÁ LANÇAR A EXCEÇÃO (PEDIDO JA ENTREGUE)
         if (sb.length() == 0) {
             this.daos.get(dominio.getClass().getName()).salvar(dominio);
             resultado.getEntidades().add(dominio);

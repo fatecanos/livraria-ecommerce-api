@@ -41,7 +41,6 @@ public class Cliente extends EntidadeDominio {
     private List<Telefone> telefones;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-    @Where(clause = "ativo = true")
     @OrderBy(value = "id")
     private List<CartaoCredito> cartoesCredito;
 
