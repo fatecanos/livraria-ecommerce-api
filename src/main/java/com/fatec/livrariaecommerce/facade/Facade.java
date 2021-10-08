@@ -9,6 +9,7 @@ import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
 import com.fatec.livrariaecommerce.negocio.cartao.SalvarCartaoFuturaCompra;
+import com.fatec.livrariaecommerce.negocio.venda.CancelarVenda;
 import com.fatec.livrariaecommerce.negocio.venda.ValidaCartaoCredito;
 import com.fatec.livrariaecommerce.negocio.venda.ValidaCupom;
 import org.springframework.stereotype.Service;
@@ -215,8 +216,9 @@ public class Facade implements IFacade {
         regrasNegocioVenda.put("SALVAR", rnsSalvarVenda);
 
         List<IStrategy> rnsAlterarVenda = new ArrayList<>();
+        //        rnsAlterarVenda.add(new ValidaCartaoCredito((CartaoCreditoDao) this.daos.get(CartaoCredito.class.getName())));
         rnsAlterarVenda.add(new AlteraStatusVenda((VendaDao) this.daos.get(Venda.class.getName())));
-//        rnsAlterarVenda.add(new ValidaCartaoCredito((CartaoCreditoDao) this.daos.get(CartaoCredito.class.getName())));
+        rnsAlterarVenda.add(new CancelarVenda());
         regrasNegocioVenda.put("ALTERAR", rnsAlterarVenda);
 
         List<IStrategy> rnsExcluirVenda = new ArrayList<>();
@@ -277,7 +279,6 @@ public class Facade implements IFacade {
 
         StringBuilder sb = this.executarRegras(dominio, rns);
 
-        //TODO: TESTAR SE IRÁ LANÇAR A EXCEÇÃO (PEDIDO JA ENTREGUE)
         if (sb.length() == 0) {
             this.daos.get(dominio.getClass().getName()).salvar(dominio);
             resultado.getEntidades().add(dominio);

@@ -23,8 +23,6 @@ public class Venda extends EntidadeDominio {
     private String numero;
     private StatusVenda statusVenda;
 
-//    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
-//    @JoinColumn(name = "endereco")
     private int idEndereco;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
@@ -42,6 +40,9 @@ public class Venda extends EntidadeDominio {
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @OrderBy(value = "id")
     private List<Cupom> cupoms;
+
+    @Transient
+    private boolean cancelarVenda;
 
 
     public void atualizarDados(int id, int idEndereco, Cliente cliente, double valorTotal, String numero, StatusVenda statusVenda, List<ItensPedido> itensPedidos,
