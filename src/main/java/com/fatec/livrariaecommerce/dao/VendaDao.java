@@ -34,6 +34,7 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "   obj.id = ?#{[0].id}")
     void excluir(@Param("dominio") EntidadeDominio entidadeDominio);
 
+
     @Override
     @Query("SELECT " +
             "   obj " +
@@ -46,6 +47,15 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "   OR (?#{[0].statusVenda} IS NOT NULL AND obj.statusVenda = ?#{[0].statusVenda}) " +
             "")
     List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   ?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id} " +
+            "")
+    List<EntidadeDominio> consultarSomenteID(EntidadeDominio entidadeDominio);
 
 
     @Query("SELECT " +

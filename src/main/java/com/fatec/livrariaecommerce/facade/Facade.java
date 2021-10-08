@@ -8,6 +8,9 @@ import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarS
 import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
+import com.fatec.livrariaecommerce.negocio.cartao.SalvarCartaoFuturaCompra;
+import com.fatec.livrariaecommerce.negocio.venda.CancelarVenda;
+import com.fatec.livrariaecommerce.negocio.venda.ValidaCartaoCredito;
 import com.fatec.livrariaecommerce.negocio.venda.ValidaCupom;
 import org.springframework.stereotype.Service;
 
@@ -169,6 +172,7 @@ public class Facade implements IFacade {
 
         // Instanciar classes de regras de negocio e adicionar na lista de rns
         List<IStrategy> rnsSalvarCartaoCredito = new ArrayList<>();
+        rnsSalvarCartaoCredito.add(new SalvarCartaoFuturaCompra());
         regrasNegocioCartaoCredito.put("SALVAR", rnsSalvarCartaoCredito);
 
         List<IStrategy> rnsAlterarCartaoCredito = new ArrayList<>();
@@ -203,16 +207,18 @@ public class Facade implements IFacade {
 
 
         // ***********************************************************************
-        // Livro
+        // Venda
         Map<String, List<IStrategy>> regrasNegocioVenda = new HashMap<>();
 
         // Instanciar classes de regras de negocio e adicionar na lista de rns
         List<IStrategy> rnsSalvarVenda = new ArrayList<>();
         rnsSalvarVenda.add(new ValidaCupom((VendaDao) this.daos.get(Venda.class.getName())));
+        rnsSalvarVenda.add(new ValidaCartaoCredito((CartaoCreditoDao) this.daos.get(CartaoCredito.class.getName())));
         regrasNegocioVenda.put("SALVAR", rnsSalvarVenda);
 
         List<IStrategy> rnsAlterarVenda = new ArrayList<>();
-        rnsAlterarVenda.add(new AlteraStatusVenda());
+        rnsAlterarVenda.add(new AlteraStatusVenda((VendaDao) this.daos.get(Venda.class.getName())));
+        rnsAlterarVenda.add(new CancelarVenda());
         regrasNegocioVenda.put("ALTERAR", rnsAlterarVenda);
 
         List<IStrategy> rnsExcluirVenda = new ArrayList<>();
@@ -225,7 +231,7 @@ public class Facade implements IFacade {
 
 
         // ***********************************************************************
-        // Livro
+        // Cupom
         Map<String, List<IStrategy>> regrasNegocioCupom = new HashMap<>();
 
         // Instanciar classes de regras de negocio e adicionar na lista de rns

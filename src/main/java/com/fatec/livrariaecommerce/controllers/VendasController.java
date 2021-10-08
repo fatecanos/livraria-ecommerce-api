@@ -6,6 +6,7 @@ import com.fatec.livrariaecommerce.models.dto.LivroDTO;
 import com.fatec.livrariaecommerce.models.dto.VendaDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,8 @@ public class VendasController {
     private final IFacade facade;
 
     // ***********************************************************************
+
+    //TODO: IMPLEMENTAR REGRAS DE NEGÓCIO PARA DEVOLUÇÃO/TROCA DE ITENS_PEDIDO
 
     @PostMapping
     public ResponseEntity<Message> salvarVenda(@RequestBody VendaDTO vendaDTO) {
@@ -83,18 +86,27 @@ public class VendasController {
     }
 
     @PutMapping(path = "{idVenda}")
-    public void alterarStatusVenda(@PathVariable int idVenda){
-
-        Venda venda = new Venda();
-        venda.setId(idVenda);
-
-        StatusVenda[] statusVenda = StatusVenda.values();
-        System.out.println("Contents of the enum are: ");
-        //Iterating enum using the for loop
-        for(StatusVenda status: statusVenda) {
-            System.out.println(status);
+    public ResponseEntity<Message> alterarStatusVenda(@PathVariable int idVenda,
+                                                      @Param("cancelarPedido") boolean cancelarPedido) {
+        try {
+            Venda venda = new Venda();
+            venda.setId(idVenda);
+            venda = (Venda) this.facade.consultar(venda).getEntidades().get(0);
+            venda.setCancelarVenda(cancelarPedido);
+            Resultado resultado = this.facade.alterar(venda);
+            Message message = new Message();
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso!");
+                message.setDescription("Status alterado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro!");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
-//        this.facade.alterar(venda);
     }
-
 }

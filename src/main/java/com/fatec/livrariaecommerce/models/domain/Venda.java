@@ -18,13 +18,16 @@ import java.util.List;
 @Table(name = "venda")
 public class Venda extends EntidadeDominio {
 
-    //todo: guardar endereço TROCAR DETACH E REFRESH
-    //todo sem colocar WHERE(ativo = true)
 
-    private int idEndereco;
     private double valorTotal;
     private String numero;
     private StatusVenda statusVenda;
+
+    private int idEndereco;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "cliente")
+    private Cliente cliente;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venda")
     @OrderBy(value = "id")
@@ -38,9 +41,8 @@ public class Venda extends EntidadeDominio {
     @OrderBy(value = "id")
     private List<Cupom> cupoms;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "cliente")
-    private Cliente cliente;
+    @Transient
+    private boolean cancelarVenda;
 
 
     public void atualizarDados(int id, int idEndereco, Cliente cliente, double valorTotal, String numero, StatusVenda statusVenda, List<ItensPedido> itensPedidos,

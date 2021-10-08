@@ -20,6 +20,9 @@ public class CartaoCredito extends EntidadeDominio {
     private String nomeImpressoCartao;
     private String numeroCartao;
 
+    @Transient
+    private boolean salvar;
+
     @JoinColumn(name = "cliente", foreignKey = @ForeignKey(name = "fk_cartao_credito_cliente"))
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     private Cliente cliente;
@@ -29,7 +32,7 @@ public class CartaoCredito extends EntidadeDominio {
     }
 
     public void atualizarDados(int id, String bandeira, String codigoSeguranca, String nomeImpressoCartao,
-                               String numeroCartao, boolean isPreferencial) {
+                               String numeroCartao, boolean isPreferencial, boolean salvar) {
 
         super.setId(id);
         super.setAtivo(true);
@@ -41,6 +44,7 @@ public class CartaoCredito extends EntidadeDominio {
         this.nomeImpressoCartao = nomeImpressoCartao;
         this.numeroCartao = numeroCartao;
         this.isPreferencial = isPreferencial;
+        this.salvar = salvar;
     }
 
 }

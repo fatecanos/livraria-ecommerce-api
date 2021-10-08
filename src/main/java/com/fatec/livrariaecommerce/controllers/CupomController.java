@@ -32,8 +32,8 @@ public class CupomController {
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
 
-            Cupom cupom = new Cupom(cliente);
-            cupomDTO.fill(cupom);
+            Cupom cupom = new Cupom();
+            cupomDTO.fill(cupom, cliente);
             Resultado resultado = this.facade.salvar(cupom);
 
             Message message = new Message();

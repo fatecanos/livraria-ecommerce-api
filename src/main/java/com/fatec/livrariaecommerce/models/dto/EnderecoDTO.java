@@ -1,6 +1,7 @@
 package com.fatec.livrariaecommerce.models.dto;
 
 import com.fatec.livrariaecommerce.models.domain.Cidade;
+import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.Endereco;
 import com.fatec.livrariaecommerce.models.domain.TipoEndereco;
 import lombok.Data;
@@ -23,18 +24,23 @@ public class EnderecoDTO {
     private String pais;
     private TipoEndereco tipoEndereco;
     private Cidade cidade;
+    private boolean salvar;
 
     // ***********************************************************************
 
-    public void fill(Endereco dominio) {
+    public void fill(Endereco dominio, Cliente cliente) {
         Cidade cidade = new Cidade();
         cidade.setId(this.cidade.getId());
 
         TipoEndereco tipoEndereco = new TipoEndereco();
         tipoEndereco.setId(this.tipoEndereco.getId());
 
+        if(!this.salvar){
+            cliente = null;
+        }
+
         dominio.atualizarDados(this.id, this.nome, this.logradouro, this.bairro, this.numero, this.cep,
-                this.complemento, this.pais, this.tipoLogradouro, cidade, tipoEndereco);
+                this.complemento, this.pais, this.tipoLogradouro, cliente, cidade, tipoEndereco);
     }
 
     public static EnderecoDTO from(Endereco endereco) {

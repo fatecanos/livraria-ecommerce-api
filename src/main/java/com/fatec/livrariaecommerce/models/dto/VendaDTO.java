@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 public class VendaDTO {
 
     private int id;
-
-    @JoinColumn(name = "id_endereco")
     private int idEndereco;
     private int idCliente;
     private double valorTotal;
@@ -32,6 +30,10 @@ public class VendaDTO {
         List<ItensPedido> itensPedidos = new ArrayList<>();
         List<FormaPagamento> formaPagamentoList = new ArrayList<>();
         List<Cupom> cupomList = new ArrayList<>();
+        Cliente cliente = new Cliente();
+        cliente.setId(idCliente);
+        StatusVenda statusVenda = this.status;
+        String numero;
 
         if (!this.getItensPedido().isEmpty()) {
             for (ItensPedidoDTO itensPedidoDTO : this.getItensPedido()) {
@@ -52,18 +54,17 @@ public class VendaDTO {
         if (!this.getCupoms().isEmpty()) {
             for (CupomDTO cupomDTO : this.getCupoms()) {
                 Cupom cupom = new Cupom();
-                cupomDTO.fill(cupom);
+                cupomDTO.fill(cupom, cliente);
                 cupomList.add(cupom);
             }
         }
-        Cliente cliente = new Cliente();
-        cliente.setId(idCliente);
-
-        String numero = String.format("%04d", new Random().nextInt(10000));
-
-        StatusVenda initialStatus = StatusVenda.EM_PROCESSAMENTO;
-
-        dominio.atualizarDados(this.id, this.idEndereco, cliente, this.valorTotal, numero, initialStatus, itensPedidos,
+        if (dominio.getId() == null) {
+            numero = String.format("%07d", new Random().nextInt(1000000));
+            statusVenda = StatusVenda.EM_PROCESSAMENTO;
+        } else {
+            numero = this.numero;
+        }
+        dominio.atualizarDados(this.id, idEndereco, cliente, this.valorTotal, numero, statusVenda, itensPedidos,
                 formaPagamentoList, cupomList);
     }
 

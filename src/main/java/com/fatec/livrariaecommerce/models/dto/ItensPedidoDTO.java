@@ -2,6 +2,7 @@ package com.fatec.livrariaecommerce.models.dto;
 
 
 import com.fatec.livrariaecommerce.models.domain.ItensPedido;
+import com.fatec.livrariaecommerce.models.domain.StatusPedido;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,14 +16,17 @@ public class ItensPedidoDTO {
     private int qtdComprada;
     private double valorUnitario;
     private double valorTotal;
+    private StatusPedido statusPedido;
+
 
 //    transformar os valores em regra de negócio
 
     public void fill(ItensPedido dominio) {
-        dominio.atualizarDados(this.id, this.idLivro, this.nomeLivro, this.qtdComprada, this.valorUnitario,
-                this.valorTotal);
 
-//        dominio.atualizarDados(this.id, this.idLivro, this.qtdComprada);
+        StatusPedido initialStatusPedido = StatusPedido.AGUARDANDO_ENTREGA;
+
+        dominio.atualizarDados(this.id, this.idLivro, this.nomeLivro, this.qtdComprada, this.valorUnitario,
+                this.valorTotal, initialStatusPedido);
     }
 
     public static ItensPedidoDTO from(ItensPedido dominio) {

@@ -30,9 +30,12 @@ public class EnderecoController {
             Cliente cliente = new Cliente();
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
-            Endereco endereco = new Endereco(cliente);
-            enderecoDto.fill(endereco);
+
+            Endereco endereco = new Endereco();
+
+            enderecoDto.fill(endereco, cliente);
             Resultado resultado = this.facade.salvar(endereco);
+
             if (resultado.getMensagem() == null) {
                 return ResponseEntity.ok(EnderecoDTO.from((Endereco) resultado.getEntidades().get(0)));
             } else {
@@ -88,8 +91,8 @@ public class EnderecoController {
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
 
-            Endereco endereco = new Endereco(cliente);
-            enderecoDto.fill(endereco);
+            Endereco endereco = new Endereco();
+            enderecoDto.fill(endereco, cliente);
 
             Resultado resultado = this.facade.salvar(endereco);
 
