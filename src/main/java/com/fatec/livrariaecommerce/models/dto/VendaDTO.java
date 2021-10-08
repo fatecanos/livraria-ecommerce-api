@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class VendaDTO {
 
     private int id;
-
     private int idEndereco;
     private int idCliente;
     private double valorTotal;
@@ -34,6 +33,7 @@ public class VendaDTO {
         Cliente cliente = new Cliente();
         cliente.setId(idCliente);
         StatusVenda statusVenda = this.status;
+        String numero;
 
         if (!this.getItensPedido().isEmpty()) {
             for (ItensPedidoDTO itensPedidoDTO : this.getItensPedido()) {
@@ -58,12 +58,12 @@ public class VendaDTO {
                 cupomList.add(cupom);
             }
         }
-
-        if(dominio.getId() == null){
-            String numero = String.format("%04d", new Random().nextInt(10000));
+        if (dominio.getId() == null) {
+            numero = String.format("%07d", new Random().nextInt(1000000));
             statusVenda = StatusVenda.EM_PROCESSAMENTO;
+        } else {
+            numero = this.numero;
         }
-
         dominio.atualizarDados(this.id, idEndereco, cliente, this.valorTotal, numero, statusVenda, itensPedidos,
                 formaPagamentoList, cupomList);
     }

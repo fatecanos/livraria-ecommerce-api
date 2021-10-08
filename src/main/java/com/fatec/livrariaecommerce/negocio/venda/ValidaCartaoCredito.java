@@ -5,35 +5,31 @@ import com.fatec.livrariaecommerce.dao.VendaDao;
 import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.negocio.IStrategy;
 
-import java.util.List;
-
 public class ValidaCartaoCredito implements IStrategy {
 
     public final CartaoCreditoDao cartaoCreditoDao;
+
+    // ***********************************************************************
 
     public ValidaCartaoCredito(CartaoCreditoDao cartaoCreditoDao) {
         this.cartaoCreditoDao = cartaoCreditoDao;
     }
 
+    // ***********************************************************************
 
     @Override
     public String processar(EntidadeDominio dominio) {
         Venda venda = (Venda) dominio;
-
         for (FormaPagamento formaPagamento : venda.getFormaPagamentoList()) {
             CartaoCredito cartaoCredito = new CartaoCredito();
             cartaoCredito.setId(formaPagamento.getIdCartao());
-
             CartaoCredito cartao = (CartaoCredito) this.cartaoCreditoDao.consultar(cartaoCredito).get(0);
-            System.out.println("Me diz esse cartao: " + cartao.getNumeroCartao());
-
-            //TODO: ALTERAR O STATUS DA VENDA PARA PAGAMENTO_REALIZADO
-
-            if(!validateCreditCardNumber(cartao.getNumeroCartao())){
+            if (!validateCreditCardNumber(cartao.getNumeroCartao().replaceAll(".", ""))) {
                 return "Cartão inválido";
+            } else {
+                venda.setStatusVenda(StatusVenda.PAGAMENTO_REALIZADO);
             }
         }
-
         return "";
     }
 

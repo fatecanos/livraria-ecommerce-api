@@ -24,6 +24,8 @@ public class VendasController {
 
     // ***********************************************************************
 
+    //TODO: IMPLEMENTAR REGRAS DE NEGÓCIO PARA DEVOLUÇÃO/TROCA DE ITENS_PEDIDO
+
     @PostMapping
     public ResponseEntity<Message> salvarVenda(@RequestBody VendaDTO vendaDTO) {
         try {
@@ -86,7 +88,6 @@ public class VendasController {
     @PutMapping(path = "{idVenda}")
     public ResponseEntity<Message> alterarStatusVenda(@PathVariable int idVenda,
                                                       @Param("cancelarPedido") boolean cancelarPedido) {
-        //TODO: IMPLEMENTAR REGRAS DE NEGÓCIO PARA DEVOLUÇÃO/TROCA DE ITENS_PEDIDO
         try {
             Venda venda = new Venda();
             venda.setId(idVenda);
