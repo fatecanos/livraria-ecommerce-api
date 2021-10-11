@@ -28,6 +28,10 @@ public class ItensPedido extends EntidadeDominio {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     private Venda venda;
 
+    @JoinColumn(name = "cupom", foreignKey = @ForeignKey(name = "fk_cupom_gerado"))
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cupom cupomGerado;
+
     public ItensPedido(Venda venda) {
         this.venda = venda;
     }

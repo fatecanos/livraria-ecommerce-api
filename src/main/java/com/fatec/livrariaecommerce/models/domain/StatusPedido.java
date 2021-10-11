@@ -8,9 +8,10 @@ public enum StatusPedido {
 
     //OBS: Troca aceita, já pula direto para o status em TROCA
     TROCA_ACEITA,
-    //ESSE CARA É IGUAL A:     TROCADO
 
+    //ESSE CARA É IGUAL A:     TROCADO
     TROCA_AUTORIZADA,
+
     EM_TROCA,
 
 }
