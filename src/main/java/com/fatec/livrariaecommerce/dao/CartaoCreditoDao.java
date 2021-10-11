@@ -47,6 +47,7 @@ public interface CartaoCreditoDao extends JpaRepository<CartaoCredito, Integer>,
             "   OR (?#{[0].codigoSeguranca} IS NOT NULL AND obj.codigoSeguranca = ?#{[0].codigoSeguranca}) " +
             "   OR (?#{[0].nomeImpressoCartao} IS NOT NULL AND obj.nomeImpressoCartao = ?#{[0].nomeImpressoCartao}) " +
             "   OR (?#{[0].numeroCartao} IS NOT NULL AND obj.numeroCartao = ?#{[0].numeroCartao}) " +
+            "   OR (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
             "")
     List<EntidadeDominio> consultar(@Param("dominio") EntidadeDominio entidadeDominio);
 
