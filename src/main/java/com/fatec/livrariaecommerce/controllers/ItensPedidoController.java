@@ -26,7 +26,7 @@ public class ItensPedidoController {
             itensPedido.setId(idItemPedido);
             itensPedido = (ItensPedido) this.facade.consultar(itensPedido).getEntidades().get(0);
 
-gi            Resultado resultado = this.facade.alterar(itensPedido);
+            Resultado resultado = this.facade.alterar(itensPedido);
 
 
 
