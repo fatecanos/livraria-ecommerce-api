@@ -34,6 +34,10 @@ public interface ItensPedidoDao extends JpaRepository<ItensPedido, Integer>, IDA
             "   obj.id = ?#{[0].id}")
     void excluir(@Param("dominio") EntidadeDominio entidadeDominio);
 
+    //TODO: QUANDO VOLTAR, FAZER A QUERY PELO STATUS PEDIDO
+
+    //TODO: TERMINAR O GET COM FILTRO DOS PEDIDOS E SEUS STATUS
+
     @Override
     @Query("SELECT " +
             "   obj " +
@@ -41,6 +45,8 @@ public interface ItensPedidoDao extends JpaRepository<ItensPedido, Integer>, IDA
             "   #{#entityName} obj " +
             "WHERE " +
             "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
+            "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = ?#{[0].ativo}) " +
+            "   OR (?#{[0].statusPedido} IS NOT NULL AND obj.statusPedido = ?#{[0].statusPedido}) " +
             "")
     List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
 

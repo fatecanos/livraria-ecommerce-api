@@ -7,6 +7,7 @@ import com.fatec.livrariaecommerce.negocio.cliente.criptografia.CriptografarSenh
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarSenha;
 import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
+import com.fatec.livrariaecommerce.negocio.itenspedido.GerarCupom;
 import com.fatec.livrariaecommerce.negocio.itenspedido.SolicitarTroca;
 import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
 import com.fatec.livrariaecommerce.negocio.cartao.SalvarCartaoFuturaCompra;
@@ -265,6 +266,7 @@ public class Facade implements IFacade {
 
         List<IStrategy> rnsAlterarItensPedido = new ArrayList<>();
         rnsAlterarItensPedido.add(new SolicitarTroca());
+        rnsAlterarItensPedido.add(new GerarCupom());
         regrasNegocioItensPedido.put("ALTERAR", rnsAlterarItensPedido);
 
         List<IStrategy> rnsExcluirItensPedido = new ArrayList<>();

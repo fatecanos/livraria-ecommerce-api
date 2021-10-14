@@ -20,10 +20,6 @@ public class CartaoCreditoDTO {
     public void fill(CartaoCredito dominio) {
         dominio.atualizarDados(this.id, this.bandeira, this.codigoSeguranca, this.nomeImpressoCartao, this.numeroCartao,
                 this.isPreferencial, this.salvar);
-
-//        public void atualizarDados(int id, String bandeira, String codigoSeguranca, String nomeImpressoCartao,
-//                String numeroCartao, boolean isPreferencial, boolean salvar) {
-
     }
 
     public static CartaoCreditoDTO from(CartaoCredito cartaoCredito) {

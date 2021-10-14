@@ -11,11 +11,18 @@ public class SolicitarTroca implements IStrategy {
     @Override
     public String processar(EntidadeDominio dominio) {
         ItensPedido itensPedido = (ItensPedido) dominio;
-        if(itensPedido.getVenda().getStatusVenda() == StatusVenda.ENTREGUE){
+        if (itensPedido.getStatusPedido() == StatusPedido.ENTREGUE) {
             itensPedido.setStatusPedido(StatusPedido.TROCA_SOLICITADA);
-        }else{
-            return "Seu pedido ainda não foi entregue. Aguarde a entrega para solicitar a troca.";
+        }
+
+        if (itensPedido.getStatusPedido() == StatusPedido.TROCA_RECUSADA) {
+            return "Sinto muito, a solicitação de troca do seu pedido foi recusada.";
+        }
+
+        if (itensPedido.getStatusPedido() == StatusPedido.TROCA_ACEITA) {
+            itensPedido.setStatusPedido(StatusPedido.EM_TROCA);
         }
         return "";
+
     }
 }
