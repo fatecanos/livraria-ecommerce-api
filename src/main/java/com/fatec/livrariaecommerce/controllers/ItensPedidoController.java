@@ -58,21 +58,17 @@ public class ItensPedidoController {
             itensPedido = (ItensPedido) this.facade.consultar(itensPedido).getEntidades().get(0);
             itensPedido.setStatusPedido(status);
 
-            //TODO: AQUI AGR É SÓ IMPLEMENTAR A REGRA DE NEGÓCIO PARA ALTERAR PARA TROCA_AUTORIZADA E
-            // GERAR O CUPOM. DAÍ CABOU
-
             Resultado resultado = this.facade.alterar(itensPedido);
-//            Message message = new Message();
-//            if (resultado.getMensagem() == null) {
-//                message.setTitle("Sucesso!");
-//                message.setDescription("Status alterado com sucesso!");
-//                return ResponseEntity.ok(message);
-//            } else {
-//                message.setTitle("Erro!");
-//                message.setDescription(resultado.getMensagem());
-//                return ResponseEntity.badRequest().body(message);
-//            }
-            return null;
+            Message message = new Message();
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso!");
+                message.setDescription("Status alterado com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro!");
+                message.setDescription(resultado.getMensagem());
+                return ResponseEntity.badRequest().body(message);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

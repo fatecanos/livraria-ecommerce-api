@@ -16,7 +16,8 @@ public class SolicitarTroca implements IStrategy {
         }
 
         if (itensPedido.getStatusPedido() == StatusPedido.TROCA_RECUSADA) {
-            return "Sinto muito, a solicitação de troca do seu pedido foi recusada.";
+//            return "Sinto muito, a solicitação de troca do seu pedido foi recusada.";
+            itensPedido.setStatusPedido(StatusPedido.TROCA_RECUSADA);
         }
 
         if (itensPedido.getStatusPedido() == StatusPedido.TROCA_ACEITA) {
