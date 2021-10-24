@@ -7,6 +7,8 @@ import com.fatec.livrariaecommerce.negocio.cliente.criptografia.CriptografarSenh
 import com.fatec.livrariaecommerce.negocio.cliente.criptografia.DescriptografarSenha;
 import com.fatec.livrariaecommerce.negocio.cliente.validaemail.ValidaEmail;
 import com.fatec.livrariaecommerce.negocio.cupom.ValidaCupomUsados;
+import com.fatec.livrariaecommerce.negocio.itenspedido.GerarCupom;
+import com.fatec.livrariaecommerce.negocio.itenspedido.SolicitarTroca;
 import com.fatec.livrariaecommerce.negocio.venda.AlteraStatusVenda;
 import com.fatec.livrariaecommerce.negocio.cartao.SalvarCartaoFuturaCompra;
 import com.fatec.livrariaecommerce.negocio.venda.CancelarVenda;
@@ -35,7 +37,7 @@ public class Facade implements IFacade {
 
     public Facade(ClienteDao clienteDao, UsuarioDao usuarioDao, EnderecoDao enderecoDao, CidadeDao cidadeDao,
                   TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao, CartaoCreditoDao cartaoCreditoDao,
-                  LivroDao livroDao, VendaDao vendaDao, CupomDao cupomDao) {
+                  LivroDao livroDao, VendaDao vendaDao, CupomDao cupomDao, ItensPedidoDao itensPedidoDao) {
 
         // ClienteDao
         this.daos.put(Cliente.class.getName(), clienteDao);
@@ -66,6 +68,9 @@ public class Facade implements IFacade {
 
         //CupomDao
         this.daos.put(Cupom.class.getName(), cupomDao);
+
+        //itensPedidoDao
+        this.daos.put(ItensPedido.class.getName(), itensPedidoDao);
 
     }
 
@@ -250,6 +255,27 @@ public class Facade implements IFacade {
 
         this.regrasNegocio.put(Cupom.class.getName(), regrasNegocioCupom);
 
+
+        // ***********************************************************************
+        // ItensPedido
+        Map<String, List<IStrategy>> regrasNegocioItensPedido = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarItensPedido = new ArrayList<>();
+        regrasNegocioItensPedido.put("SALVAR", rnsSalvarItensPedido);
+
+        List<IStrategy> rnsAlterarItensPedido = new ArrayList<>();
+        rnsAlterarItensPedido.add(new SolicitarTroca());
+        rnsAlterarItensPedido.add(new GerarCupom());
+        regrasNegocioItensPedido.put("ALTERAR", rnsAlterarItensPedido);
+
+        List<IStrategy> rnsExcluirItensPedido = new ArrayList<>();
+        regrasNegocioItensPedido.put("EXCLUIR", rnsExcluirItensPedido);
+
+        List<IStrategy> rnsConsultarItensPedido = new ArrayList<>();
+        regrasNegocioItensPedido.put("CONSULTAR", rnsConsultarItensPedido);
+
+        this.regrasNegocio.put(ItensPedido.class.getName(), regrasNegocioItensPedido);
 
     }
 

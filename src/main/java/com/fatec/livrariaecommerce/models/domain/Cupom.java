@@ -25,6 +25,13 @@ public class Cupom extends EntidadeDominio {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     private Cliente cliente;
 
+    //Armazenar origem do item de pedido (Saber qual a origem/criação do cupom)
+    @JoinColumn(name = "itens_pedido", foreignKey = @ForeignKey(name = "fk_cupom_itens_pedido"))
+    @OneToOne
+    private ItensPedido itensPedido;
+
+    //criar coluna
+
     public Cupom(Cliente cliente) {
         this.cliente = cliente;
     }

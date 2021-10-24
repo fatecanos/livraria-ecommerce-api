@@ -5,6 +5,7 @@ import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class TelefoneController {
 
     private final IFacade facade;
+    private final Logger logger;
 
     @PostMapping(path = "{usuarioID}")
     public ResponseEntity<Message> salvarTelefone(@PathVariable int usuarioID, @RequestBody TelefoneDTO telefoneDTO) {
@@ -35,7 +37,6 @@ public class TelefoneController {
             telefoneDTO.fill(telefone);
 
             Resultado resultado = this.facade.salvar(telefone);
-
             Message message = new Message();
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
@@ -104,6 +105,11 @@ public class TelefoneController {
             List<TelefoneDTO> telefones = this.facade.consultar(telefone).getEntidades().stream().map(tel -> {
                 return TelefoneDTO.from((Telefone) tel);
             }).collect(Collectors.toList());
+
+            //REGISTRAR TODOS OS SAVES/ERROS COM OS DADOS
+
+            //TODO: IMPLEMENTAR SOMENTE NA PARTE DA VENDA
+            logger.info("Ola, da controller do telfone");
             return ResponseEntity.ok(telefones);
         } catch (Exception e) {
             e.printStackTrace();

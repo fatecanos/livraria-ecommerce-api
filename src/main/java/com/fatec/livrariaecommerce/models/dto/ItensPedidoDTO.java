@@ -21,6 +21,16 @@ public class ItensPedidoDTO {
 
 //    transformar os valores em regra de negócio
 
+    /**
+     * dto, facade e controller
+     *
+     * validar no front se VENDA_ENTREGE mostrar botão de devolução.
+     *
+     * btn devoluçaõ: consumir um post passando o status
+     *
+     * os STATUS virão do front
+     * */
+
     public void fill(ItensPedido dominio) {
 
         StatusPedido initialStatusPedido = StatusPedido.AGUARDANDO_ENTREGA;
@@ -38,7 +48,7 @@ public class ItensPedidoDTO {
         dto.qtdComprada = dominio.getQtdComprada();
         dto.valorUnitario = dominio.getValorUnitario();
         dto.valorTotal = dominio.getValorTotal();
-
+        dto.statusPedido = dominio.getStatusPedido();
         return dto;
     }
 

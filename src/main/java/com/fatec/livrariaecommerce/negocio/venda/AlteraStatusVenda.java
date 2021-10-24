@@ -1,9 +1,7 @@
 package com.fatec.livrariaecommerce.negocio.venda;
 
 import com.fatec.livrariaecommerce.dao.VendaDao;
-import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
-import com.fatec.livrariaecommerce.models.domain.StatusVenda;
-import com.fatec.livrariaecommerce.models.domain.Venda;
+import com.fatec.livrariaecommerce.models.domain.*;
 import com.fatec.livrariaecommerce.negocio.IStrategy;
 
 public class AlteraStatusVenda implements IStrategy {
@@ -28,6 +26,11 @@ public class AlteraStatusVenda implements IStrategy {
                     for (int i = 0; i < statusVenda.length; i++) {
                         if (venda.getStatusVenda() == statusVenda[i]) {
                             venda.setStatusVenda(StatusVenda.values()[i + 1]);
+                            if (StatusVenda.values()[i + 1] == StatusVenda.ENTREGUE) {
+                                for (ItensPedido itens : venda.getItensPedidos()) {
+                                    itens.setStatusPedido(StatusPedido.ENTREGUE);
+                                }
+                            }
                             return "";
                         }
                     }
