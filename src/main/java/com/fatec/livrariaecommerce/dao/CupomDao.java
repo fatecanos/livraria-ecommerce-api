@@ -61,6 +61,15 @@ public interface CupomDao extends JpaRepository<Cupom, Integer>, IDAO {
             "")
     List<EntidadeDominio> consultarExcluindoIds(@Param("ids") List<Integer> ids, @Param("cliente") Cliente cliente);
 
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   ?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente} " +
+            "")
+    List<EntidadeDominio> consultarPorCliente(EntidadeDominio entidadeDominio);
+
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
         if (entidadeDominio.getId() != null || entidadeDominio.getAtivo() != null) {
@@ -74,6 +83,8 @@ public interface CupomDao extends JpaRepository<Cupom, Integer>, IDAO {
                     split(",")).map(cp -> Integer.valueOf(cp)).collect(Collectors.toList());
             return consultarExcluindoIds(ids, ((Cupom) entidadeDominio).getCliente());
 
+        } else if (entidadeDominio.getId() == null && ((Cupom) entidadeDominio).getCliente() != null) {
+            return consultarPorCliente(entidadeDominio);
         } else {
             return consultarPorIdOuAtivo(entidadeDominio);
         }
