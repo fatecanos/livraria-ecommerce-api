@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.negocio;
+package com.fatec.livrariaecommerce.strategy;
 
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 

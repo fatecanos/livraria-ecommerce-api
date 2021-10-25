@@ -1,8 +1,8 @@
-package com.fatec.livrariaecommerce.negocio.cartao;
+package com.fatec.livrariaecommerce.strategy.cartao;
 
 import com.fatec.livrariaecommerce.models.domain.CartaoCredito;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 
 public class SalvarCartaoFuturaCompra implements IStrategy {
     @Override

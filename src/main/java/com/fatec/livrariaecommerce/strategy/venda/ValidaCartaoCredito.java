@@ -1,9 +1,8 @@
-package com.fatec.livrariaecommerce.negocio.venda;
+package com.fatec.livrariaecommerce.strategy.venda;
 
 import com.fatec.livrariaecommerce.dao.CartaoCreditoDao;
-import com.fatec.livrariaecommerce.dao.VendaDao;
 import com.fatec.livrariaecommerce.models.domain.*;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 
 public class ValidaCartaoCredito implements IStrategy {
 
@@ -23,9 +22,12 @@ public class ValidaCartaoCredito implements IStrategy {
         for (FormaPagamento formaPagamento : venda.getFormaPagamentoList()) {
             CartaoCredito cartaoCredito = new CartaoCredito();
             cartaoCredito.setId(formaPagamento.getIdCartao());
-            CartaoCredito cartao = (CartaoCredito) this.cartaoCreditoDao.consultar(cartaoCredito).get(0);
-            if (!validateCreditCardNumber(cartao.getNumeroCartao().replaceAll(".", ""))) {
-                return "Cartão inválido";
+            cartaoCredito = (CartaoCredito) this.cartaoCreditoDao.consultar(cartaoCredito).get(0);
+            if (!validateCreditCardNumber(cartaoCredito.getNumeroCartao().replaceAll("\\.", ""))) {
+                venda.setStatusVenda(StatusVenda.PAGAMENTO_REPROVADO);
+                for (ItensPedido itens : venda.getItensPedidos()) {
+                    itens.setStatusPedido(StatusPedido.PAGAMENTO_REPROVADO);
+                }
             } else {
                 venda.setStatusVenda(StatusVenda.PAGAMENTO_REALIZADO);
             }
@@ -35,6 +37,9 @@ public class ValidaCartaoCredito implements IStrategy {
 
     private boolean validateCreditCardNumber(String str) {
 
+        if (str.equals("1111222233334444") || str.equals("1111111111111111")) {
+            return false;
+        }
         int[] ints = new int[str.length()];
         for (int i = 0; i < str.length(); i++) {
             ints[i] = Integer.parseInt(str.substring(i, i + 1));

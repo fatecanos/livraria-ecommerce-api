@@ -1,7 +1,7 @@
-package com.fatec.livrariaecommerce.negocio.itenspedido;
+package com.fatec.livrariaecommerce.strategy.itenspedido;
 
 import com.fatec.livrariaecommerce.models.domain.*;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 
 import java.time.LocalDateTime;
 

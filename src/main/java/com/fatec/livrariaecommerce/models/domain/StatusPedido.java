@@ -1,6 +1,7 @@
 package com.fatec.livrariaecommerce.models.domain;
 
 public enum StatusPedido {
+    PAGAMENTO_REPROVADO,
     AGUARDANDO_ENTREGA,
     ENTREGUE,
     TROCA_SOLICITADA,

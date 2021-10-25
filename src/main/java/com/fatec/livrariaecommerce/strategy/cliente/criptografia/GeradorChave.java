@@ -1,4 +1,4 @@
-package com.fatec.livrariaecommerce.negocio.cliente.criptografia;
+package com.fatec.livrariaecommerce.strategy.cliente.criptografia;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;

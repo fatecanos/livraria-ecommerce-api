@@ -1,8 +1,8 @@
-package com.fatec.livrariaecommerce.negocio.cliente.criptografia;
+package com.fatec.livrariaecommerce.strategy.cliente.criptografia;
 
 import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 import javax.crypto.Cipher;
 import java.security.Key;
 import java.util.Base64;

@@ -68,7 +68,7 @@ public interface CupomDao extends JpaRepository<Cupom, Integer>, IDAO {
             "WHERE " +
             "   ?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente} " +
             "")
-    List<EntidadeDominio> consultarPorCliente(EntidadeDominio entidadeDominio);
+    List<EntidadeDominio> consultarPorCliente(@Param("dominio") EntidadeDominio entidadeDominio);
 
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {

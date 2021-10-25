@@ -1,8 +1,8 @@
-package com.fatec.livrariaecommerce.negocio.cliente.endereco;
+package com.fatec.livrariaecommerce.strategy.cliente.endereco;
 
 import com.fatec.livrariaecommerce.models.domain.Endereco;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 
 public class EnderecoValidaCep implements IStrategy {
     @Override

@@ -1,10 +1,9 @@
-package com.fatec.livrariaecommerce.negocio.itenspedido;
+package com.fatec.livrariaecommerce.strategy.itenspedido;
 
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.ItensPedido;
 import com.fatec.livrariaecommerce.models.domain.StatusPedido;
-import com.fatec.livrariaecommerce.models.domain.StatusVenda;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 
 public class SolicitarTroca implements IStrategy {
 

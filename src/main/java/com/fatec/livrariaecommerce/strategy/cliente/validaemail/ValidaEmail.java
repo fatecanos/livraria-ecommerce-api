@@ -1,12 +1,11 @@
-package com.fatec.livrariaecommerce.negocio.cliente.validaemail;
+package com.fatec.livrariaecommerce.strategy.cliente.validaemail;
 
 import com.fatec.livrariaecommerce.facade.Facade;
 import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.Resultado;
 import com.fatec.livrariaecommerce.models.domain.Usuario;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
-import org.springframework.http.ResponseEntity;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 
 public class ValidaEmail implements IStrategy {
 

@@ -1,10 +1,9 @@
-package com.fatec.livrariaecommerce.negocio.venda;
+package com.fatec.livrariaecommerce.strategy.venda;
 
-import com.fatec.livrariaecommerce.dao.VendaDao;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.StatusVenda;
 import com.fatec.livrariaecommerce.models.domain.Venda;
-import com.fatec.livrariaecommerce.negocio.IStrategy;
+import com.fatec.livrariaecommerce.strategy.IStrategy;
 
 public class CancelarVenda implements IStrategy {
 
