@@ -70,6 +70,24 @@ public interface CupomDao extends JpaRepository<Cupom, Integer>, IDAO {
             "")
     List<EntidadeDominio> consultarPorCliente(@Param("dominio") EntidadeDominio entidadeDominio);
 
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   ?#{[0].codigo} IS NOT NULL AND obj.codigo = ?#{[0].codigo} " +
+            "")
+    List<EntidadeDominio> consultarPorCodigoPromocional(@Param("dominio") EntidadeDominio entidadeDominio);
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   ?#{[0].tipoCupom} IS NOT NULL AND obj.tipoCupom = ?#{[0].tipoCupom} " +
+            "")
+    List<EntidadeDominio> consultarPromocionais(@Param("dominio") EntidadeDominio entidadeDominio);
+
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
         if (entidadeDominio.getId() != null || entidadeDominio.getAtivo() != null) {
@@ -85,6 +103,10 @@ public interface CupomDao extends JpaRepository<Cupom, Integer>, IDAO {
 
         } else if (entidadeDominio.getId() == null && ((Cupom) entidadeDominio).getCliente() != null) {
             return consultarPorCliente(entidadeDominio);
+        } else if (((Cupom) entidadeDominio).getCodigo() != null && ((Cupom) entidadeDominio).getTipoCupom() != null) {
+            return consultarPorCodigoPromocional(entidadeDominio);
+        } else if (((Cupom) entidadeDominio).getTipoCupom() != null) {
+            return consultarPromocionais(entidadeDominio);
         } else {
             return consultarPorIdOuAtivo(entidadeDominio);
         }

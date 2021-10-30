@@ -30,8 +30,6 @@ public class Cupom extends EntidadeDominio {
     @OneToOne
     private ItensPedido itensPedido;
 
-    //criar coluna
-
     public Cupom(Cliente cliente) {
         this.cliente = cliente;
     }

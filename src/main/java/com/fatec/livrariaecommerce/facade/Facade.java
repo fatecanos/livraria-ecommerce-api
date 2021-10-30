@@ -6,6 +6,7 @@ import com.fatec.livrariaecommerce.strategy.IStrategy;
 import com.fatec.livrariaecommerce.strategy.cliente.criptografia.CriptografarSenha;
 import com.fatec.livrariaecommerce.strategy.cliente.criptografia.DescriptografarSenha;
 import com.fatec.livrariaecommerce.strategy.cliente.validaemail.ValidaEmail;
+import com.fatec.livrariaecommerce.strategy.cupom.TipoCupom;
 import com.fatec.livrariaecommerce.strategy.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.strategy.itenspedido.GerarCupom;
 import com.fatec.livrariaecommerce.strategy.itenspedido.SolicitarTroca;
@@ -241,6 +242,7 @@ public class Facade implements IFacade {
 
         // Instanciar classes de regras de negocio e adicionar na lista de rns
         List<IStrategy> rnsSalvarCupom = new ArrayList<>();
+        rnsSalvarCupom.add(new TipoCupom((CupomDao) this.daos.get(Cupom.class.getName())));
         regrasNegocioCupom.put("SALVAR", rnsSalvarCupom);
 
         List<IStrategy> rnsAlterarCupom = new ArrayList<>();
