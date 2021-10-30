@@ -38,6 +38,12 @@ public class VendasController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
                 message.setDescription("Venda efetuada com sucesso!");
+                logger.info("Venda efetuada com sucesso. Dados da venda:" +
+                        "\nValor total: " + venda.getValorTotal() +
+                        "\nNúmero da venda: " + venda.getNumero() +
+                        "\nQuantidade de cartões para pagamento: " + venda.getFormaPagamentoList().size() +
+                        "\nCompra efetuada pelo cliente de id: "
+                        + venda.getCliente().getId());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");
@@ -100,6 +106,14 @@ public class VendasController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
                 message.setDescription("Status alterado com sucesso!");
+
+                logger.info("Status da Venda alterado com sucesso. Dados da venda:" +
+                        "\nValor total: " + venda.getValorTotal() +
+                        "\nNúmero da venda: " + venda.getNumero() +
+                        "\nQuantidade de cartões para pagamento: " + venda.getFormaPagamentoList().size() +
+                        "\nCompra efetuada pelo cliente de id: " + venda.getCliente().getId() +
+                        "\nStatus atual da venda: " + venda.getStatusVenda());
+
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");
