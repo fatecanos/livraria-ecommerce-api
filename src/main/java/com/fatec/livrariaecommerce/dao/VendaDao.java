@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
@@ -35,7 +38,6 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
     void excluir(@Param("dominio") EntidadeDominio entidadeDominio);
 
 
-    @Override
     @Query("SELECT " +
             "   obj " +
             "FROM " +
@@ -46,7 +48,7 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "   OR (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
             "   OR (?#{[0].statusVenda} IS NOT NULL AND obj.statusVenda = ?#{[0].statusVenda}) " +
             "")
-    List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
+    List<EntidadeDominio> consultarTabela(EntidadeDominio entidadeDominio);
 
     @Query("SELECT " +
             "   obj " +
@@ -72,5 +74,38 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "WHERE obj.cupoms.size > 0")
     List<EntidadeDominio> consultarComCupom();
 
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+
+            "WHERE " +
+
+            "   obj.dataCriacao BETWEEN :inicio AND :fim" +
+
+            "")
+    List<EntidadeDominio> consultarPeriodo(@Param("inicio") LocalDateTime inicio, @Param("fim") LocalDateTime fim);
+
+
+    @Override
+    default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
+
+        if (entidadeDominio.getId() != null) {
+
+            return consultarTabela(entidadeDominio);
+        } else if (entidadeDominio.getId() == null && entidadeDominio.getDataCriacao() != null) {
+            LocalDateTime inicio = entidadeDominio.getDataCriacao()
+                    .with(TemporalAdjusters.firstDayOfMonth())
+                    .withHour(0)
+                    .withMinute(0);
+            LocalDateTime fim = entidadeDominio.getDataCriacao()
+                    .with(TemporalAdjusters.lastDayOfMonth())
+                    .withHour(23)
+                    .withMinute(59);
+            return consultarPeriodo(inicio, fim);
+        }
+
+        return null;
+    }
 
 }

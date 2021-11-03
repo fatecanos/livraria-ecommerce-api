@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,6 +121,48 @@ public class VendasController {
                 message.setDescription(resultado.getMensagem());
                 return ResponseEntity.badRequest().body(message);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "faturamentomensal")
+    public ResponseEntity<Double> consultarFaturamentoMensal(@RequestParam("inicio") String inicio,
+                                                             @RequestParam("fim") String fim) {
+        try {
+            Venda venda = new Venda();
+            venda.setDataCriacao(LocalDateTime.now().withMonth(5));
+            Resultado resultado = this.facade.consultar(venda);
+            return ResponseEntity.ok(resultado.getEntidades().stream().mapToDouble(vnd -> {
+                return ((Venda) vnd).getValorTotal();
+            }).sum());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "faturamentoporperiodo")
+    public ResponseEntity<Double> consultarFaturamentoPeriodo(@RequestParam("inicio") String inicio,
+                                                              @RequestParam("fim") String fim) {
+        try {
+
+            //inicio -> 10/05/2021
+            //fim -> 20/07/2021
+//            laço para percorrer do incio ao fim
+            //isBefore; isAfter
+            Venda venda = new Venda();
+            venda.setDataCriacao(LocalDateTime.now().withMonth(5));
+            Resultado resultado = this.facade.consultar(venda);
+            //se eu quiser saber por um periodo, preciso iterar os meses passados
+            //converter a string em data
+            //criar else if criar uma data de começo
+            //
+
+            return ResponseEntity.ok(resultado.getEntidades().stream().mapToDouble(vnd -> {
+                return ((Venda) vnd).getValorTotal();
+            }).sum());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
