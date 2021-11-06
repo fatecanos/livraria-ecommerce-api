@@ -137,7 +137,6 @@ public class VendasController {
     public ResponseEntity<Double> consultarFaturamentoMensal(@RequestParam("month") String month,
                                                              @RequestParam(required = false) String year) {
         try {
-
             Venda venda = new Venda();
             if (year != null) {
                 venda.setDataCriacao(LocalDateTime.now().withMonth(Integer.parseInt(month))
@@ -146,11 +145,9 @@ public class VendasController {
                 venda.setDataCriacao(LocalDateTime.now().withMonth(Integer.parseInt(month)));
             }
             Resultado resultado = this.facade.consultar(venda);
-
             return ResponseEntity.ok(resultado.getEntidades().stream().mapToDouble(vnd -> {
                 return ((Venda) vnd).getValorTotal();
             }).sum());
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -186,15 +183,20 @@ public class VendasController {
     }
 
     @GetMapping(path = "vendasporgenero")
-    public ResponseEntity<Double> consultarVendasGeneroCliente(@RequestParam(required = false) String genero) {
+    public ResponseEntity<Double> consultarVendasGeneroCliente() {
         try {
             Venda venda = new Venda();
             Cliente cliente = new Cliente();
-            cliente.setGenero(genero);
-            venda.setCliente(cliente);
-            Resultado resultado = this.facade.consultar(venda);
 
-            System.out.println("Venda por genero: " + resultado.getEntidades().size());
+            cliente.setGenero("Masculino");
+            venda.setCliente(cliente);
+            Resultado mascResultado = this.facade.consultar(venda);
+            cliente.setGenero("Feminino");
+            venda.setCliente(cliente);
+            Resultado femResultado = this.facade.consultar(venda);
+
+            System.out.println("Venda por genero: " + mascResultado.getEntidades().size());
+            System.out.println("Venda por genero fem: " + femResultado.getEntidades().size());
 
             return null;
         } catch (Exception e) {
