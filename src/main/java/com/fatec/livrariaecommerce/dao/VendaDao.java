@@ -1,5 +1,6 @@
 package com.fatec.livrariaecommerce.dao;
 
+import com.fatec.livrariaecommerce.models.domain.Cliente;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.Telefone;
 import com.fatec.livrariaecommerce.models.domain.Venda;
@@ -86,6 +87,15 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "")
     List<EntidadeDominio> consultarPeriodo(@Param("inicio") LocalDateTime inicio, @Param("fim") LocalDateTime fim);
 
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   obj.cliente.genero = ?#{[0].cliente.genero} " +
+            "")
+    List<EntidadeDominio> consultarGeneroCliente(@Param("dominio") EntidadeDominio entidadeDominio);
+
 
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
@@ -103,6 +113,10 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
                     .withHour(23)
                     .withMinute(59);
             return consultarPeriodo(inicio, fim);
+        }else if(((Venda) entidadeDominio).getCliente() != null){
+
+            return consultarGeneroCliente(entidadeDominio);
+
         }
 
         return null;

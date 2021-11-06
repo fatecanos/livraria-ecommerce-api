@@ -2,8 +2,10 @@ package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
+import com.fatec.livrariaecommerce.models.dto.FaturamentoMensalDTO;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
 import com.fatec.livrariaecommerce.models.dto.VendaDTO;
+import com.fatec.livrariaecommerce.models.utils.ConverterDate;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
@@ -11,8 +13,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -128,15 +134,23 @@ public class VendasController {
     }
 
     @GetMapping(path = "faturamentomensal")
-    public ResponseEntity<Double> consultarFaturamentoMensal(@RequestParam("inicio") String inicio,
-                                                             @RequestParam("fim") String fim) {
+    public ResponseEntity<Double> consultarFaturamentoMensal(@RequestParam("month") String month,
+                                                             @RequestParam(required = false) String year) {
         try {
+
             Venda venda = new Venda();
-            venda.setDataCriacao(LocalDateTime.now().withMonth(5));
+            if (year != null) {
+                venda.setDataCriacao(LocalDateTime.now().withMonth(Integer.parseInt(month))
+                        .withYear(Integer.parseInt(year)));
+            } else {
+                venda.setDataCriacao(LocalDateTime.now().withMonth(Integer.parseInt(month)));
+            }
             Resultado resultado = this.facade.consultar(venda);
+
             return ResponseEntity.ok(resultado.getEntidades().stream().mapToDouble(vnd -> {
                 return ((Venda) vnd).getValorTotal();
             }).sum());
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -144,25 +158,45 @@ public class VendasController {
     }
 
     @GetMapping(path = "faturamentoporperiodo")
-    public ResponseEntity<Double> consultarFaturamentoPeriodo(@RequestParam("inicio") String inicio,
-                                                              @RequestParam("fim") String fim) {
+    public ResponseEntity<List<FaturamentoMensalDTO>> consultarFaturamentoPeriodo(@RequestParam("dataInicio") String dataInicio,
+                                                                                  @RequestParam("dataFim") String dataFim) {
         try {
+            List<FaturamentoMensalDTO> faturamentos = new ArrayList<>();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            LocalDateTime initDate = LocalDateTime.ofInstant(formatter.parse(dataInicio).toInstant(),
+                    ZoneId.systemDefault());
+            LocalDateTime endDate = LocalDateTime.ofInstant(formatter.parse(dataFim).toInstant(),
+                    ZoneId.systemDefault());
+            for (LocalDateTime date = initDate; date.isBefore(endDate); date = date.plusMonths(1)) {
+                Venda venda = new Venda();
+                FaturamentoMensal faturamentoMensal = new FaturamentoMensal();
+                venda.setDataCriacao(LocalDateTime.now().withMonth(date.getMonthValue()).withYear(date.getYear()));
+                Resultado resultado = this.facade.consultar(venda);
+                faturamentoMensal.setData(ConverterDate.translateMonth(date.getMonth().name()) + "/" + date.getYear());
+                faturamentoMensal.setFaturamento(resultado.getEntidades().stream().mapToDouble(vnd -> {
+                    return ((Venda) vnd).getValorTotal();
+                }).sum());
+                faturamentos.add(FaturamentoMensalDTO.from(faturamentoMensal));
+            }
+            return ResponseEntity.ok(faturamentos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
-            //inicio -> 10/05/2021
-            //fim -> 20/07/2021
-//            laço para percorrer do incio ao fim
-            //isBefore; isAfter
+    @GetMapping(path = "vendasporgenero")
+    public ResponseEntity<Double> consultarVendasGeneroCliente(@RequestParam(required = false) String genero) {
+        try {
             Venda venda = new Venda();
-            venda.setDataCriacao(LocalDateTime.now().withMonth(5));
+            Cliente cliente = new Cliente();
+            cliente.setGenero(genero);
+            venda.setCliente(cliente);
             Resultado resultado = this.facade.consultar(venda);
-            //se eu quiser saber por um periodo, preciso iterar os meses passados
-            //converter a string em data
-            //criar else if criar uma data de começo
-            //
 
-            return ResponseEntity.ok(resultado.getEntidades().stream().mapToDouble(vnd -> {
-                return ((Venda) vnd).getValorTotal();
-            }).sum());
+            System.out.println("Venda por genero: " + resultado.getEntidades().size());
+
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
