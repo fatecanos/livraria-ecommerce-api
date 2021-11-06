@@ -2,6 +2,7 @@ package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
+import com.fatec.livrariaecommerce.models.dto.ConsultarGeneroClienteDTO;
 import com.fatec.livrariaecommerce.models.dto.FaturamentoMensalDTO;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
 import com.fatec.livrariaecommerce.models.dto.VendaDTO;
@@ -183,11 +184,10 @@ public class VendasController {
     }
 
     @GetMapping(path = "vendasporgenero")
-    public ResponseEntity<Double> consultarVendasGeneroCliente() {
+    public ResponseEntity<ConsultarGeneroClienteDTO> consultarVendasGeneroCliente() {
         try {
             Venda venda = new Venda();
             Cliente cliente = new Cliente();
-
             cliente.setGenero("Masculino");
             venda.setCliente(cliente);
             Resultado mascResultado = this.facade.consultar(venda);
@@ -195,10 +195,11 @@ public class VendasController {
             venda.setCliente(cliente);
             Resultado femResultado = this.facade.consultar(venda);
 
-            System.out.println("Venda por genero: " + mascResultado.getEntidades().size());
-            System.out.println("Venda por genero fem: " + femResultado.getEntidades().size());
+            ConsultarGeneroCliente consultarGeneroCliente = new ConsultarGeneroCliente();
+            consultarGeneroCliente.setFeminino(femResultado.getEntidades().size());
+            consultarGeneroCliente.setMasculino(mascResultado.getEntidades().size());
 
-            return null;
+            return ResponseEntity.ok(ConsultarGeneroClienteDTO.from(consultarGeneroCliente));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
