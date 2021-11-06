@@ -113,10 +113,12 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
                     .withHour(23)
                     .withMinute(59);
             return consultarPeriodo(inicio, fim);
-        }else if(((Venda) entidadeDominio).getCliente() != null){
+        } else if (((Venda) entidadeDominio).getCliente() != null) {
 
             return consultarGeneroCliente(entidadeDominio);
 
+        } else if (entidadeDominio.getAtivo() != null) {
+            return consultarTabela(entidadeDominio);
         }
 
         return null;
