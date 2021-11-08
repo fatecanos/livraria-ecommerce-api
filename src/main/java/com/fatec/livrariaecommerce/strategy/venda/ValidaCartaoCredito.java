@@ -23,14 +23,17 @@ public class ValidaCartaoCredito implements IStrategy {
             CartaoCredito cartaoCredito = new CartaoCredito();
             cartaoCredito.setId(formaPagamento.getIdCartao());
             cartaoCredito = (CartaoCredito) this.cartaoCreditoDao.consultar(cartaoCredito).get(0);
-            if (!validateCreditCardNumber(cartaoCredito.getNumeroCartao().replaceAll("\\.", ""))) {
-                venda.setStatusVenda(StatusVenda.PAGAMENTO_REPROVADO);
-                for (ItensPedido itens : venda.getItensPedidos()) {
-                    itens.setStatusPedido(StatusPedido.PAGAMENTO_REPROVADO);
-                }
-            } else {
-                venda.setStatusVenda(StatusVenda.PAGAMENTO_REALIZADO);
-            }
+
+            venda.setStatusVenda(StatusVenda.PAGAMENTO_REALIZADO);
+
+//            if (!validateCreditCardNumber(cartaoCredito.getNumeroCartao().replaceAll("\\.", ""))) {
+//                venda.setStatusVenda(StatusVenda.PAGAMENTO_REPROVADO);
+//                for (ItensPedido itens : venda.getItensPedidos()) {
+//                    itens.setStatusPedido(StatusPedido.PAGAMENTO_REPROVADO);
+//                }
+//            } else {
+//                venda.setStatusVenda(StatusVenda.PAGAMENTO_REALIZADO);
+//            }
         }
         return "";
     }
