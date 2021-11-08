@@ -90,6 +90,7 @@ public class VendasController {
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
 
             Venda venda = new Venda();
+            venda.setAtivo(true);
             venda.setCliente(cliente);
             List<VendaDTO> vendaDTOList = this.facade.consultar(venda).getEntidades().stream().map(ven -> {
                 return VendaDTO.from((Venda) ven);
@@ -188,10 +189,10 @@ public class VendasController {
         try {
             Venda venda = new Venda();
             Cliente cliente = new Cliente();
-            cliente.setGenero("Masculino");
+            cliente.setGenero("m");
             venda.setCliente(cliente);
             Resultado mascResultado = this.facade.consultar(venda);
-            cliente.setGenero("Feminino");
+            cliente.setGenero("f");
             venda.setCliente(cliente);
             Resultado femResultado = this.facade.consultar(venda);
 

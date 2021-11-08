@@ -96,6 +96,15 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "")
     List<EntidadeDominio> consultarGeneroCliente(@Param("dominio") EntidadeDominio entidadeDominio);
 
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
+            "")
+    List<EntidadeDominio> consultarPedidosCliente(@Param("dominio") EntidadeDominio entidadeDominio);
+
 
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
@@ -113,10 +122,10 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
                     .withHour(23)
                     .withMinute(59);
             return consultarPeriodo(inicio, fim);
+        } else if (((Venda) entidadeDominio).getCliente() != null && entidadeDominio.getAtivo() != null) {
+            return consultarPedidosCliente(entidadeDominio);
         } else if (((Venda) entidadeDominio).getCliente() != null) {
-
             return consultarGeneroCliente(entidadeDominio);
-
         } else if (entidadeDominio.getAtivo() != null) {
             return consultarTabela(entidadeDominio);
         }
