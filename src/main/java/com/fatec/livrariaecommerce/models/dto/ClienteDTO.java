@@ -40,7 +40,7 @@ public class ClienteDTO {
         List<CartaoCredito> cartoesList = new ArrayList<>();
         List<Cupom> cupomList = new ArrayList<>();
 
-        if (!this.getEnderecos().isEmpty()) {
+        if (this.getEnderecos() != null && !this.getEnderecos().isEmpty()) {
             Endereco endereco = new Endereco();
             for (EnderecoDTO enderecoDTO : this.getEnderecos()) {
                 enderecoDTO.fill(endereco, dominio);
@@ -48,7 +48,7 @@ public class ClienteDTO {
             enderecoList.add(endereco);
         }
 
-        if (!this.getTelefones().isEmpty()) {
+        if (this.getTelefones() != null && !this.getTelefones().isEmpty()) {
             Telefone telefone = new Telefone(dominio);
             for (TelefoneDTO telefoneDTO : this.getTelefones()) {
                 telefoneDTO.fill(telefone);
@@ -56,7 +56,7 @@ public class ClienteDTO {
             telefoneList.add(telefone);
         }
 
-        if (!this.getCartoesCredito().isEmpty()) {
+        if (this.getCartoesCredito() != null && !this.getCartoesCredito().isEmpty()) {
             for (CartaoCreditoDTO cartaoCreditoDTO : this.getCartoesCredito()) {
                 CartaoCredito cartaoCredito = new CartaoCredito(dominio);
                 cartaoCreditoDTO.fill(cartaoCredito);
@@ -64,7 +64,7 @@ public class ClienteDTO {
             }
         }
 
-        if (!this.getCupoms().isEmpty()) {
+        if (this.getCupoms() != null && !this.getCupoms().isEmpty() ) {
             for (CupomDTO cupomDTO : this.getCupoms()) {
                 Cupom cupom = new Cupom();
                 cupomDTO.fill(cupom, dominio);
