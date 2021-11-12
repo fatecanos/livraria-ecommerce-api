@@ -28,11 +28,13 @@ public class ItensPedidoController {
     // ***********************************************************************
 
     @PutMapping(path = "/solicitartroca/{idItemPedido}")
-    public ResponseEntity<Message> solicitarTrocaItensPedido(@PathVariable int idItemPedido) {
+    public ResponseEntity<Message> solicitarTrocaItensPedido(@PathVariable int idItemPedido,
+                                                             @RequestParam int qtdTrocada) {
         try {
             ItensPedido itensPedido = new ItensPedido();
             itensPedido.setId(idItemPedido);
             itensPedido = (ItensPedido) this.facade.consultar(itensPedido).getEntidades().get(0);
+            itensPedido.setQuantidadeTrocada(qtdTrocada);
 
             Resultado resultado = this.facade.alterar(itensPedido);
             Message message = new Message();

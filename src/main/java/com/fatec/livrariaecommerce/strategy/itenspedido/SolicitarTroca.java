@@ -11,7 +11,13 @@ public class SolicitarTroca implements IStrategy {
     public String processar(EntidadeDominio dominio) {
         ItensPedido itensPedido = (ItensPedido) dominio;
         if (itensPedido.getStatusPedido() == StatusPedido.ENTREGUE) {
-            itensPedido.setStatusPedido(StatusPedido.TROCA_SOLICITADA);
+
+            if (itensPedido.getQuantidadeTrocada() > itensPedido.getQtdComprada()) {
+                return "Quantidade solicitada para troca é maior que a quantidade comprada." +
+                        " Tenta novamente com um valor menor.";
+            } else {
+                itensPedido.setStatusPedido(StatusPedido.TROCA_SOLICITADA);
+            }
         }
 
         if (itensPedido.getStatusPedido() == StatusPedido.TROCA_RECUSADA) {

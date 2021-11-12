@@ -32,12 +32,15 @@ public class ItensPedido extends EntidadeDominio {
     @OneToOne(cascade = CascadeType.ALL)
     private Cupom cupomGerado;
 
+    @JoinColumn(name = "quantiade_trocada")
+    private int quantidadeTrocada;
+
     public ItensPedido(Venda venda) {
         this.venda = venda;
     }
 
     public void atualizarDados(int id, int idLivro, String nomeLivro, int qtdComprada, double valorUnitario,
-                               double valorTotal, StatusPedido statusPedido) {
+                               double valorTotal, StatusPedido statusPedido, int quantidadeTrocada) {
         super.setId(id);
         super.setAtivo(true);
         if (this.getId() == 0 || this.getId() == null) {
@@ -49,5 +52,6 @@ public class ItensPedido extends EntidadeDominio {
         this.valorUnitario = valorUnitario;
         this.valorTotal = valorTotal;
         this.statusPedido = statusPedido;
+        this.quantidadeTrocada = quantidadeTrocada;
     }
 }
