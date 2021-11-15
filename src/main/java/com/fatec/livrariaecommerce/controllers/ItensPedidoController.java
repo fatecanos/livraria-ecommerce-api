@@ -108,69 +108,46 @@ public class ItensPedidoController {
 
     @GetMapping(path = "faturamentoporperiodo")
     public ResponseEntity<List<LivroFaturamentoMensalDTO>> consultarFaturamentoPeriodo(
-//    public ResponseEntity<List<Map<String, LivroFaturamentoMensalDTO>>> consultarFaturamentoPeriodo(
             @RequestHeader("livroFaturamentoParamDTO") String json) {
-
         try {
             List<LivroFaturamentoMensalDTO> listDto = new ArrayList<>();
-
-            List<Map<String, LivroFaturamentoMensalDTO>> content =
-                    new ArrayList<Map<String, LivroFaturamentoMensalDTO>>();
-
             ObjectMapper objectMapper = new ObjectMapper();
             LivroFaturamentoParamDTO[] jsonObjectData = objectMapper.readValue(json, LivroFaturamentoParamDTO[].class);
-
-
+            String nomeLivro = "";
+            int idLivro = 0;
             for (LivroFaturamentoParamDTO dto : jsonObjectData) {
-
-                List<LivroFaturamentoMensalDTO> faturamentoPorLivro = new ArrayList<>();
-
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 LocalDateTime initDate = LocalDateTime.ofInstant(formatter.parse(dto.getDataInicio()).toInstant(),
                         ZoneId.systemDefault());
                 LocalDateTime endDate = LocalDateTime.ofInstant(formatter.parse(dto.getDataFim()).toInstant(),
                         ZoneId.systemDefault());
 
-                int i = 0;
                 for (LocalDateTime date = initDate; date.isBefore(endDate); date = date.plusMonths(1)) {
                     ItensPedido itensPedido = new ItensPedido();
                     Map<String, LivroFaturamentoMensalDTO> teste = new HashMap<>();
 
                     LivroFaturamentoMensal faturamento = new LivroFaturamentoMensal();
-
                     itensPedido.setDataCriacao(LocalDateTime.now().withMonth(date.getMonthValue()).withYear(date.getYear()));
                     itensPedido.setIdLivro(dto.getIdLivro());
-
                     Resultado resultado = this.facade.consultar(itensPedido);
+                    for (EntidadeDominio dominio : resultado.getEntidades()) {
+                        ItensPedido it = (ItensPedido) dominio;
 
-
-//                    faturamento.setNomeLivro();
-
-//                    faturamento.setNomeLivro("EAE");
-//                    faturamento.setIdLivro(((ItensPedido) resultado.getEntidades().get(0)).getIdLivro());
-
+                        if (idLivro != it.getIdLivro() && nomeLivro != it.getNomeLivro()) {
+                            idLivro = it.getIdLivro();
+                            nomeLivro = it.getNomeLivro();
+                        }
+                    }
+                    faturamento.setNomeLivro(nomeLivro);
+                    faturamento.setIdLivro(idLivro);
                     faturamento.setData(ConverterDate.translateMonth(date.getMonth().name()) + "/" + date.getYear());
                     faturamento.setFaturamento(resultado.getEntidades().stream().mapToDouble(itPedido -> {
                         return ((ItensPedido) itPedido).getValorTotal();
                     }).sum());
-                    i++;
-
-                    teste.put("idLivro", LivroFaturamentoMensalDTO.from(faturamento));
-
-                    //todo: quando voltar finalizar o map de objetos para retornar
-//                    faturamentoPorLivro.add(LivroFaturamentoMensalDTO.from(faturamento));
-
                     listDto.add(LivroFaturamentoMensalDTO.from(faturamento));
-                    content.add(teste);
-
                 }
-
             }
-
-//            return ResponseEntity.ok(content);
             return ResponseEntity.ok(listDto);
-
-
         } catch (JsonMappingException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -189,15 +166,11 @@ public class ItensPedidoController {
 
         try {
             List<LivroFaturamentoMensalDTO> listDto = new ArrayList<>();
-
             ObjectMapper objectMapper = new ObjectMapper();
             PeriodoLivroFaturamentoDTO jsonObjectData = objectMapper.readValue(json, PeriodoLivroFaturamentoDTO.class);
-
-
+            String nomeLivro = "";
+            int idLivro = 0;
             for (LivroIdDTO dto : jsonObjectData.getIdsLivros()) {
-
-                List<LivroFaturamentoMensalDTO> faturamentoPorLivro = new ArrayList<>();
-
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 LocalDateTime initDate = LocalDateTime.ofInstant(formatter.parse(jsonObjectData.getDataInicio()).toInstant(),
                         ZoneId.systemDefault());
@@ -209,33 +182,27 @@ public class ItensPedidoController {
                     ItensPedido itensPedido = new ItensPedido();
 
                     LivroFaturamentoMensal livro = new LivroFaturamentoMensal();
-
                     itensPedido.setDataCriacao(LocalDateTime.now().withMonth(date.getMonthValue()).withYear(date.getYear()));
-
                     itensPedido.setIdLivro(dto.getId());
-
                     Resultado resultado = this.facade.consultar(itensPedido);
-
-
-//                    faturamento.setNomeLivro();
-
-//                    faturamento.setNomeLivro("EAE");
-//                    faturamento.setIdLivro(((ItensPedido) resultado.getEntidades().get(0)).getIdLivro());
-
+                    for (EntidadeDominio dominio : resultado.getEntidades()) {
+                        ItensPedido it = (ItensPedido) dominio;
+                        if (idLivro != it.getIdLivro() && nomeLivro != it.getNomeLivro()) {
+                            idLivro = it.getIdLivro();
+                            nomeLivro = it.getNomeLivro();
+                        }
+                    }
+                    livro.setNomeLivro(nomeLivro);
+                    livro.setIdLivro(idLivro);
                     livro.setData(ConverterDate.translateMonth(date.getMonth().name()) + "/" + date.getYear());
-
                     livro.setFaturamento(resultado.getEntidades().stream().mapToDouble(itPedido -> {
                         return ((ItensPedido) itPedido).getValorTotal();
                     }).sum());
                     i++;
-
                     listDto.add(LivroFaturamentoMensalDTO.from(livro));
                 }
-
             }
             return ResponseEntity.ok(listDto);
-
-
         } catch (JsonMappingException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
