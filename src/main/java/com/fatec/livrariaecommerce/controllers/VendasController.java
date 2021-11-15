@@ -159,6 +159,7 @@ public class VendasController {
     @GetMapping(path = "faturamentoporperiodo")
     public ResponseEntity<List<FaturamentoMensalDTO>> consultarFaturamentoPeriodo(@RequestParam("dataInicio") String dataInicio,
                                                                                   @RequestParam("dataFim") String dataFim) {
+
         try {
             List<FaturamentoMensalDTO> faturamentos = new ArrayList<>();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -176,6 +177,47 @@ public class VendasController {
                     return ((Venda) vnd).getValorTotal();
                 }).sum());
                 faturamentos.add(FaturamentoMensalDTO.from(faturamentoMensal));
+            }
+            return ResponseEntity.ok(faturamentos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "faturamentoprodutoperiodo")
+    public ResponseEntity<List<FaturamentoMensalDTO>> consultarFaturamentoProdutoPorPeriodo(@RequestParam("dataInicio") String dataInicio,
+                                                                                            @RequestParam("dataFim") String dataFim) {
+        try {
+
+            List<FaturamentoMensalDTO> faturamentos = new ArrayList<>();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            LocalDateTime initDate = LocalDateTime.ofInstant(formatter.parse(dataInicio).toInstant(),
+                    ZoneId.systemDefault());
+            LocalDateTime endDate = LocalDateTime.ofInstant(formatter.parse(dataFim).toInstant(),
+                    ZoneId.systemDefault());
+
+
+            //TODO: FAZER REGRA DE NEGOCIO E PASSAR O ITENS_PEDIDO DAO.
+            //TODO: CONSULTAR POR ITENS PEDIDO DA VENDA E RETORNAR PARA A CONTROLLER
+
+            //todo: example: em janeiro, foi vendido 5k em livro X;
+            //todo: fazer query na itens_pedido_controller, testa
+
+            for (LocalDateTime date = initDate; date.isBefore(endDate); date = date.plusMonths(1)) {
+                Venda venda = new Venda();
+                FaturamentoMensal faturamentoMensal = new FaturamentoMensal();
+
+                venda.setDataCriacao(LocalDateTime.now().withMonth(date.getMonthValue()).withYear(date.getYear()));
+
+                Resultado resultado = this.facade.consultar(venda);
+
+                System.out.println("Dados da venda: " + venda);
+//                faturamentoMensal.setData(ConverterDate.translateMonth(date.getMonth().name()) + "/" + date.getYear());
+//                faturamentoMensal.setFaturamento(resultado.getEntidades().stream().mapToDouble(vnd -> {
+//                    return ((Venda) vnd).getValorTotal();
+//                }).sum());
+//                faturamentos.add(FaturamentoMensalDTO.from(faturamentoMensal));
             }
             return ResponseEntity.ok(faturamentos);
         } catch (Exception e) {

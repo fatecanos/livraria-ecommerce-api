@@ -3,12 +3,15 @@ package com.fatec.livrariaecommerce.dao;
 import com.fatec.livrariaecommerce.models.domain.EntidadeDominio;
 import com.fatec.livrariaecommerce.models.domain.ItensPedido;
 import com.fatec.livrariaecommerce.models.domain.Telefone;
+import com.fatec.livrariaecommerce.models.domain.Venda;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 public interface ItensPedidoDao extends JpaRepository<ItensPedido, Integer>, IDAO {
@@ -34,11 +37,8 @@ public interface ItensPedidoDao extends JpaRepository<ItensPedido, Integer>, IDA
             "   obj.id = ?#{[0].id}")
     void excluir(@Param("dominio") EntidadeDominio entidadeDominio);
 
-    //TODO: QUANDO VOLTAR, FAZER A QUERY PELO STATUS PEDIDO
-
     //TODO: TERMINAR O GET COM FILTRO DOS PEDIDOS E SEUS STATUS
 
-    @Override
     @Query("SELECT " +
             "   obj " +
             "FROM " +
@@ -48,6 +48,40 @@ public interface ItensPedidoDao extends JpaRepository<ItensPedido, Integer>, IDA
             "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = ?#{[0].ativo}) " +
             "   OR (?#{[0].statusPedido} IS NOT NULL AND obj.statusPedido = ?#{[0].statusPedido}) " +
             "")
-    List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio);
+    List<EntidadeDominio> consultarTabela(EntidadeDominio entidadeDominio);
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   obj.idLivro = :idLivro " +
+            "   AND obj.dataCriacao BETWEEN :inicio AND :fim" +
+            "")
+    List<EntidadeDominio> consultarPeriodo(@Param("idLivro") int idLivro,
+                                           @Param("inicio") LocalDateTime inicio,
+                                           @Param("fim") LocalDateTime fim);
+
+    @Override
+    default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
+
+        if (entidadeDominio.getId() == null && entidadeDominio.getDataCriacao() != null) {
+
+            LocalDateTime inicio = entidadeDominio.getDataCriacao()
+                    .with(TemporalAdjusters.firstDayOfMonth())
+                    .withHour(0)
+                    .withMinute(0);
+            LocalDateTime fim = entidadeDominio.getDataCriacao()
+                    .with(TemporalAdjusters.lastDayOfMonth())
+                    .withHour(23)
+                    .withMinute(59);
+
+            return consultarPeriodo(((ItensPedido) entidadeDominio).getIdLivro(), inicio, fim);
+
+        } else {
+            return consultarTabela(entidadeDominio);
+        }
+    }
+
 
 }

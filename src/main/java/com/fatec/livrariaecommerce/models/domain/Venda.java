@@ -18,6 +18,8 @@ import java.util.List;
 @Table(name = "venda")
 public class Venda extends EntidadeDominio {
 
+//TODO: quando voltar ver as CONSULTAS DE VENDAS
+
 
     private double valorTotal;
     private String numero;

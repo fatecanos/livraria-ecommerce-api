@@ -10,11 +10,8 @@ import com.fatec.livrariaecommerce.strategy.cupom.TipoCupom;
 import com.fatec.livrariaecommerce.strategy.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.strategy.itenspedido.GerarCupom;
 import com.fatec.livrariaecommerce.strategy.itenspedido.SolicitarTroca;
-import com.fatec.livrariaecommerce.strategy.venda.AlteraStatusVenda;
+import com.fatec.livrariaecommerce.strategy.venda.*;
 import com.fatec.livrariaecommerce.strategy.cartao.SalvarCartaoFuturaCompra;
-import com.fatec.livrariaecommerce.strategy.venda.CancelarVenda;
-import com.fatec.livrariaecommerce.strategy.venda.ValidaCartaoCredito;
-import com.fatec.livrariaecommerce.strategy.venda.ValidaCupom;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -231,6 +228,7 @@ public class Facade implements IFacade {
         regrasNegocioVenda.put("EXCLUIR", rnsExcluirVenda);
 
         List<IStrategy> rnsConsultarVenda = new ArrayList<>();
+        rnsConsultarVenda.add(new ItensPedidoVenda((ItensPedidoDao) this.daos.get(ItensPedido.class.getName())));
         regrasNegocioVenda.put("CONSULTAR", rnsConsultarVenda);
 
         this.regrasNegocio.put(Venda.class.getName(), regrasNegocioVenda);
