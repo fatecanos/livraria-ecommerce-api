@@ -7,8 +7,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FaturamentoLivroLinha {
-    private int idLivro;
-    private String nomeLivro;
-    private double faturamento;
+public class RankCliente {
+
+    private Integer idCliente;
+    private int comprasRealizadas;
 }

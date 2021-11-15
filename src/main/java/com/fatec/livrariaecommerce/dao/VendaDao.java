@@ -105,12 +105,27 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "")
     List<EntidadeDominio> consultarPedidosCliente(@Param("dominio") EntidadeDominio entidadeDominio);
 
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "ORDER BY " +
+            "   obj.cliente ASC " +
+            "")
+    List<EntidadeDominio> consultarRankClientes(@Param("dominio") EntidadeDominio entidadeDominio);
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
+            "")
+    List<EntidadeDominio> consultarQtdComprasCliente(@Param("dominio") EntidadeDominio entidadeDominio);
 
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
-
         if (entidadeDominio.getId() != null) {
-
             return consultarTabela(entidadeDominio);
         } else if (entidadeDominio.getId() == null && entidadeDominio.getDataCriacao() != null) {
             LocalDateTime inicio = entidadeDominio.getDataCriacao()
@@ -124,12 +139,23 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             return consultarPeriodo(inicio, fim);
         } else if (((Venda) entidadeDominio).getCliente() != null && entidadeDominio.getAtivo() != null) {
             return consultarPedidosCliente(entidadeDominio);
-        } else if (((Venda) entidadeDominio).getCliente() != null) {
+        } else if (((Venda) entidadeDominio).getCliente() != null
+                && ((Venda) entidadeDominio).getCliente().getGenero() != null) {
             return consultarGeneroCliente(entidadeDominio);
         } else if (entidadeDominio.getAtivo() != null) {
             return consultarTabela(entidadeDominio);
-        }
 
+        } else if (((Venda) entidadeDominio).getCliente() != null
+                && ((Venda) entidadeDominio).getCliente().getId() == 0) {
+
+
+            return consultarRankClientes(entidadeDominio);
+        } else if (((Venda) entidadeDominio).getCliente() != null
+                && ((Venda) entidadeDominio).getCliente().getNome().equals("consulta")) {
+
+
+            return consultarQtdComprasCliente(entidadeDominio);
+        }
         return null;
     }
 

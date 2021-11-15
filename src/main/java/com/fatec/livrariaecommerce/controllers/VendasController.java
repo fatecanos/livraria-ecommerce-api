@@ -2,10 +2,7 @@ package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
-import com.fatec.livrariaecommerce.models.dto.ConsultarGeneroClienteDTO;
-import com.fatec.livrariaecommerce.models.dto.FaturamentoMensalDTO;
-import com.fatec.livrariaecommerce.models.dto.LivroDTO;
-import com.fatec.livrariaecommerce.models.dto.VendaDTO;
+import com.fatec.livrariaecommerce.models.dto.*;
 import com.fatec.livrariaecommerce.models.utils.ConverterDate;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
@@ -185,47 +182,6 @@ public class VendasController {
         }
     }
 
-    @GetMapping(path = "faturamentoprodutoperiodo")
-    public ResponseEntity<List<FaturamentoMensalDTO>> consultarFaturamentoProdutoPorPeriodo(@RequestParam("dataInicio") String dataInicio,
-                                                                                            @RequestParam("dataFim") String dataFim) {
-        try {
-
-            List<FaturamentoMensalDTO> faturamentos = new ArrayList<>();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            LocalDateTime initDate = LocalDateTime.ofInstant(formatter.parse(dataInicio).toInstant(),
-                    ZoneId.systemDefault());
-            LocalDateTime endDate = LocalDateTime.ofInstant(formatter.parse(dataFim).toInstant(),
-                    ZoneId.systemDefault());
-
-
-            //TODO: FAZER REGRA DE NEGOCIO E PASSAR O ITENS_PEDIDO DAO.
-            //TODO: CONSULTAR POR ITENS PEDIDO DA VENDA E RETORNAR PARA A CONTROLLER
-
-            //todo: example: em janeiro, foi vendido 5k em livro X;
-            //todo: fazer query na itens_pedido_controller, testa
-
-            for (LocalDateTime date = initDate; date.isBefore(endDate); date = date.plusMonths(1)) {
-                Venda venda = new Venda();
-                FaturamentoMensal faturamentoMensal = new FaturamentoMensal();
-
-                venda.setDataCriacao(LocalDateTime.now().withMonth(date.getMonthValue()).withYear(date.getYear()));
-
-                Resultado resultado = this.facade.consultar(venda);
-
-                System.out.println("Dados da venda: " + venda);
-//                faturamentoMensal.setData(ConverterDate.translateMonth(date.getMonth().name()) + "/" + date.getYear());
-//                faturamentoMensal.setFaturamento(resultado.getEntidades().stream().mapToDouble(vnd -> {
-//                    return ((Venda) vnd).getValorTotal();
-//                }).sum());
-//                faturamentos.add(FaturamentoMensalDTO.from(faturamentoMensal));
-            }
-            return ResponseEntity.ok(faturamentos);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
     @GetMapping(path = "vendasporgenero")
     public ResponseEntity<ConsultarGeneroClienteDTO> consultarVendasGeneroCliente() {
         try {
@@ -248,4 +204,38 @@ public class VendasController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping(path = "rankclientes")
+    public ResponseEntity<List<RankClienteDTO>> consultarRankClientes() {
+        try {
+            Cliente cliente = new Cliente();
+            cliente.setId(0);
+            Venda venda = new Venda();
+            venda.setCliente(cliente);
+            Resultado resultado = this.facade.consultar(venda);
+            List<RankClienteDTO> dtoList = new ArrayList<>();
+            int idCliente = 0;
+            int qtdCompras = 0;
+            for (EntidadeDominio dominio : resultado.getEntidades()) {
+                Venda vnd = (Venda) dominio;
+                RankCliente rank = new RankCliente();
+                Cliente cl = new Cliente();
+                if (idCliente != vnd.getCliente().getId()) {
+                    idCliente = vnd.getCliente().getId();
+                    cl.setId(idCliente);
+                    cl.setNome("consulta");
+                    venda.setCliente(cl);
+                    qtdCompras = this.facade.consultar(venda).getEntidades().size();
+                    rank.setIdCliente(vnd.getCliente().getId());
+                    rank.setComprasRealizadas(qtdCompras);
+                    dtoList.add(RankClienteDTO.from(rank));
+                }
+            }
+            return ResponseEntity.ok(dtoList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

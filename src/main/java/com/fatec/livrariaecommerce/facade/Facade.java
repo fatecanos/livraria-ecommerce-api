@@ -228,7 +228,6 @@ public class Facade implements IFacade {
         regrasNegocioVenda.put("EXCLUIR", rnsExcluirVenda);
 
         List<IStrategy> rnsConsultarVenda = new ArrayList<>();
-        rnsConsultarVenda.add(new ItensPedidoVenda((ItensPedidoDao) this.daos.get(ItensPedido.class.getName())));
         regrasNegocioVenda.put("CONSULTAR", rnsConsultarVenda);
 
         this.regrasNegocio.put(Venda.class.getName(), regrasNegocioVenda);
