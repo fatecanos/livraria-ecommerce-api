@@ -176,11 +176,8 @@ public class ItensPedidoController {
                         ZoneId.systemDefault());
                 LocalDateTime endDate = LocalDateTime.ofInstant(formatter.parse(jsonObjectData.getDataFim()).toInstant(),
                         ZoneId.systemDefault());
-
-                int i = 0;
                 for (LocalDateTime date = initDate; date.isBefore(endDate); date = date.plusMonths(1)) {
                     ItensPedido itensPedido = new ItensPedido();
-
                     LivroFaturamentoMensal livro = new LivroFaturamentoMensal();
                     itensPedido.setDataCriacao(LocalDateTime.now().withMonth(date.getMonthValue()).withYear(date.getYear()));
                     itensPedido.setIdLivro(dto.getId());
@@ -198,7 +195,6 @@ public class ItensPedidoController {
                     livro.setFaturamento(resultado.getEntidades().stream().mapToDouble(itPedido -> {
                         return ((ItensPedido) itPedido).getValorTotal();
                     }).sum());
-                    i++;
                     listDto.add(LivroFaturamentoMensalDTO.from(livro));
                 }
             }
