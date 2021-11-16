@@ -10,12 +10,15 @@ import lombok.Setter;
 public class RankClienteDTO {
 
     private Integer idCliente;
+    private String nomeCliente;
+    private String cpfCliente;
     private int comprasRealizadas;
 
     public static RankClienteDTO from(RankCliente rankCliente) {
         RankClienteDTO dto = new RankClienteDTO();
-
         dto.idCliente = rankCliente.getIdCliente();
+        dto.nomeCliente = rankCliente.getNomeCliente();
+        dto.cpfCliente = rankCliente.getCpfCliente();
         dto.comprasRealizadas = rankCliente.getComprasRealizadas();
         return dto;
     }

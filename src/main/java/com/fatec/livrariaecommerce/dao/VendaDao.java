@@ -48,6 +48,7 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = ?#{[0].ativo}) " +
             "   OR (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
             "   OR (?#{[0].statusVenda} IS NOT NULL AND obj.statusVenda = ?#{[0].statusVenda}) " +
+            "   OR (?#{[0].numero} IS NOT NULL AND obj.numero = ?#{[0].numero}) " +
             "")
     List<EntidadeDominio> consultarTabela(EntidadeDominio entidadeDominio);
 
@@ -145,6 +146,12 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
         } else if (entidadeDominio.getAtivo() != null) {
             return consultarTabela(entidadeDominio);
 
+        } else if (((Venda) entidadeDominio).getNumero() != null) {
+            return consultarTabela(entidadeDominio);
+
+        } else if (((Venda) entidadeDominio).getStatusVenda() != null) {
+            return consultarTabela(entidadeDominio);
+
         } else if (((Venda) entidadeDominio).getCliente() != null
                 && ((Venda) entidadeDominio).getCliente().getId() == 0) {
 
@@ -152,8 +159,6 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             return consultarRankClientes(entidadeDominio);
         } else if (((Venda) entidadeDominio).getCliente() != null
                 && ((Venda) entidadeDominio).getCliente().getNome().equals("consulta")) {
-
-
             return consultarQtdComprasCliente(entidadeDominio);
         }
         return null;

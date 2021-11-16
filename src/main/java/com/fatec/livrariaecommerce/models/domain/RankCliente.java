@@ -10,5 +10,7 @@ import lombok.Setter;
 public class RankCliente {
 
     private Integer idCliente;
+    private String nomeCliente;
+    private String cpfCliente;
     private int comprasRealizadas;
 }

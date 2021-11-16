@@ -63,10 +63,20 @@ public class VendasController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VendaDTO>> consultarVendas() {
+    public ResponseEntity<List<VendaDTO>> consultarVendas(
+            @RequestParam(value = "filtro", defaultValue = "") String filtro) {
         try {
             Venda venda = new Venda();
-            venda.setAtivo(true);
+            System.out.println("Ta chamando? " + filtro);
+            venda.setNumero(filtro);
+//            venda.setStatusVenda(STat);
+
+            //TODO: AMANHÃ TESTAR ESSE ENDPOINT E TERMINAR  FAZER O FILTRO
+
+            if (filtro.equals("")) {
+                venda.setAtivo(true);
+            }
+
             List<VendaDTO> vendaDTOList = this.facade.consultar(venda).getEntidades().stream().map(ven -> {
                 return VendaDTO.from((Venda) ven);
             }).collect(Collectors.toList());
@@ -227,6 +237,8 @@ public class VendasController {
                     venda.setCliente(cl);
                     qtdCompras = this.facade.consultar(venda).getEntidades().size();
                     rank.setIdCliente(vnd.getCliente().getId());
+                    rank.setNomeCliente(vnd.getCliente().getNome() + " " + vnd.getCliente().getSobrenome());
+                    rank.setCpfCliente(vnd.getCliente().getCpf());
                     rank.setComprasRealizadas(qtdCompras);
                     dtoList.add(RankClienteDTO.from(rank));
                 }
