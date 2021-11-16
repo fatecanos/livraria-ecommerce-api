@@ -48,7 +48,7 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = ?#{[0].ativo}) " +
             "   OR (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
             "   OR (?#{[0].statusVenda} IS NOT NULL AND obj.statusVenda = ?#{[0].statusVenda}) " +
-            "   OR (?#{[0].numero} IS NOT NULL AND obj.numero = ?#{[0].numero}) " +
+            "   OR (?#{[0].numero} IS NOT NULL AND (obj.numero LIKE(CONCAT('%', ?#{[0].numero},'%')))) " +
             "")
     List<EntidadeDominio> consultarTabela(EntidadeDominio entidadeDominio);
 
