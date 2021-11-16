@@ -132,7 +132,7 @@ public class TelefoneController {
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");
-                message.setDescription("Ocorreu um erro ao tentar desativar a conta.");
+                message.setDescription("Ocorreu um erro ao tentar desativar o telefone.");
                 return ResponseEntity.badRequest().body(message);
             }
 
