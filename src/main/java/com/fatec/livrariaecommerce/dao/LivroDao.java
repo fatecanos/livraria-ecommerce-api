@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,6 +47,26 @@ public interface LivroDao extends JpaRepository<Livro, Integer>, IDAO {
             "   OR (?#{[0].editora} IS NOT NULL AND obj.editora = ?#{[0].editora}) " +
             "")
     List<EntidadeDominio> consultarTabela(@Param("dominio") EntidadeDominio entidadeDominio);
+
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
+            "")
+    List<EntidadeDominio> consultarPeloID(@Param("dominio") EntidadeDominio entidadeDominio);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE " +
+            "  #{#entityName} obj " +
+            "SET " +
+            "   obj.estoque = :estoque " +
+            "WHERE " +
+            "   obj.id = :id")
+    void reduzirEstoqueLivro(@Param("id") Integer id, @Param("estoque") int estoque);
 
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {
