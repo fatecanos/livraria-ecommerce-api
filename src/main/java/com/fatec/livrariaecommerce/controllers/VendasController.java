@@ -67,16 +67,30 @@ public class VendasController {
             @RequestParam(value = "filtro", defaultValue = "") String filtro) {
         try {
             Venda venda = new Venda();
-            System.out.println("Ta chamando? " + filtro);
+            StatusVenda status;
+            if (filtro.equals("PAGAMENTO_REALIZADO")) {
+                status = StatusVenda.PAGAMENTO_REALIZADO;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("PAGAMENTO_REPROVADO")) {
+                status = StatusVenda.PAGAMENTO_REPROVADO;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("EM_PROCESSAMENTO")) {
+                status = StatusVenda.EM_PROCESSAMENTO;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("EM_TRANSPORTE")) {
+                status = StatusVenda.EM_TRANSPORTE;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("ENTREGUE")) {
+                status = StatusVenda.ENTREGUE;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("PEDIDO_CANCELADO")) {
+                status = StatusVenda.PEDIDO_CANCELADO;
+                venda.setStatusVenda(status);
+            }
             venda.setNumero(filtro);
-//            venda.setStatusVenda(STat);
-
-            //TODO: AMANHÃ TESTAR ESSE ENDPOINT E TERMINAR  FAZER O FILTRO
-
             if (filtro.equals("")) {
                 venda.setAtivo(true);
             }
-
             List<VendaDTO> vendaDTOList = this.facade.consultar(venda).getEntidades().stream().map(ven -> {
                 return VendaDTO.from((Venda) ven);
             }).collect(Collectors.toList());
