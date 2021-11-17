@@ -7,6 +7,7 @@ import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 public class ClienteController {
 
     private final IFacade facade;
+    private final Logger logger;
+
 
     // ***********************************************************************
 
@@ -36,8 +39,16 @@ public class ClienteController {
             Resultado clienteResultado = this.facade.salvar(cliente);
 
             if (clienteResultado.getMensagem() == null) {
+                Cliente clt = (Cliente) clienteResultado.getEntidades().get(0);
                 message.setTitle("Sucesso");
                 message.setDescription("Cliente cadastrado com sucesso!");
+                logger.info("Cliente cadastrado com sucesso. Dados de cadastro:" +
+                        "\nNome completo: " + clt.getNome() + " " + clt.getSobrenome() +
+                        "\nCPF: " + clt.getCpf() +
+                        "\nData de nascimento: " + clt.getDataNascimento() +
+                        "\nGênero: " + clt.getGenero() +
+                        "\nID de usuário: " + clt.getUsuario().getId() +
+                        "\nE-mail: " + clt.getUsuario().getEmail());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro");
