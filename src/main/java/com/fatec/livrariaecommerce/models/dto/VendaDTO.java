@@ -22,6 +22,7 @@ public class VendaDTO {
     private String numero;
     private StatusVenda status;
     private LocalDateTime dataCriacao;
+    private double trocoCupom;
     private List<ItensPedidoDTO> itensPedido;
     private List<FormaPagamentoDTO> formasPagamento;
     private List<CupomDTO> cupoms;
