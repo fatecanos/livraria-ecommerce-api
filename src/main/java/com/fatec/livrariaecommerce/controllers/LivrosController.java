@@ -1,9 +1,9 @@
 package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
-import com.fatec.livrariaecommerce.models.domain.Resultado;
+import com.fatec.livrariaecommerce.models.domain.*;
+import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
-import com.fatec.livrariaecommerce.models.domain.Livro;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +46,30 @@ public class LivrosController {
 
     }
 
+    @PutMapping(path = "reporestoque")
+    public ResponseEntity<Message> reporEstoqueLivro(@RequestBody LivroDTO livroDTO) {
+        try {
+            Livro livro = new Livro();
+            livroDTO.fill(livro);
+            Resultado resultado = this.facade.alterar(livro);
+            Message message = new Message();
+            if (resultado.getMensagem() == null) {
+                message.setTitle("Sucesso!");
+                message.setDescription("Estoque reposto com sucesso!");
+                return ResponseEntity.ok(message);
+            } else {
+                message.setTitle("Erro!");
+                message.setDescription("Erro ao repor estoque!");
+                return ResponseEntity.badRequest().body(message);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
     @GetMapping
     public ResponseEntity<List<LivroDTO>> consultarLivros(){
         try{
@@ -74,5 +98,7 @@ public class LivrosController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+
 
 }
