@@ -151,3 +151,7 @@ Número da venda: 0585652
 Quantidade de cartões para pagamento: 1
 Compra efetuada pelo cliente de id: 52
 Status atual da venda: EM_TRANSPORTE
+2021-11-17 11:54:14.653  INFO 3467 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2021-11-17 11:54:14.656  INFO 3467 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-11-17 11:54:14.659  INFO 3467 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-11-17 11:54:14.674  INFO 3467 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

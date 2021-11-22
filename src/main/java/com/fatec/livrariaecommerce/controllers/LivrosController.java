@@ -6,6 +6,7 @@ import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 public class LivrosController {
 
     private final IFacade facade;
+    private final Logger logger;
+
 
     // ***********************************************************************
 
@@ -33,6 +36,11 @@ public class LivrosController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso");
                 message.setDescription("Livro cadastrado com sucesso!");
+                logger.info("Livro cadastrado com sucesso:" +
+                        "\nTítulo: " + ((Livro) resultado.getEntidades().get(0)).getTitulo() +
+                        "\nAutor: " + ((Livro) resultado.getEntidades().get(0)).getAutor() +
+                        "\nEditora: " + ((Livro) resultado.getEntidades().get(0)).getEditora() +
+                        "\nQuantidade em estoque: " + ((Livro) resultado.getEntidades().get(0)).getEstoque());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro");
@@ -56,6 +64,8 @@ public class LivrosController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
                 message.setDescription("Estoque reposto com sucesso!");
+                logger.info("Estoque reposto com sucesso:" +
+                        "\nNova quantidade em estoque: " + ((Livro) resultado.getEntidades().get(0)).getEstoque());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");
@@ -71,34 +81,33 @@ public class LivrosController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LivroDTO>> consultarLivros(){
-        try{
+    public ResponseEntity<List<LivroDTO>> consultarLivros() {
+        try {
             Livro livro = new Livro();
             livro.setAtivo(true);
             List<LivroDTO> livroDTOList = this.facade.consultar(livro).getEntidades().stream().map(lvr -> {
                 return LivroDTO.from((Livro) lvr);
             }).collect(Collectors.toList());
             return ResponseEntity.ok(livroDTOList);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping("detalhes/{idLivro}")
-    public ResponseEntity<LivroDTO> consultarLivroPorID(@PathVariable int idLivro){
-        try{
+    public ResponseEntity<LivroDTO> consultarLivroPorID(@PathVariable int idLivro) {
+        try {
             Livro livro = new Livro();
             livro.setId(idLivro);
             Resultado resultado = this.facade.consultar(livro);
             livro = (Livro) resultado.getEntidades().get(0);
             return ResponseEntity.ok(LivroDTO.from(livro));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
-
 
 
 }

@@ -41,6 +41,10 @@ public class TelefoneController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
                 message.setDescription("Telefone cadastrado com sucesso!");
+                logger.info("Telefone cadastrado com sucesso. Dados do telefone:" +
+                        "\nID telefone: " + telefone.getId() +
+                        "\nNum. Telefone: " + telefone.getTelefone() +
+                        "\nTelefone salvo no cliente: " + cliente.getId());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");
@@ -76,6 +80,10 @@ public class TelefoneController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
                 message.setDescription("Telefone alterado com sucesso!");
+                logger.info("Telefone alterado com sucesso. Dados do telefone:" +
+                        "\nID telefone: " + telefone.getId() +
+                        "\nTelefone anterior: " + telefoneDTO.getTelefone() +
+                        "\nNovo telefone: " + ((Telefone) resultado.getEntidades().get(0)).getTelefone());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");
@@ -129,6 +137,8 @@ public class TelefoneController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
                 message.setDescription("Telefone desativado com sucesso!");
+                logger.info("Telefone excluido com sucesso. Dados do telefone:" +
+                        "\nID telefone: " + telefone.getId());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");

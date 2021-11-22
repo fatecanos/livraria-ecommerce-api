@@ -7,6 +7,7 @@ import com.fatec.livrariaecommerce.models.dto.LoginDTO;
 import com.fatec.livrariaecommerce.models.dto.UsuarioDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     private final IFacade facade;
+    private final Logger logger;
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO) {
@@ -28,6 +30,9 @@ public class LoginController {
             Resultado resultado = this.facade
                     .consultar(usuario);
             if (resultado.getMensagem() == null) {
+                logger.info("Usuário que logou:" +
+                        "\nID usuário: " + ((Usuario) resultado.getEntidades().get(0)).getId() +
+                        "\nEmail: " + ((Usuario) resultado.getEntidades().get(0)).getEmail());
                 return ResponseEntity.ok(new UsuarioDTO((Usuario) resultado.getEntidades().get(0)));
             } else {
                 System.out.println(resultado.getMensagem());

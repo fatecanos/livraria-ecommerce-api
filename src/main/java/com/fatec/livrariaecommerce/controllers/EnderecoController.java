@@ -6,6 +6,7 @@ import com.fatec.livrariaecommerce.models.domain.Endereco;
 import com.fatec.livrariaecommerce.models.dto.EnderecoDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,8 @@ public class EnderecoController {
 
     // ***********************************************************************
     private final IFacade facade;
+    private final Logger logger;
+
     // ***********************************************************************
 
     @PostMapping(path = "{userId}")
@@ -37,6 +40,15 @@ public class EnderecoController {
             Resultado resultado = this.facade.salvar(endereco);
 
             if (resultado.getMensagem() == null) {
+                logger.info("Endereço cadastrado com sucesso:" +
+                        "\nNome: " + ((Endereco) resultado.getEntidades().get(0)).getNome() +
+                        "\nLogradouro: " + ((Endereco) resultado.getEntidades().get(0)).getLogradouro() +
+                        "\nNúmero res.: " + ((Endereco) resultado.getEntidades().get(0)).getNumero() +
+                        "\nCEP: " + ((Endereco) resultado.getEntidades().get(0)).getCep() +
+                        "\nCidade: " + ((Endereco) resultado.getEntidades().get(0)).getCidade() +
+                        "\nEstado: " + ((Endereco) resultado.getEntidades().get(0)).getPais() +
+                        "\nSalvo no cadastro do cliente: " + (enderecoDto.isSalvar() ? "Sim" : "Não"));
+
                 return ResponseEntity.ok(EnderecoDTO.from((Endereco) resultado.getEntidades().get(0)));
             } else {
                 return ResponseEntity.badRequest().build();
@@ -62,6 +74,8 @@ public class EnderecoController {
             if (resultado.getMensagem() == null) {
                 message.setTitle("Sucesso!");
                 message.setDescription("Endereco desativado com sucesso!");
+                logger.info("Endereço excluido com sucesso. Dados do endereço:" +
+                        "\nID endereço: " + endereco.getId());
                 return ResponseEntity.ok(message);
             } else {
                 message.setTitle("Erro!");

@@ -31,8 +31,6 @@ public class VendasController {
 
     // ***********************************************************************
 
-    //TODO: IMPLEMENTAR REGRAS DE NEGÓCIO PARA DEVOLUÇÃO/TROCA DE ITENS_PEDIDO
-
     @PostMapping
     public ResponseEntity<Message> salvarVenda(@RequestBody VendaDTO vendaDTO) {
         try {
