@@ -218,6 +218,7 @@ public class Facade implements IFacade {
         rnsSalvarVenda.add(new ValidaCupom((VendaDao) this.daos.get(Venda.class.getName())));
         rnsSalvarVenda.add(new ValidaCartaoCredito((CartaoCreditoDao) this.daos.get(CartaoCredito.class.getName())));
         rnsSalvarVenda.add(new GerenciarEstoqueVenda((LivroDao) this.daos.get(Livro.class.getName())));
+        rnsSalvarVenda.add(new ValidaValorPagoCartoes());
         regrasNegocioVenda.put("SALVAR", rnsSalvarVenda);
 
         List<IStrategy> rnsAlterarVenda = new ArrayList<>();
