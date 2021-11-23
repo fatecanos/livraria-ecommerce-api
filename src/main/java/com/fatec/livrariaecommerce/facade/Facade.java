@@ -10,6 +10,7 @@ import com.fatec.livrariaecommerce.strategy.cupom.TipoCupom;
 import com.fatec.livrariaecommerce.strategy.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.strategy.itenspedido.GerarCupom;
 import com.fatec.livrariaecommerce.strategy.itenspedido.SolicitarTroca;
+import com.fatec.livrariaecommerce.strategy.livro.ValidaEntradaEstoque;
 import com.fatec.livrariaecommerce.strategy.venda.*;
 import com.fatec.livrariaecommerce.strategy.cartao.SalvarCartaoFuturaCompra;
 import org.springframework.stereotype.Service;
@@ -192,9 +193,9 @@ public class Facade implements IFacade {
         // ***********************************************************************
         // Livro
         Map<String, List<IStrategy>> regrasNegocioLivro = new HashMap<>();
-
         // Instanciar classes de regras de negocio e adicionar na lista de rns
         List<IStrategy> rnsSalvarLivro = new ArrayList<>();
+        rnsSalvarLivro.add(new ValidaEntradaEstoque());
         regrasNegocioLivro.put("SALVAR", rnsSalvarLivro);
 
         List<IStrategy> rnsAlterarLivro = new ArrayList<>();
@@ -267,7 +268,7 @@ public class Facade implements IFacade {
 
         List<IStrategy> rnsAlterarItensPedido = new ArrayList<>();
         rnsAlterarItensPedido.add(new SolicitarTroca());
-        rnsAlterarItensPedido.add(new GerarCupom());
+        rnsAlterarItensPedido.add(new GerarCupom((LivroDao) this.daos.get(Livro.class.getName())));
         regrasNegocioItensPedido.put("ALTERAR", rnsAlterarItensPedido);
 
         List<IStrategy> rnsExcluirItensPedido = new ArrayList<>();

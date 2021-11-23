@@ -66,7 +66,7 @@ public interface LivroDao extends JpaRepository<Livro, Integer>, IDAO {
             "   obj.estoque = :estoque " +
             "WHERE " +
             "   obj.id = :id")
-    void reduzirEstoqueLivro(@Param("id") Integer id, @Param("estoque") int estoque);
+    void alterarEstoqueLivro(@Param("id") Integer id, @Param("estoque") int estoque);
 
     @Override
     default List<EntidadeDominio> consultar(EntidadeDominio entidadeDominio) {

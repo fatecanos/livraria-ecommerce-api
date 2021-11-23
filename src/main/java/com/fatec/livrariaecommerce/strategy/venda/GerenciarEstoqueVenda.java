@@ -23,7 +23,7 @@ public class GerenciarEstoqueVenda implements IStrategy {
             livro.setId(it.getIdLivro());
             livro = (Livro) this.livroDao.consultarPeloID(livro).get(0);
             livro.setEstoque(livro.getEstoque() - it.getQtdComprada());
-            this.livroDao.reduzirEstoqueLivro(livro.getId(), livro.getEstoque());
+            this.livroDao.alterarEstoqueLivro(livro.getId(), livro.getEstoque());
         }
         return "";
     }
