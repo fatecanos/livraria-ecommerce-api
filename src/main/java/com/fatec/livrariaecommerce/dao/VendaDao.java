@@ -47,7 +47,8 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "   (?#{[0].id} IS NOT NULL AND obj.id = ?#{[0].id}) " +
             "   OR (?#{[0].ativo} IS NOT NULL AND obj.ativo = ?#{[0].ativo}) " +
             "   OR (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
-
+            "ORDER BY " +
+            "   obj.dataCriacao DESC " +
             "")
     List<EntidadeDominio> consultarTabela(EntidadeDominio entidadeDominio);
 
@@ -113,8 +114,23 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             "   #{#entityName} obj " +
             "WHERE " +
             "   (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente}) " +
+            "ORDER BY " +
+            "   obj.dataCriacao DESC " +
             "")
     List<EntidadeDominio> consultarPedidosCliente(@Param("dominio") EntidadeDominio entidadeDominio);
+
+    @Query("SELECT " +
+            "   obj " +
+            "FROM " +
+            "   #{#entityName} obj " +
+            "WHERE " +
+            "   (?#{[0].cliente} IS NOT NULL AND obj.cliente = ?#{[0].cliente})" +
+            "   AND ((?#{[0].statusVenda} IS NOT NULL AND obj.statusVenda = ?#{[0].statusVenda}) " +
+            "   OR (?#{[0].numero} IS NOT NULL AND (obj.numero LIKE(CONCAT('%', ?#{[0].numero},'%'))))) " +
+            "ORDER BY " +
+            "   obj.dataCriacao DESC " +
+            "")
+    List<EntidadeDominio> consultarPedidosClienteComFiltro(@Param("dominio") EntidadeDominio entidadeDominio);
 
     @Query("SELECT " +
             "   obj " +
@@ -148,6 +164,10 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
                     .withHour(23)
                     .withMinute(59);
             return consultarPeriodo(inicio, fim);
+        } else if (((Venda) entidadeDominio).getCliente() != null && entidadeDominio.getAtivo() != null
+                && (((Venda) entidadeDominio).getNumero() != null
+                || ((Venda) entidadeDominio).getStatusVenda() != null)) {
+            return consultarPedidosClienteComFiltro(entidadeDominio);
         } else if (((Venda) entidadeDominio).getCliente() != null && entidadeDominio.getAtivo() != null) {
             return consultarPedidosCliente(entidadeDominio);
         } else if (((Venda) entidadeDominio).getCliente() != null
@@ -155,17 +175,12 @@ public interface VendaDao extends JpaRepository<Venda, Integer>, IDAO {
             return consultarGeneroCliente(entidadeDominio);
         } else if (entidadeDominio.getAtivo() != null) {
             return consultarTabela(entidadeDominio);
-
         } else if (((Venda) entidadeDominio).getNumero() != null) {
             return consultarComFiltro(entidadeDominio);
-
         } else if (((Venda) entidadeDominio).getStatusVenda() != null) {
             return consultarComFiltro(entidadeDominio);
-
         } else if (((Venda) entidadeDominio).getCliente() != null
                 && ((Venda) entidadeDominio).getCliente().getId() == 0) {
-
-
             return consultarRankClientes(entidadeDominio);
         } else if (((Venda) entidadeDominio).getCliente() != null
                 && ((Venda) entidadeDominio).getCliente().getNome().equals("consulta")) {

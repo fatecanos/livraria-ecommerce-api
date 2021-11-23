@@ -100,17 +100,41 @@ public class VendasController {
     }
 
     @GetMapping(path = "{usuarioID}")
-    public ResponseEntity<List<VendaDTO>> consultarVendasCliente(@PathVariable int usuarioID) {
+    public ResponseEntity<List<VendaDTO>> consultarVendasCliente(
+            @PathVariable int usuarioID, @RequestParam(value = "filtro", defaultValue = "") String filtro) {
         try {
+
             Usuario usuario = new Usuario();
             usuario.setId(usuarioID);
             Cliente cliente = new Cliente();
             cliente.setUsuario(usuario);
             cliente = (Cliente) this.facade.consultar(cliente).getEntidades().get(0);
-
             Venda venda = new Venda();
             venda.setAtivo(true);
             venda.setCliente(cliente);
+
+            StatusVenda status;
+            if (filtro.equals("PAGAMENTO_REALIZADO")) {
+                status = StatusVenda.PAGAMENTO_REALIZADO;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("PAGAMENTO_REPROVADO")) {
+                status = StatusVenda.PAGAMENTO_REPROVADO;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("EM_PROCESSAMENTO")) {
+                status = StatusVenda.EM_PROCESSAMENTO;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("EM_TRANSPORTE")) {
+                status = StatusVenda.EM_TRANSPORTE;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("ENTREGUE")) {
+                status = StatusVenda.ENTREGUE;
+                venda.setStatusVenda(status);
+            } else if (filtro.equals("PEDIDO_CANCELADO")) {
+                status = StatusVenda.PEDIDO_CANCELADO;
+                venda.setStatusVenda(status);
+            }
+            venda.setNumero(filtro);
+
             List<VendaDTO> vendaDTOList = this.facade.consultar(venda).getEntidades().stream().map(ven -> {
                 return VendaDTO.from((Venda) ven);
             }).collect(Collectors.toList());
