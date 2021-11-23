@@ -36,7 +36,7 @@ public class Facade implements IFacade {
 
     public Facade(ClienteDao clienteDao, UsuarioDao usuarioDao, EnderecoDao enderecoDao, CidadeDao cidadeDao,
                   TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao, CartaoCreditoDao cartaoCreditoDao,
-                  LivroDao livroDao, VendaDao vendaDao, CupomDao cupomDao, ItensPedidoDao itensPedidoDao) {
+                  LivroDao livroDao, VendaDao vendaDao, CupomDao cupomDao, ItensPedidoDao itensPedidoDao, NotificacaoDao notificacaoDao) {
 
         // ClienteDao
         this.daos.put(Cliente.class.getName(), clienteDao);
@@ -70,6 +70,9 @@ public class Facade implements IFacade {
 
         //itensPedidoDao
         this.daos.put(ItensPedido.class.getName(), itensPedidoDao);
+
+        //notificacaoDao
+        this.daos.put(Notificacao.class.getName(), notificacaoDao);
 
     }
 
@@ -267,7 +270,7 @@ public class Facade implements IFacade {
         regrasNegocioItensPedido.put("SALVAR", rnsSalvarItensPedido);
 
         List<IStrategy> rnsAlterarItensPedido = new ArrayList<>();
-        rnsAlterarItensPedido.add(new SolicitarTroca());
+        rnsAlterarItensPedido.add(new SolicitarTroca((NotificacaoDao) this.daos.get(Notificacao.class.getName())));
         rnsAlterarItensPedido.add(new GerarCupom((LivroDao) this.daos.get(Livro.class.getName())));
         regrasNegocioItensPedido.put("ALTERAR", rnsAlterarItensPedido);
 
@@ -278,6 +281,25 @@ public class Facade implements IFacade {
         regrasNegocioItensPedido.put("CONSULTAR", rnsConsultarItensPedido);
 
         this.regrasNegocio.put(ItensPedido.class.getName(), regrasNegocioItensPedido);
+
+        // ***********************************************************************
+        // ItensPedido
+        Map<String, List<IStrategy>> regrasNegocioNotificacao = new HashMap<>();
+
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarNotificacao = new ArrayList<>();
+        regrasNegocioNotificacao.put("SALVAR", rnsSalvarNotificacao);
+
+        List<IStrategy> rnsAlterarNotificacao = new ArrayList<>();
+        regrasNegocioNotificacao.put("ALTERAR", rnsAlterarNotificacao);
+
+        List<IStrategy> rnsExcluirNotificacao = new ArrayList<>();
+        regrasNegocioNotificacao.put("EXCLUIR", rnsExcluirNotificacao);
+
+        List<IStrategy> rnsConsultarNotificacao = new ArrayList<>();
+        regrasNegocioNotificacao.put("CONSULTAR", rnsConsultarNotificacao);
+
+        this.regrasNegocio.put(Notificacao.class.getName(), regrasNegocioNotificacao);
 
     }
 

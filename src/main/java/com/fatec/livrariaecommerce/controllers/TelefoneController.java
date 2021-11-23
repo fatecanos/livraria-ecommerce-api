@@ -113,10 +113,6 @@ public class TelefoneController {
             List<TelefoneDTO> telefones = this.facade.consultar(telefone).getEntidades().stream().map(tel -> {
                 return TelefoneDTO.from((Telefone) tel);
             }).collect(Collectors.toList());
-
-            //REGISTRAR TODOS OS SAVES/ERROS COM OS DADOS
-
-            //TODO: IMPLEMENTAR SOMENTE NA PARTE DA VENDA
             logger.info("Ola, da controller do telfone");
             return ResponseEntity.ok(telefones);
         } catch (Exception e) {
