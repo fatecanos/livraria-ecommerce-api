@@ -2,6 +2,8 @@ package com.fatec.livrariaecommerce.controllers;
 
 import com.fatec.livrariaecommerce.facade.IFacade;
 import com.fatec.livrariaecommerce.models.domain.*;
+import com.fatec.livrariaecommerce.models.dto.CategoriaDTO;
+import com.fatec.livrariaecommerce.models.dto.GrupoPrecificacaoDTO;
 import com.fatec.livrariaecommerce.models.dto.TelefoneDTO;
 import com.fatec.livrariaecommerce.models.utils.Message;
 import com.fatec.livrariaecommerce.models.dto.LivroDTO;
@@ -103,6 +105,42 @@ public class LivrosController {
             Resultado resultado = this.facade.consultar(livro);
             livro = (Livro) resultado.getEntidades().get(0);
             return ResponseEntity.ok(LivroDTO.from(livro));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/grupoprecificacao")
+    public ResponseEntity<List<GrupoPrecificacaoDTO>> consultarGrupoPrecificacao() {
+        try {
+            GrupoPrecificacao grupoPrecificacao = new GrupoPrecificacao();
+            grupoPrecificacao.setAtivo(true);
+            List<GrupoPrecificacaoDTO> grupoPrecificacaoDTOList = this.facade.consultar(grupoPrecificacao)
+                    .getEntidades()
+                    .stream()
+                    .map(gp -> {
+                        return GrupoPrecificacaoDTO.from((GrupoPrecificacao) gp);
+                    }).collect(Collectors.toList());
+            return ResponseEntity.ok(grupoPrecificacaoDTOList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/categorias")
+    public ResponseEntity<List<CategoriaDTO>> consultarCategorias() {
+        try {
+            Categoria categoria = new Categoria();
+            categoria.setAtivo(true);
+            List<CategoriaDTO> categoriaDTOList = this.facade.consultar(categoria)
+                    .getEntidades()
+                    .stream()
+                    .map(cat -> {
+                        return CategoriaDTO.from((Categoria) cat);
+                    }).collect(Collectors.toList());
+            return ResponseEntity.ok(categoriaDTOList);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

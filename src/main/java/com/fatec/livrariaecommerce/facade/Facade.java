@@ -36,7 +36,7 @@ public class Facade implements IFacade {
 
     public Facade(ClienteDao clienteDao, UsuarioDao usuarioDao, EnderecoDao enderecoDao, CidadeDao cidadeDao,
                   TipoEnderecoDao tipoEnderecoDao, TelefoneDao telefoneDao, CartaoCreditoDao cartaoCreditoDao,
-                  LivroDao livroDao, VendaDao vendaDao, CupomDao cupomDao, ItensPedidoDao itensPedidoDao, NotificacaoDao notificacaoDao) {
+                  LivroDao livroDao, GrupoPrecificacaoDao grupoPrecificacaoDao, CategoriaDao categoriaDao, VendaDao vendaDao, CupomDao cupomDao, ItensPedidoDao itensPedidoDao, NotificacaoDao notificacaoDao) {
 
         // ClienteDao
         this.daos.put(Cliente.class.getName(), clienteDao);
@@ -61,6 +61,12 @@ public class Facade implements IFacade {
 
         //LivroDao
         this.daos.put(Livro.class.getName(), livroDao);
+
+        //GrupoPrecificacaoDao
+        this.daos.put(GrupoPrecificacao.class.getName(), grupoPrecificacaoDao);
+
+        //CategoriaDao
+        this.daos.put(Categoria.class.getName(), categoriaDao);
 
         //VendaDao
         this.daos.put(Venda.class.getName(), vendaDao);
@@ -212,6 +218,42 @@ public class Facade implements IFacade {
 
         this.regrasNegocio.put(Livro.class.getName(), regrasNegocioLivro);
 
+        // ***********************************************************************
+        // GrupoPrecificacao
+        Map<String, List<IStrategy>> regrasNegocioGrupoPrecificacao = new HashMap<>();
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarGrupoPrecificacao = new ArrayList<>();
+        regrasNegocioGrupoPrecificacao.put("SALVAR", rnsSalvarGrupoPrecificacao);
+
+        List<IStrategy> rnsAlterarGrupoPrecificacao = new ArrayList<>();
+        regrasNegocioGrupoPrecificacao.put("ALTERAR", rnsAlterarGrupoPrecificacao);
+
+        List<IStrategy> rnsExcluirGrupoPrecificacao = new ArrayList<>();
+        regrasNegocioGrupoPrecificacao.put("EXCLUIR", rnsExcluirGrupoPrecificacao);
+
+        List<IStrategy> rnsConsultarGrupoPrecificacao = new ArrayList<>();
+        regrasNegocioGrupoPrecificacao.put("CONSULTAR", rnsConsultarGrupoPrecificacao);
+
+        this.regrasNegocio.put(GrupoPrecificacao.class.getName(), regrasNegocioGrupoPrecificacao);
+
+
+        // ***********************************************************************
+        // Categoria
+        Map<String, List<IStrategy>> regrasNegocioCategoria = new HashMap<>();
+        // Instanciar classes de regras de negocio e adicionar na lista de rns
+        List<IStrategy> rnsSalvarCategoria = new ArrayList<>();
+        regrasNegocioCategoria.put("SALVAR", rnsSalvarCategoria);
+
+        List<IStrategy> rnsAlterarCategoria = new ArrayList<>();
+        regrasNegocioCategoria.put("ALTERAR", rnsAlterarCategoria);
+
+        List<IStrategy> rnsExcluirCategoria = new ArrayList<>();
+        regrasNegocioCategoria.put("EXCLUIR", rnsExcluirCategoria);
+
+        List<IStrategy> rnsConsultarCategoria = new ArrayList<>();
+        regrasNegocioCategoria.put("CONSULTAR", rnsConsultarCategoria);
+
+        this.regrasNegocio.put(Categoria.class.getName(), regrasNegocioCategoria);
 
         // ***********************************************************************
         // Venda
