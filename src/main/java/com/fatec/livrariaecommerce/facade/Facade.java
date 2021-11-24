@@ -208,6 +208,7 @@ public class Facade implements IFacade {
         regrasNegocioLivro.put("SALVAR", rnsSalvarLivro);
 
         List<IStrategy> rnsAlterarLivro = new ArrayList<>();
+        rnsSalvarLivro.add(new ValidaEntradaEstoque());
         regrasNegocioLivro.put("ALTERAR", rnsAlterarLivro);
 
         List<IStrategy> rnsExcluirLivro = new ArrayList<>();

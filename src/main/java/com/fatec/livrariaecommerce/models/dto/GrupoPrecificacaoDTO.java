@@ -14,7 +14,11 @@ public class GrupoPrecificacaoDTO {
     private Double margem;
     private Double taxa;
 
-    public static GrupoPrecificacaoDTO from(GrupoPrecificacao grupoPrecificacao){
+    public void fill(GrupoPrecificacao dominio) {
+        dominio.atualizarDados(this.id, this.descricao, this.nome, this.margem, this.taxa);
+    }
+
+    public static GrupoPrecificacaoDTO from(GrupoPrecificacao grupoPrecificacao) {
         GrupoPrecificacaoDTO dto = new GrupoPrecificacaoDTO();
         dto.id = grupoPrecificacao.getId();
         dto.descricao = grupoPrecificacao.getDescricao();

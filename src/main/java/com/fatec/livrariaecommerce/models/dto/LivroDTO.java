@@ -26,13 +26,16 @@ public class LivroDTO {
     private double valorCompra;
     private int estoque;
     private DimensaoDTO dimensoes;
-    private GrupoPrecificacao grupoPrecificacao;
+    private int grupoPrecificacao;
     private boolean ativo;
     private List<CategoriaDTO> categorias;
 
     public void fill(Livro dominio) {
 
         List<Categoria> categoriaList = new ArrayList<>();
+
+        GrupoPrecificacao grupoPrecificacao = new GrupoPrecificacao();
+        grupoPrecificacao.setId(this.grupoPrecificacao);
 
         Dimensoes dimensoes;
         if (dominio.getDimensoes() == null) {
@@ -50,9 +53,10 @@ public class LivroDTO {
             categoriaList.add(categoria);
         }
 
+
         dominio.atualizarDados(this.id, this.titulo, this.autor, this.ano, this.editora, this.edicao, this.isbn,
                 this.numeroPaginas, this.sinopse, this.url, this.codigoBarras, this.valorCompra, this.valorVenda, this.estoque,
-                dimensoes, this.grupoPrecificacao, categoriaList);
+                dimensoes, grupoPrecificacao, categoriaList);
     }
 
     public static LivroDTO from(Livro livro) {
@@ -73,8 +77,10 @@ public class LivroDTO {
         dto.valorVenda = livro.getValorVenda();
         dto.estoque = livro.getEstoque();
         dto.dimensoes = DimensaoDTO.from(livro.getDimensoes());
-        dto.grupoPrecificacao = livro.getGrupoPrecificacao();
-        dto.categorias = livro.getCategorias().stream().map(CategoriaDTO::from).collect(Collectors.toList());;
+//        dto.grupoPrecificacao = GrupoPrecificacaoDTO.from(livro.getGrupoPrecificacao());
+        dto.grupoPrecificacao = livro.getGrupoPrecificacao().getId();
+        dto.categorias = livro.getCategorias().stream().map(CategoriaDTO::from).collect(Collectors.toList());
+        ;
         return dto;
     }
 }

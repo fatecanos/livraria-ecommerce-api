@@ -56,7 +56,7 @@ public class LivrosController {
 
     }
 
-    @PutMapping(path = "reporestoque")
+    @PutMapping(path = "/reporestoque")
     public ResponseEntity<Message> reporEstoqueLivro(@RequestBody LivroDTO livroDTO) {
         try {
             Livro livro = new Livro();
