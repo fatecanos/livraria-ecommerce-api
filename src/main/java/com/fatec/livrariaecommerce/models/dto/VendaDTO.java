@@ -65,7 +65,7 @@ public class VendaDTO {
         } else {
             numero = this.numero;
         }
-        dominio.atualizarDados(this.id, idEndereco, cliente, this.valorTotal, numero, statusVenda, itensPedidos,
+        dominio.atualizarDados(this.id, idEndereco, cliente, this.valorTotal, numero, statusVenda, this.trocoCupom, itensPedidos,
                 formaPagamentoList, cupomList);
     }
 
@@ -77,6 +77,7 @@ public class VendaDTO {
         dto.valorTotal = venda.getValorTotal();
         dto.numero = venda.getNumero();
         dto.status = venda.getStatusVenda();
+        dto.trocoCupom = venda.getTrocoCupom();
         dto.dataCriacao = venda.getDataCriacao();
         dto.itensPedido = venda.getItensPedidos().stream().map(ItensPedidoDTO::from).collect(Collectors.toList());
         dto.formasPagamento = venda.getFormaPagamentoList().stream().map(FormaPagamentoDTO::from).collect(Collectors.toList());

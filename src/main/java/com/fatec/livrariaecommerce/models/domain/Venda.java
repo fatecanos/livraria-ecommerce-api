@@ -20,6 +20,7 @@ public class Venda extends EntidadeDominio {
     private double valorTotal;
     private String numero;
     private StatusVenda statusVenda;
+    private double trocoCupom;
 
     private int idEndereco;
 
@@ -43,7 +44,7 @@ public class Venda extends EntidadeDominio {
     private boolean cancelarVenda;
 
 
-    public void atualizarDados(int id, int idEndereco, Cliente cliente, double valorTotal, String numero, StatusVenda statusVenda, List<ItensPedido> itensPedidos,
+    public void atualizarDados(int id, int idEndereco, Cliente cliente, double valorTotal, String numero, StatusVenda statusVenda, double trocoCupom, List<ItensPedido> itensPedidos,
                                List<FormaPagamento> formaPagamentoList, List<Cupom> cupoms) {
         super.setId(id);
         super.setAtivo(true);
@@ -55,6 +56,7 @@ public class Venda extends EntidadeDominio {
         this.valorTotal = valorTotal;
         this.numero = numero;
         this.statusVenda = statusVenda;
+        this.trocoCupom = trocoCupom;
         this.itensPedidos = itensPedidos;
         this.formaPagamentoList = formaPagamentoList;
         this.cupoms = cupoms;
