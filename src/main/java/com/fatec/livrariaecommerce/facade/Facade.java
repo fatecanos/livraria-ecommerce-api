@@ -11,6 +11,7 @@ import com.fatec.livrariaecommerce.strategy.cupom.ValidaCupomUsados;
 import com.fatec.livrariaecommerce.strategy.itenspedido.GerarCupom;
 import com.fatec.livrariaecommerce.strategy.itenspedido.SolicitarTroca;
 import com.fatec.livrariaecommerce.strategy.livro.ValidaEntradaEstoque;
+import com.fatec.livrariaecommerce.strategy.livro.ValorVendaLivro;
 import com.fatec.livrariaecommerce.strategy.venda.*;
 import com.fatec.livrariaecommerce.strategy.cartao.SalvarCartaoFuturaCompra;
 import org.springframework.stereotype.Service;
@@ -205,6 +206,7 @@ public class Facade implements IFacade {
         // Instanciar classes de regras de negocio e adicionar na lista de rns
         List<IStrategy> rnsSalvarLivro = new ArrayList<>();
         rnsSalvarLivro.add(new ValidaEntradaEstoque());
+        rnsSalvarLivro.add(new ValorVendaLivro((GrupoPrecificacaoDao) this.daos.get(GrupoPrecificacao.class.getName())));
         regrasNegocioLivro.put("SALVAR", rnsSalvarLivro);
 
         List<IStrategy> rnsAlterarLivro = new ArrayList<>();
